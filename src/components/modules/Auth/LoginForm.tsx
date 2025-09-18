@@ -38,12 +38,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting = false })
   };
 
   const fillDemoCredentials = () => {
-    setValue('email', 'root@readyridy.com');
-    setValue('password', 'secret22');
+    setValue('email', 'helloWorld@example.com');
+    setValue('password', 'RiderPass123!');
   };
 
   const copyCredentials = () => {
-    const credentials = `Email: root@readyridy.com\nPassword: secret22`;
+    const credentials = `Email: helloWorld@example.com\nPassword: RiderPass123!`;
     navigator.clipboard.writeText(credentials);
     alert('Credentials copied to clipboard!');
   };
@@ -116,11 +116,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isSubmitting = false })
           <div className="space-y-2">
             <div className="text-sm">
               <span className="font-medium text-blue-900 dark:text-blue-100">Email:</span>
-              <span className="ml-2 text-blue-700 dark:text-blue-300">root@readyridy.com</span>
+              <span className="ml-2 text-blue-700 dark:text-blue-300">helloWorld@example.com</span>
             </div>
             <div className="text-sm">
               <span className="font-medium text-blue-900 dark:text-blue-100">Password:</span>
-              <span className="ml-2 text-blue-700 dark:text-blue-300">secret22</span>
+              <span className="ml-2 text-blue-700 dark:text-blue-300">RiderPass123!</span>
             </div>
           </div>
         )}

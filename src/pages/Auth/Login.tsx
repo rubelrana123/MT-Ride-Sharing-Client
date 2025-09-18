@@ -1,6 +1,8 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import LoginForm from '../../components/modules/Auth/LoginForm';
+import { useLoginMutation } from '@/redux/features/auth/auth.api';
+import { toast } from 'sonner';
 
 type LoginFormData = {
   email: string;
@@ -9,19 +11,21 @@ type LoginFormData = {
 
 const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const navigate = useNavigate();
+  const [login] = useLoginMutation();
   const onSubmit = async (data: LoginFormData) => {
     try {
-      setIsSubmitting(true);
-      console.log('Login attempt:', data);
-      // Here you would typically make an API call to authenticate
-      // For now, we'll just log the data
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      alert('Login successful! (This is a demo)');
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('Login failed. Please try again.');
-    } finally {
+      const res = await login(data).unwrap();
+      console.log(res ,"response in log");
+      if (res.success) {
+        toast.success("Logged in successfully");
+        navigate("/");
+      }
+    } catch (err : any) {
+      console.error(err, "error in log");
+
+ 
+      } finally {
       setIsSubmitting(false);
     }
   };

@@ -1,29 +1,35 @@
-import Analytics from "@/pages/Admin/Analytics";
-import DriverApplications from "@/pages/Admin/DriverApplications";
-import type { ISliderItem } from "@/types";
-
  
-export const adminSidebarItems : ISliderItem[] = [
+import AllDriverApplications from "@/components/modules/Admin/DriverApplications";
+import { AllRides } from "@/pages/Admin/AllRides";
+import Analytics from "@/pages/Admin/AnalyticsStats";
+ 
+import type { ISliderItem } from "@/types";
+ 
+
+export const adminSidebarItems: ISliderItem[] = [
   {
-    title: "Dashboard",
+    title : "Dashboard",
     items: [
       {
-        title: "Overview",
+        title: "Analytics",
         url: "/admin/analytics",
         Component: Analytics,
       },
     ],
   },
+ 
+  {
+    title: "Ride Management",
+    items: [
+      { title: "All Rides", url: "/admin/rides", Component: AllRides },
+      { title: "All Rides", url: "/admin/rides", Component: AllRides },
+
+    ],
+  },
   {
     title: "Driver Management",
     items: [
-      {
-        title: "Driver Applications",
-        url: "/admin/driver-applications",
-        Component: DriverApplications,
-      },
- 
- 
+      { title: "Driver Applications", url: "/admin/driver-application", Component: AllDriverApplications },
     ],
-  },
+  }
 ];

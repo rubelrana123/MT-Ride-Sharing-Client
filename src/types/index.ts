@@ -18,7 +18,7 @@ export   interface ISliderItem {
     Component: ComponentType;
   }[]
 }
-export type TRole = 'ADMIN' | 'Super_ADMIN' | 'USER';
+export type TRole = 'ADMIN' | 'Super_ADMIN' | "DRIVER" | "RIDER";
 
 type ZodIssue = {
   code: string;

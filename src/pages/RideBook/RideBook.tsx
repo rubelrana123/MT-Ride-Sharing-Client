@@ -8,16 +8,16 @@ import { Label } from "../../components/ui/label";
 import { 
   MapPin, 
   Navigation, 
-  Clock, 
   Car, 
-  Users, 
   CreditCard,
   ArrowUpDown,
   Search,
-  Calendar,
-  Star,
-  X
+  X,
+  LucideBike,
+  BikeIcon
 } from "lucide-react";
+import { extractCoordinates } from "@/utils/extractCoordinates";
+import { calculateDistance as haversineDistance } from "@/utils/calculateDistance";
 
 // Fix default marker icons
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -55,15 +55,15 @@ function LocationPicker({ onSelect }: { onSelect: (coords: [number, number]) => 
   return null;
 }
 
+
 export default function RideBook() {
   const [pickupLoc, setPickupLoc] = useState<[number, number] | null>(null);
   const [destLoc, setDestLoc] = useState<[number, number] | null>(null);
   const [pickupAddress, setPickupAddress] = useState("");
   const [destAddress, setDestAddress] = useState("");
   const [selectingPickup, setSelectingPickup] = useState(true);
-  const [rideType, setRideType] = useState("standard");
-  const [rideDate, setRideDate] = useState("");
-  const [rideTime, setRideTime] = useState("");
+  const [rideType, setRideType] = useState("alto");
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [pickupSearch, setPickupSearch] = useState("");
   const [pickupResults, setPickupResults] = useState<Array<{ display_name: string; lat: string; lon: string }>>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -71,6 +71,7 @@ export default function RideBook() {
   const pickupInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleSelect = (coords: [number, number]) => {
+    console.log("coordscoords", coords);
     if (selectingPickup) {
       setPickupLoc(coords);
       setPickupAddress(`Location: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`);
@@ -78,6 +79,7 @@ export default function RideBook() {
       setDestLoc(coords);
       setDestAddress(`Location: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`);
     }
+
   };
 
   const swapLocations = () => {
@@ -154,31 +156,40 @@ export default function RideBook() {
     };
   }, [pickupSearch]);
 
-  const calculateDistance = () => {
-    if (!pickupLoc || !destLoc) return 0;
-    // Simple distance calculation (not accurate for real-world use)
-    const R = 6371; // Earth's radius in km
-    const dLat = (destLoc[1] - pickupLoc[1]) * Math.PI / 180;
-    const dLon = (destLoc[0] - pickupLoc[0]) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-      Math.cos(pickupLoc[1] * Math.PI / 180) * Math.cos(destLoc[1] * Math.PI / 180) *
-      Math.sin(dLon/2) * Math.sin(dLon/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
-  };
+  const distanceKm = () => haversineDistance(pickupLoc, destLoc);
 
   const calculatePrice = () => {
-    const distance = calculateDistance();
+    const distance = distanceKm();
     const basePrice = 50; // Base price in local currency
     const pricePerKm = 15; // Price per kilometer
     return Math.round(basePrice + (distance * pricePerKm));
   };
 
   const rideTypes = [
-    { id: "standard", name: "Standard", icon: Car, price: 1, description: "Comfortable ride for everyday travel" },
-    { id: "premium", name: "Premium", icon: Star, price: 1.5, description: "Luxury vehicle with premium features" },
-    { id: "shared", name: "Shared", icon: Users, price: 0.7, description: "Share your ride and save money" }
+    { id: "scooter", name: "Scooter", icon: LucideBike, price: 1, color: "bg-blue-500" },
+    { id: "Bike", name: "Bike", icon: BikeIcon, price: 2, color: "bg-green-500" },
+    { id: "nac", name: "N/A Car", icon: Car, price: 3, color: "bg-blue-600" },
+    { id: "ac", name: "AC Car", icon: Car, price: 4, color: "bg-orange-500" },
+     
   ];
+
+  const handleBooking = () => {
+    const riderData = {
+      "pickupLoc": {
+        "type": "Point",
+        "coordinates": extractCoordinates(pickupAddress)
+      },
+      "destLoc": {
+        "type": "Point",
+        "coordinates": extractCoordinates(destAddress)
+      }
+    }
+
+    console.log("rideData", riderData);
+    
+  
+  }
+  
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
@@ -336,34 +347,34 @@ export default function RideBook() {
                 Choose Ride Type
               </h2>
               
-              <div className="space-y-3">
+              <div className="grid grid-cols-4 gap-3">
                 {rideTypes.map((type) => {
                   const Icon = type.icon;
                   return (
                     <div
                       key={type.id}
-                      className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                      className={`relative p-3 border-2 rounded-xl cursor-pointer transition-all ${
                         rideType === type.id
-                          ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                          ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
                           : "border-gray-200 dark:border-gray-700 hover:border-gray-300"
                       }`}
                       onClick={() => setRideType(type.id)}
                     >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
-                          <Icon className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                          <div>
-                            <h3 className="font-medium text-gray-900 dark:text-white">
-                              {type.name}
-                            </h3>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                              {type.description}
-                            </p>
-                          </div>
+                      {/* Selection indicator dot */}
+                      <div className={`absolute -top-1 -left-1 w-3 h-3 rounded-full ${
+                        rideType === type.id ? "bg-yellow-400" : "bg-yellow-400"
+                      }`} />
+                      
+                      <div className="flex flex-col items-center space-y-2">
+                        <div className={`p-2 rounded-lg ${type.color}`}>
+                          <Icon className="h-6 w-6 text-white" />
                         </div>
-                        <div className="text-right">
-                          <p className="font-semibold text-gray-900 dark:text-white">
+                        <div className="text-center">
+                          <p className="text-xs font-semibold text-gray-900 dark:text-white">
                             {type.price}x
+                          </p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                            {type.name}
                           </p>
                         </div>
                       </div>
@@ -373,38 +384,48 @@ export default function RideBook() {
               </div>
             </div>
 
-            {/* Schedule */}
+            {/* Payment Method */}
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                <Clock className="h-5 w-5 mr-2" />
-                Schedule Ride
+                <CreditCard className="h-5 w-5 mr-2" />
+                Payment Method
               </h2>
               
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Date
-                  </Label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      type="date"
-                      value={rideDate}
-                      onChange={(e) => setRideDate(e.target.value)}
-                      className="pl-10"
-                    />
+              <div className="space-y-3">
+                <div
+                  className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                    paymentMethod === "cash"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                      : "border-gray-200 dark:border-gray-700 hover:border-gray-300"
+                  }`}
+                  onClick={() => setPaymentMethod("cash")}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-4 h-4 rounded-full border-2 ${
+                      paymentMethod === "cash" 
+                        ? "border-blue-500 bg-blue-500" 
+                        : "border-gray-300"
+                    }`} />
+                    <span className="font-medium text-gray-900 dark:text-white">Cash</span>
                   </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Time
-                  </Label>
-                  <Input
-                    type="time"
-                    value={rideTime}
-                    onChange={(e) => setRideTime(e.target.value)}
-                  />
+                <div
+                  className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                    paymentMethod === "online"
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                      : "border-gray-200 dark:border-gray-700 hover:border-gray-300"
+                  }`}
+                  onClick={() => setPaymentMethod("online")}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-4 h-4 rounded-full border-2 ${
+                      paymentMethod === "online" 
+                        ? "border-blue-500 bg-blue-500" 
+                        : "border-gray-300"
+                    }`} />
+                    <span className="font-medium text-gray-900 dark:text-white ">Online Payment(Not Available)</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -420,7 +441,7 @@ export default function RideBook() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Distance:</span>
-                    <span className="font-medium">{calculateDistance().toFixed(1)} km</span>
+                    <span className="font-medium">{distanceKm().toFixed(1)} km</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Base Price:</span>
@@ -428,7 +449,7 @@ export default function RideBook() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Distance Cost:</span>
-                    <span className="font-medium">৳{Math.round(calculateDistance() * 15)}</span>
+                    <span className="font-medium">৳{Math.round(distanceKm() * 15)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600 dark:text-gray-400">Ride Type:</span>
@@ -448,6 +469,7 @@ export default function RideBook() {
 
             {/* Book Ride Button */}
             <Button 
+            onClick={() => handleBooking()}
               className="w-full py-3 text-lg font-semibold"
               disabled={!pickupLoc || !destLoc}
             >
