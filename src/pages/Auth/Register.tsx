@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
 import RegisterForm from '../../components/modules/Auth/RegisterForm';
-import { useRegisterMutation } from '@/redux/features/auth/auth.api';
+// import { useRegisterMutation } from '@/redux/features/auth/auth.api';
 
 type SignupFormData = {
   fullName: string;
@@ -12,7 +12,7 @@ type SignupFormData = {
 
 export const Register: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [registerUser] = useRegisterMutation();
+  // const [registerUser] = useRegisterMutation();
 
   const onSubmit = async (data: SignupFormData) => {
     try {
@@ -23,8 +23,8 @@ export const Register: React.FC = () => {
         password: data.password,
       };
       console.log(payload)
-      const res = await registerUser(payload).unwrap();
-      console.log('Registered:', res);
+      // const res = await registerUser(payload).unwrap();
+      // console.log('Registered:', res);
       alert('Account created successfully!');
     } catch (error) {
       console.error('Signup error:', error);

@@ -1,38 +1,40 @@
+import { axiosInstance } from "@/lib/axios";
+import type { BaseQueryFn } from "@reduxjs/toolkit/query";
  
-import { axiosInstance } from '@/lib/axios'
-import type { BaseQueryFn } from '@reduxjs/toolkit/query'
- 
-import type { AxiosRequestConfig, AxiosError } from 'axios'
+import { AxiosError, type AxiosRequestConfig } from "axios";
 
-export const axiosBaseQuery =
+const axiosBaseQuery =
   (): BaseQueryFn<
     {
-      url: string
-      method?: AxiosRequestConfig['method']
-      data?: AxiosRequestConfig['data']
-      params?: AxiosRequestConfig['params']
-      headers?: AxiosRequestConfig['headers']
+      url: string;
+      method?: AxiosRequestConfig["method"];
+      data?: AxiosRequestConfig["data"];
+      params?: AxiosRequestConfig["params"];
+      headers?: AxiosRequestConfig["headers"];
     },
     unknown,
     unknown
   > =>
   async ({ url, method, data, params, headers }) => {
+    console.log({ url, method, data, params, headers });
     try {
       const result = await axiosInstance({
-        url:   url,
+        url: url,
         method,
         data,
         params,
         headers,
-      })
-      return { data: result.data }
+      });
+      return { data: result.data };
     } catch (axiosError) {
-      const err = axiosError as AxiosError
+      const err = axiosError as AxiosError;
       return {
         error: {
           status: err.response?.status,
           data: err.response?.data || err.message,
         },
-      }
+      };
     }
-  }
+  };
+
+export default axiosBaseQuery;

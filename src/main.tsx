@@ -5,18 +5,19 @@ import { RouterProvider } from "react-router";
 import { router } from "./routes";
 import { ThemeProvider } from "./provider/theme.provider";
  
-import { Provider } from "react-redux";
+import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./redux/store";
+import { Toaster } from "./components/ui/sonner";
+ 
  
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
- <Provider store={store}>
-
- <ThemeProvider defaultTheme="system" storageKey="mt-ride-theme">
+    <ReduxProvider store={store}>
+      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
         <RouterProvider router={router} />
+        <Toaster richColors />
       </ThemeProvider>
-  
- </Provider>
+    </ReduxProvider>
   </React.StrictMode>
 );
