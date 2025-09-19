@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router';
 import LoginForm from '../../components/modules/Auth/LoginForm';
 import { useLoginMutation } from '@/redux/features/auth/auth.api';
 import { toast } from 'sonner';
+import   Logo from '@/assets/icons/Logo';
 
 type LoginFormData = {
   email: string;
@@ -37,7 +38,13 @@ const Login = () => {
         <div className="text-center mb-8">
           <div className="mb-4">
             <div className="w-16 h-16 bg-primary rounded-full mx-auto flex items-center justify-center mb-4">
-              <span className="text-2xl font-bold text-primary-foreground">R</span>
+              {/* <span className="text-2xl font-bold text-primary-foreground">
+
+              </span> */}
+       
+
+              <Logo/>
+            
             </div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Welcome to My Trip

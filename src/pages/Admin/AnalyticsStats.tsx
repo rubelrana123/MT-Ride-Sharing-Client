@@ -1,51 +1,143 @@
-import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
-
-const sampleData = [
-  { name: "Mon", rides: 12, earnings: 120 },
-  { name: "Tue", rides: 18, earnings: 190 },
-  { name: "Wed", rides: 25, earnings: 260 },
-  { name: "Thu", rides: 22, earnings: 230 },
-  { name: "Fri", rides: 30, earnings: 320 },
-  { name: "Sat", rides: 28, earnings: 300 },
-  { name: "Sun", rides: 20, earnings: 210 },
-];
+import { useGetAnalyticsQuery } from "@/redux/features/analytics/analytics.api";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+} from "recharts";
 
 export default function Analytics() {
+  const { data, isLoading, isError } = useGetAnalyticsQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  if (isLoading) return <div className="p-6">Loading analytics...</div>;
+  if (isError || !data) return <div className="p-6">Failed to load analytics</div>;
+
+  const stats = data;
+
+  // Pie data for users
+  const userPieData = [
+    { name: "Admins", value: stats.totalUsers.totalAdmins },
+    { name: "Riders", value: stats.totalUsers.totalRiders },
+    { name: "Drivers", value: stats.totalUsers.totalDrivers },
+  ];
+
+  // Pie data for rides
+  const ridePieData = [
+    { name: "Completed", value: stats.completedRides },
+    { name: "Cancelled", value: stats.cancelledRides },
+    { name: "Total", value: stats.totalRides },
+  ];
+
+  const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
+
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Analytics</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="rounded-lg border border-border p-4">
-          <h2 className="font-medium mb-4">Rides (weekly)</h2>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={sampleData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
-                <YAxis stroke="hsl(var(--muted-foreground))" />
+    <div className="space-y-6 p-6">
+      <h1 className="text-2xl font-semibold">Admin Dashboard Analytics</h1>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>Total Users</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold">{stats.totalUsers.totalUsers}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Total Rides</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold">{stats.totalRides}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Completed Rides</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold">{stats.completedRides}</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Total Earnings</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold">{stats.totalEarnings} BDT</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Users Distribution */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Users Breakdown</CardTitle>
+          </CardHeader>
+          <CardContent className="h-64">
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={userPieData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label
+                >
+                  {userPieData.map((_, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
                 <Tooltip />
-                <Line type="monotone" dataKey="rides" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-              </LineChart>
+              </PieChart>
             </ResponsiveContainer>
-          </div>
-        </div>
-        <div className="rounded-lg border border-border p-4">
-          <h2 className="font-medium mb-4">Earnings (weekly)</h2>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={sampleData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
-                <YAxis stroke="hsl(var(--muted-foreground))" />
+          </CardContent>
+        </Card>
+
+        {/* Rides Distribution */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Rides Breakdown</CardTitle>
+          </CardHeader>
+          <CardContent className="h-64">
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={ridePieData}
+                  dataKey="value"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label
+                >
+                  {ridePieData.map((_, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
                 <Tooltip />
-                <Line type="monotone" dataKey="earnings" stroke="hsl(var(--chart-2))" strokeWidth={2} dot={false} />
-              </LineChart>
+              </PieChart>
             </ResponsiveContainer>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 }
-
-

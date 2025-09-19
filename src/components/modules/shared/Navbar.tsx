@@ -15,15 +15,18 @@ import { ModeToggle } from "@/components/layout/mode.toggler";
 // import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { useAppDispatch } from "@/redux/hook";
 import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import Logo from "@/assets/icons/Logo";
 
 // Navigation links with roles
 const navigationLinks = [
   { href: "/", label: "Home", icon: Car, role: "PUBLIC" },
   { href: "/about", label: "About", icon: MenuSquare, role: "PUBLIC" },
-  { href: "/ride", label: "Book a Ride", icon: Car, role: "PUBLIC" },//rider
-  { href: "/drivers/driver-application", label: "Become a Drive", icon: Car, role: "PUBLIC" },//driver
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, role: "PUBLIC" },//admin
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, role: "PUBLIC" },//SUPER_ADMIN
+  { href: "/ride-book", label: "Book a Ride", icon: Car, role: "RIDER" },//rider
+  { href: "/drivers/driver-application", label: "Become a Drive", icon: Car, role: "RIDER" },//driver
+  { href: "/rider", label: "Dashboard", icon: LayoutDashboard, role: "RIDER" },//admin
+  { href: "/driver", label: "Dashboard", icon: LayoutDashboard, role: "DRIVER" },//admin
+  { href: "/admin", label: "Admin Panel", icon: LayoutDashboard, role: "ADMIN" },//admin
+  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, role: "SUPER_ADMIN" },//SUPER_ADMIN
 ];
 
 export default function Navbar() {
@@ -33,7 +36,7 @@ export default function Navbar() {
   const { data } = useUserInfoQuery(undefined);
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
-
+  console.log("user data", data)
   const handleLogout = async () => {
     await logout(undefined);
     dispatch(authApi.util.resetApiState());
@@ -46,10 +49,11 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="bg-primary p-2 rounded-lg">
+              {/* <div className="bg-primary p-2 rounded-lg">
                 <Car className="h-6 w-6 text-primary-foreground" />
-              </div>
-              <span className="text-xl font-bold text-foreground">MT Ride</span>
+              </div> */}
+              <Logo/>
+              {/* <span className="text-xl font-bold text-foreground">MT Ride</span> */}
             </Link>
           </div>
 

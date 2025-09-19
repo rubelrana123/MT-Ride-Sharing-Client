@@ -24,7 +24,7 @@ export const router = createBrowserRouter([
         path: "about",
       },
       {
-        path: "/ride",
+        path: "/ride-book",
         Component: RideBook,
       },
       {

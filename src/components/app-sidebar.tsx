@@ -17,6 +17,7 @@ import { Link } from "react-router"
 import { getSildeBarItems } from "@/utils/getSildeBarItems"
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api"
 import Logo from "@/assets/icons/Logo"
+import { Nav } from "react-day-picker"
  
  
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -29,8 +30,10 @@ const NavItems = {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-
+      <Link to="/">
+      
         <Logo/>
+      </Link>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
