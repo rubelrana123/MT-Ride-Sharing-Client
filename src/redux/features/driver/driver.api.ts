@@ -33,7 +33,7 @@ export const driverApi = baseApi.injectEndpoints({
     }),
 
     // Admin / Super Admin: Update application status
-    updateApplicationStatus: builder.mutation({
+    updateDriverStatus: builder.mutation({
       query: ({ id, status }) => ({
         url: `/drivers/driver-application/${id}/status`,
         method: "PATCH",
@@ -58,6 +58,6 @@ export const {
   useApplyDriverMutation,
   useGetDriverApplicationsQuery,
   useGetDriversQuery,
-  useUpdateApplicationStatusMutation,
+  useUpdateDriverStatusMutation,
   useUpdateAvailabilityMutation,
 } = driverApi;
