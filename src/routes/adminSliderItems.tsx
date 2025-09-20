@@ -1,6 +1,7 @@
  
 import AllDriverApplications from "@/components/modules/Admin/DriverApplications";
 import AllRides from "@/pages/Admin/AllRides";
+import AllUsers from "@/pages/Admin/AllUsers";
  
  
  
@@ -25,6 +26,12 @@ export const adminSidebarItems: ISliderItem[] = [
     title: "Ride Management",
     items: [
       { title: "All Rides", url: "/admin/rides", Component: AllRides },
+            {
+        title: "Users",
+        url: "/admin/all-users",
+        Component: AllUsers,
+       
+      },
   
 
     ],
