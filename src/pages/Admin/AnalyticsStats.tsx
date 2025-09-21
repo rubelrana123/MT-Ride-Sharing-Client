@@ -12,13 +12,15 @@ import {
   Cell,
   Tooltip,
 } from "recharts";
+import Loading from "@/components/modules/shared/Loading";
+import ViewAllRides from "./AllRides";
 
 export default function Analytics() {
   const { data, isLoading, isError } = useGetAnalyticsQuery(undefined, {
     refetchOnMountOrArgChange: true,
   });
 
-  if (isLoading) return <div className="p-6">Loading analytics...</div>;
+  if (isLoading) return <Loading />;
   if (isError || !data) return <div className="p-6">Failed to load analytics</div>;
 
   const stats = data;
@@ -138,6 +140,10 @@ export default function Analytics() {
           </CardContent>
         </Card>
       </div>
+   
+     <div className="mt-10">
+     <ViewAllRides/>
+     </div>
     </div>
   );
 }
