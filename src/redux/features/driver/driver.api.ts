@@ -11,15 +11,18 @@ export const driverApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["DRIVER"],
     }),
-
+ //
     // Admin / Super Admin: List driver applications
     getDriverApplications: builder.query({
       query: () => ({
-        url: "/drivers/driver",
+        url: "/drivers/driver-application",
         method: "GET",
       }),
       providesTags: ["DRIVER"],
-      transformResponse: (response) => response.data,
+      transformResponse: (response) => {
+        console.log(response, "driver applications response");
+        return response.data;
+      },
     }),
 
     // Admin / Super Admin: List approved drivers

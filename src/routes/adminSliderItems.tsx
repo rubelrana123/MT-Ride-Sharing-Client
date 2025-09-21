@@ -1,5 +1,5 @@
  
-import AllDriverApplications from "@/components/modules/Admin/DriverApplications";
+import AllDriverApplications from "@/pages/Admin/AllDriverApplications";
 import AllRides from "@/pages/Admin/AllRides";
 import AllUsers from "@/pages/Admin/AllUsers";
  
