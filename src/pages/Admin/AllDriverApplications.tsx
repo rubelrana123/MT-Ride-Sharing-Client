@@ -1,8 +1,8 @@
-import React from "react";
+// Main AllDriverApplications Component
+import React, { useState } from "react";
 import { Link } from "react-router";
-import { Eye, Plus, Trash2 } from "lucide-react";
+import { Eye, Plus, Trash2, Filter, Search, Download } from "lucide-react";
 import { toast } from "sonner";
-
 import {
   Table,
   TableBody,
@@ -12,121 +12,255 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+ 
 import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useGetDriverApplicationsQuery } from "@/redux/features/driver/driver.api";
+import type { DriverApplication, DriverStatus } from "@/types/driver.type";
+import ApplicationStats from "@/components/modules/driver/ApplicationStats";
+import { ApplicationRow } from "@/components/modules/driver/ApplicationRow";
+ 
  
 export default function AllDriverApplications() {
-  const {data : driverApplications} = useGetDriverApplicationsQuery(undefined);
-  console.log(driverApplications, "driver applications data")
-  const handleAccept = (id: string) => {
-    // TODO: integrate with API call: PATCH /driver-application/:id/status
-    toast.success(`Application ${id} accepted!`);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [vehicleTypeFilter, setVehicleTypeFilter] = useState<string>("all");
+
+  const { 
+    data: driverApplicationsResponse, 
+    isLoading, 
+    error 
+  } = useGetDriverApplicationsQuery(undefined);
+console.log(driverApplicationsResponse, "driver applications data")
+  const applications: DriverApplication[] = driverApplicationsResponse || [];
+  const meta = driverApplicationsResponse?.meta;
+
+  const handleStatusUpdate = async (applicationId: string, newStatus: DriverStatus) => {
+    try {
+      // TODO: Implement API call - PATCH /driver-application/:id/status
+      toast.success(`Application status updated to ${newStatus}`);
+    } catch (error) {
+      toast.error("Failed to update application status");
+    }
   };
 
-  const handleDelete = (id: string) => {
-    // TODO: integrate with API call: DELETE /driver-application/:id
-    toast.error(`Application ${id} deleted!`);
+  const handleDelete = async (applicationId: string) => {
+    try {
+      // TODO: Implement API call - DELETE /driver-application/:id
+      toast.success("Application deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete application");
+    }
   };
+
+  // Filter applications based on search and filters
+  const filteredApplications = applications.filter((app) => {
+    const matchesSearch = 
+      app.driver.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      app.driver.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      app.licenseNumber.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus = statusFilter === "all" || app.driverStatus === statusFilter;
+    
+    const matchesVehicleType = 
+      vehicleTypeFilter === "all" || 
+      app.vehicleInfo.vehicleType.toLowerCase() === vehicleTypeFilter.toLowerCase();
+
+    return matchesSearch && matchesStatus && matchesVehicleType;
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p>Loading applications...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Failed to load applications</p>
+          <Button onClick={() => window.location.reload()}>Retry</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Driver Applications</h1>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Driver Applications
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Manage and review driver applications
+          </p>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <Button variant="outline" className="flex items-center gap-2">
+            <Download className="h-4 w-4" />
+            Export
+          </Button>
+        </div>
+      </div>
 
-            <TableHead>Vehicle Type</TableHead>
-            <TableHead>Model</TableHead>
+      {/* Statistics */}
+      <ApplicationStats applications={applications} />
 
-            <TableHead className="text-right">Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {driverApplications?.map((application : any) => (
-            <TableRow key={application._id}>
-              <TableCell>{application?.driver?.name}</TableCell>
-              <TableCell>{application?.driver?.email}</TableCell>
+      {/* Filters and Search */}
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex flex-col lg:flex-row lg:items-center gap-4">
+            {/* Search */}
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search by name, email, or license number..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
 
-              <TableCell>{application.vehicleInfo.vehicleType}</TableCell>
-              <TableCell>{application.vehicleInfo.model}</TableCell>
-              <TableCell className="text-right">
-                <div className="flex items-center justify-end space-x-2">
-                  {/* View button */}
-                  <Link to={`/applications/${application._id}`}>
-                    <Button variant="ghost" size="sm">
-                      <Eye className="h-4 w-4" />
-                      <span className="sr-only">View details</span>
-                    </Button>
-                  </Link>
+            {/* Status Filter */}
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full lg:w-48">
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Statuses</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="approved">Approved</SelectItem>
+                <SelectItem value="rejected">Rejected</SelectItem>
+                <SelectItem value="suspend">Suspended</SelectItem>
+              </SelectContent>
+            </Select>
 
-                  {/* Accept button */}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-green-600 hover:text-green-700"
-                    onClick={() => handleAccept(application._id)}
-                  >
-                    <Plus className="h-4 w-4" />
-                    <span className="sr-only">Accept</span>
-                  </Button>
+            {/* Vehicle Type Filter */}
+            <Select value={vehicleTypeFilter} onValueChange={setVehicleTypeFilter}>
+              <SelectTrigger className="w-full lg:w-48">
+                <SelectValue placeholder="Filter by vehicle" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Vehicles</SelectItem>
+                <SelectItem value="bike">Bike</SelectItem>
+                <SelectItem value="car">Car</SelectItem>
+                <SelectItem value="taxi">Taxi</SelectItem>
+                <SelectItem value="scooter">Scooter</SelectItem>
+              </SelectContent>
+            </Select>
 
-                  {/* Delete button with confirmation */}
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span className="sr-only">Delete application</span>
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This will permanently delete "
-                          {application.vehicleInfo.vehicleType}" application.
-                          This action cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <Button
-                          variant="destructive"
-                          onClick={() => handleDelete(application._id)}
-                        >
-                          Delete
-                        </Button>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+            {/* Clear Filters */}
+            {(searchTerm || statusFilter !== "all" || vehicleTypeFilter !== "all") && (
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSearchTerm("");
+                  setStatusFilter("all");
+                  setVehicleTypeFilter("all");
+                }}
+              >
+                Clear Filters
+              </Button>
+            )}
+          </div>
+
+          {/* Results Count */}
+          <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+            Showing {filteredApplications.length} of {applications.length} applications
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Applications Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Filter className="h-5 w-5" />
+            Applications List
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Driver</TableHead>
+                  <TableHead>Contact</TableHead>
+                  <TableHead>Vehicle Info</TableHead>
+                  <TableHead>License</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Earnings</TableHead>
+                  <TableHead>Applied Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredApplications.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={8} className="text-center py-8 text-gray-500">
+                      No applications found matching your criteria
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  filteredApplications.map((application) => (
+                    <ApplicationRow 
+                      key={application._id} 
+                      application={application}
+                      onStatusUpdate={handleStatusUpdate}
+                      onDelete={handleDelete}
+                    />
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Pagination */}
+      {meta && meta.totalPages > 1 && (
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
+                Page {meta.page} of {meta.totalPages} ({meta.total} total applications)
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" size="sm" disabled={meta.page === 1}>
+                  Previous
+                </Button>
+                <Button variant="outline" size="sm" disabled={meta.page === meta.totalPages}>
+                  Next
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
+// import React from "react";
+// import { Link } from "react-router";
+// import { Eye, Plus, Trash2 } from "lucide-react";
+// import { toast } from "sonner";
 
-
-// import { Button } from "@/components/ui/button";
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
- 
 // import {
 //   Table,
 //   TableBody,
@@ -135,357 +269,115 @@ export default function AllDriverApplications() {
 //   TableHeader,
 //   TableRow,
 // } from "@/components/ui/table";
+// import { Button } from "@/components/ui/button";
 // import {
 //   AlertDialog,
-//   AlertDialogAction,
-//   AlertDialogCancel,
+//   AlertDialogTrigger,
 //   AlertDialogContent,
-//   AlertDialogDescription,
-//   AlertDialogFooter,
 //   AlertDialogHeader,
 //   AlertDialogTitle,
-//   AlertDialogTrigger,
+//   AlertDialogDescription,
+//   AlertDialogFooter,
+//   AlertDialogCancel,
 // } from "@/components/ui/alert-dialog";
-// import { Trash2, BookPlus, Eye, Plus, BookLock } from "lucide-react";
-// import { Badge } from "@/components/ui/badge";
-// import { useState } from "react";
-// import { Link } from "react-router";
-// import { toast } from "sonner";
 // import { useGetDriverApplicationsQuery } from "@/redux/features/driver/driver.api";
-
-// const applicatoinsData = {
-//   "statusCode": 200,
-//   "success": true,
-//   "message": "All Driver Application has been retrive successfully",
-//   "meta": {
-//       "page": 1,
-//       "limit": 10,
-//       "total": 3,
-//       "totalPages": 1
-//   },
-//   "data": [
-//       {
-//           "vehicleInfo": {
-//               "vehicleType": "texi",
-//               "model": "BM RE",
-//               "plate": "SYL-5621"
-//           },
-//           "_id": "68a21c02e0361c0d4b7b692a",
-//           "driver": "68a0b3b564445e3276f79bcb",
-//           "licenseNumber": "DX-2025-0789",
-//           "availability": "offline",
-//           "driverStatus": "pending",
-//           "earnings": 0,
-//           "createdAt": "2025-08-17T18:14:26.213Z",
-//           "updatedAt": "2025-08-17T18:14:26.213Z"
-//       },
-//       {
-//           "vehicleInfo": {
-//               "vehicleType": "CNG",
-//               "model": "Bajaj RE",
-//               "plate": "SYL-5621"
-//           },
-//           "_id": "689b831bf15176bd6cc3c4e7",
-//           "driver": "6891ae0d170cad5ec181ea5d",
-//           "licenseNumber": "DL-2025-0789",
-//           "availability": "offline",
-//           "driverStatus": "pending",
-//           "earnings": 0,
-//           "createdAt": "2025-08-12T18:08:27.341Z",
-//           "updatedAt": "2025-08-12T18:08:27.341Z"
-//       },
-//       {
-//           "vehicleInfo": {
-//               "vehicleType": "CNG",
-//               "model": "Bajaj RE",
-//               "plate": "SYL-5621"
-//           },
-//           "_id": "689b82c4f15176bd6cc3c4de",
-//           "driver": "6891ae3b170cad5ec181ea66",
-//           "licenseNumber": "DL-2025-0789",
-//           "availability": "offline",
-//           "driverStatus": "pending",
-//           "earnings": 0,
-//           "createdAt": "2025-08-12T18:07:00.437Z",
-//           "updatedAt": "2025-08-12T18:07:00.437Z"
-//       }
-//   ]
-// }
-
-
-// const AllDriverApplications = () => {
-
-// const [currentPage, setCurrentPage] = useState(1);
-// const applicationPerPage = 6;
-
-// const { data, isLoading } = useGetDriverApplicationsQuery(
-//   { page: currentPage, limit: applicationPerPage },
-//   {
-//     refetchOnFocus: true,
-//     refetchOnMountOrArgChange: true,
-//     refetchOnReconnect: true,
-//   }
-// );
-
-// const applications = applicatoinsData?.data || [];
-// const totalPages = applicatoinsData?.meta?.totalPages || 1;
-// console.log(applications, "applications")
  
+// export default function AllDriverApplications() {
+//   const {data : driverApplications} = useGetDriverApplicationsQuery(undefined);
+//   console.log(driverApplications, "driver applications data")
+//   const handleAccept = (id: string) => {
+//     // TODO: integrate with API call: PATCH /driver-application/:id/status
+//     toast.success(`Application ${id} accepted!`);
+//   };
 
-//   if (isLoading) {
-//     return (
-//       <>
-//         <div className="flex items-center justify-center min-h-[400px]">
-//           <div className="text-center">
-//             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-//             <p className="text-muted-foreground">Loading books...</p>
-//           </div>
-//         </div>
-//       </>
-//     );
-//   }
+//   const handleDelete = (id: string) => {
+//     // TODO: integrate with API call: DELETE /driver-application/:id
+//     toast.error(`Application ${id} deleted!`);
+//   };
 
 //   return (
-//     <>
-//       <div className="space-y-6">
-//         {/* Header */}
-//         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-//           <div>
-//             <h1 className="text-3xl font-bold text-foreground">All Drivers Applications</h1>
-//             <p className="text-muted-foreground">Manage your Drivers Applications</p>
-//           </div>
-//         </div>
+//     <div className="p-6">
+//       <h1 className="text-2xl font-bold mb-4">Driver Applications</h1>
+//       <Table>
+//         <TableHeader>
+//           <TableRow>
+//             <TableHead>Name</TableHead>
+//             <TableHead>Email</TableHead>
 
-//         {/* Stats */}
-//         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-//           <Card>
-//             <CardHeader className="pb-2">
-//               <CardTitle className="text-sm font-medium text-muted-foreground">
-//                 Total Applications
-//               </CardTitle>
-//             </CardHeader>
-//             <CardContent>
-//               <div className="text-2xl font-bold text-foreground">
-//                 {applications?.length}
-//               </div>
-//             </CardContent>
-//           </Card>
+//             <TableHead>Vehicle Type</TableHead>
+//             <TableHead>Model</TableHead>
 
-//           <Card>
-//             <CardHeader className="pb-2">
-//               <CardTitle className="text-sm font-medium text-muted-foreground">
-//                 Available Books
-//               </CardTitle>
-//             </CardHeader>
-//             <CardContent>
-//               <div className="text-2xl font-bold text-success">
-//                 {/* {books?.filter((book: IBook) => book?.available).length} */}
-//               </div>
-//             </CardContent>
-//           </Card>
+//             <TableHead className="text-right">Actions</TableHead>
+//           </TableRow>
+//         </TableHeader>
+//         <TableBody>
+//           {driverApplications?.map((application : any) => (
+//             <TableRow key={application._id}>
+//               <TableCell>{application?.driver?.name}</TableCell>
+//               <TableCell>{application?.driver?.email}</TableCell>
 
-//           <Card>
-//             <CardHeader className="pb-2">
-//               <CardTitle className="text-sm font-medium text-muted-foreground">
-//                 Total Copies
-//               </CardTitle>
-//             </CardHeader>
-//             <CardContent>
-//               <div className="text-2xl font-bold text-foreground">
-//                 {/* {applications.reduce(
-//                   (sum: number, book: IBook) => sum + book.copies,
-//                   0
-//                 )} */}
-//               </div>
-//             </CardContent>
-//           </Card>
-//         </div>
+//               <TableCell>{application.vehicleInfo.vehicleType}</TableCell>
+//               <TableCell>{application.vehicleInfo.model}</TableCell>
+//               <TableCell className="text-right">
+//                 <div className="flex items-center justify-end space-x-2">
+//                   {/* View button */}
+//                   <Link to={`/applications/${application._id}`}>
+//                     <Button variant="ghost" size="sm">
+//                       <Eye className="h-4 w-4" />
+//                       <span className="sr-only">View details</span>
+//                     </Button>
+//                   </Link>
 
-//         {/* Books Table */}
-//         <Card>
-//           <CardHeader>
-//             <CardTitle>All Books</CardTitle>
-//           </CardHeader>
-//           <CardContent>
-//             {applications?.length === 0 ? (
-//               <div className="text-center py-12">
-//                 <div className="text-muted-foreground mb-4">
-//                   <BookPlus className="h-12 w-12 mx-auto mb-4 opacity-50" />
-//                   <p className="text-lg">No books found</p>
-//                   <p className="text-sm">Add your first book to get started</p>
+//                   {/* Accept button */}
+//                   <Button
+//                     variant="ghost"
+//                     size="sm"
+//                     className="text-green-600 hover:text-green-700"
+//                     onClick={() => handleAccept(application._id)}
+//                   >
+//                     <Plus className="h-4 w-4" />
+//                     <span className="sr-only">Accept</span>
+//                   </Button>
+
+//                   {/* Delete button with confirmation */}
+//                   <AlertDialog>
+//                     <AlertDialogTrigger asChild>
+//                       <Button
+//                         variant="ghost"
+//                         size="sm"
+//                         className="text-destructive"
+//                       >
+//                         <Trash2 className="h-4 w-4" />
+//                         <span className="sr-only">Delete application</span>
+//                       </Button>
+//                     </AlertDialogTrigger>
+//                     <AlertDialogContent>
+//                       <AlertDialogHeader>
+//                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+//                         <AlertDialogDescription>
+//                           This will permanently delete "
+//                           {application.vehicleInfo.vehicleType}" application.
+//                           This action cannot be undone.
+//                         </AlertDialogDescription>
+//                       </AlertDialogHeader>
+//                       <AlertDialogFooter>
+//                         <AlertDialogCancel>Cancel</AlertDialogCancel>
+//                         <Button
+//                           variant="destructive"
+//                           onClick={() => handleDelete(application._id)}
+//                         >
+//                           Delete
+//                         </Button>
+//                       </AlertDialogFooter>
+//                     </AlertDialogContent>
+//                   </AlertDialog>
 //                 </div>
-              
-//                   <Button>No Applications here</Button>
-                
-//               </div>
-//             ) : (
-//               <div className="overflow-x-auto">
-//                 <Table>
-//                   <TableHeader>
-//                     <TableRow>
-//                       <TableHead>Title</TableHead>
-//                       <TableHead>Availability</TableHead>
-//                       <TableHead>Status</TableHead>
-//                       <TableHead>View</TableHead>
-//                       <TableHead className=" text-center">Actions</TableHead>
-//                     </TableRow>
-//                   </TableHeader>
-//                   {/*table body */}
-//                   <TableBody>
-//                     {applications?.map((application) => (
-//                       <TableRow key={application._id}>
-//                         <TableCell className="font-medium">
-//                           {application?.vehicleInfo?.vehicleType}
-//                         </TableCell>
-//                         <TableCell>{application?.availability}</TableCell>
-//                         <TableCell>{application?.driverStatus}</TableCell>
-  
-//                         <TableCell>
-//                           <Badge
-//                             variant={application.availability ? "default" : "secondary"}
-//                             className={
-//                               application?.availability
-//                                 ? "bg-white text-green-500"
-//                                 : "bg-white text-red-500 line-through"
-//                             }
-//                           >
-//                             {application.availability ? "Available" : "available"}
-//                           </Badge>
-//                         </TableCell>
-//                         <TableCell className="text-right">
-//                           <div className="flex items-center justify-end space-x-2">
-//                             <Link to={`/applications/${application._id}`}>
-//                               <Button variant="ghost" size="sm">
-//                                 <Eye className="h-4 w-4" />
-//                                 <span className="sr-only">View details</span>
-//                               </Button>
-//                             </Link>
-
-//                             {/* <Button variant="ghost" size="sm">
-//                               <EditapplicationDialog application={application} />
-//                             </Button> */}
-// {/* 
-//                             {application.available && application.copies ? (
-//                               <>
-//                                 {" "}
-//                                 <BorrowapplicationDialog application={application} />
-//                               </>
-//                             ) : (
-//                               <Button
-//                                 variant="ghost"
-//                                 size="sm"
-//                                 className="text-red-500 block"
-//                               >
-//                                 <BookLock className="h-4 w-4" />
-//                                 <span className="sr-only">Borrow book</span>
-//                               </Button>
-//                             )} */}
-
-//                             <AlertDialog>
-//                               <AlertDialogTrigger asChild>
-//                                 <Button
-//                                   variant="ghost"
-//                                   size="sm"
-//                                   className="text-destructive"
-//                                 >
-//                                   <Trash2 className="h-4 w-4" />
-//                                   <span className="sr-only">Delete book</span>
-//                                 </Button>
-//                               </AlertDialogTrigger>
-//                               <AlertDialogContent>
-//                                 <AlertDialogHeader>
-//                                   <AlertDialogTitle>
-//                                     Are you sure?
-//                                   </AlertDialogTitle>
-//                                   <AlertDialogDescription>
-//                                     This will permanently delete "{application.vehicleInfo.vehicleType}"
-//                                     from your library. This action cannot be
-//                                     undone.
-//                                   </AlertDialogDescription>
-//                                 </AlertDialogHeader>
-//                                 <AlertDialogFooter>
-//                                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-//                                   {/* <AlertDialogAction
-//                                     onClick={() => handleDelete(application._id)}
-//                                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-//                                   >
-//                                     Delete
-//                                   </AlertDialogAction> */}
-//                                 </AlertDialogFooter>
-//                               </AlertDialogContent>
-//                             </AlertDialog>
-//                           </div>
-//                         </TableCell>
-//                       </TableRow>
-//                     ))}
-//                   </TableBody>                  
-
-//                 </Table>
-//               </div>
-//             )}
-//           </CardContent>
-//         </Card>
-
-//         <div className="text-center my-10">
-//           {/* Pagination */}
-//           <div className="flex justify-center items-center gap-2 flex-wrap mt-10">
-//             {/* Previous Button */}
-//             <button
-//               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-//               disabled={currentPage === 1}
-//               className={`px-3 py-1 text-sm font-medium rounded-md border 
-//       ${
-//         currentPage === 1
-//           ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-//           : "bg-green-500 text-white hover:bg-green-600 border-green-500"
-//       }
-//     `}
-//             >
-//               Previous
-//             </button>
-
-//             {/* Page Buttons */}
-//             {[...Array(totalPages)].map((_, i) => {
-//               const page = i + 1;
-//               const isActive = currentPage === page;
-//               return (
-//                 <button
-//                   key={i}
-//                   onClick={() => setCurrentPage(page)}
-//                   className={`px-3 py-1 text-sm font-medium rounded-md border transition-all duration-150
-//           ${
-//             isActive
-//               ? "bg-green-600 text-white border-green-600"
-//               : "bg-white text-gray-800 border-gray-300 hover:bg-green-100"
-//           }
-//         `}
-//                 >
-//                   {page}
-//                 </button>
-//               );
-//             })}
-
-//             {/* Next Button */}
-//             <button
-//               onClick={() =>
-//                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-//               }
-//               disabled={currentPage === totalPages}
-//               className={`px-3 py-1 text-sm font-medium rounded-md border 
-//       ${
-//         currentPage === totalPages
-//           ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-//           : "bg-green-500 text-white hover:bg-green-600 border-green-500"
-//       }
-//     `}
-//             >
-//               Next
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </>
+//               </TableCell>
+//             </TableRow>
+//           ))}
+//         </TableBody>
+//       </Table>
+//     </div>
 //   );
-// };
-
-// export default AllDriverApplications;
+// }
+  
