@@ -23,22 +23,7 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { useGetDriverApplicationsQuery } from "@/redux/features/driver/driver.api";
-import { da } from "date-fns/locale";
-
-// Dummy data for driver applications
-const driverApplications = [
-  {
-    _id: "1",
-    name: "John Doe",
-    vehicleInfo: { vehicleType: "Car", model: "Toyota Prius" },
-  },
-  {
-    _id: "2",
-    name: "Jane Smith",
-    vehicleInfo: { vehicleType: "Bike", model: "Honda CBR" },
-  },
-];
-
+ 
 export default function AllDriverApplications() {
   const {data : driverApplications} = useGetDriverApplicationsQuery(undefined);
   console.log(driverApplications, "driver applications data")
@@ -59,15 +44,20 @@ export default function AllDriverApplications() {
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
+            <TableHead>Email</TableHead>
+
             <TableHead>Vehicle Type</TableHead>
             <TableHead>Model</TableHead>
+
             <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {driverApplications?.map((application : any) => (
             <TableRow key={application._id}>
-              <TableCell>{application.name}</TableCell>
+              <TableCell>{application?.driver?.name}</TableCell>
+              <TableCell>{application?.driver?.email}</TableCell>
+
               <TableCell>{application.vehicleInfo.vehicleType}</TableCell>
               <TableCell>{application.vehicleInfo.model}</TableCell>
               <TableCell className="text-right">

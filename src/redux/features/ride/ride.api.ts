@@ -1,4 +1,5 @@
 import { baseApi } from "@/redux/baseApi";
+import type { IRide } from "@/types/ride.type";
 
 export const rideApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -11,7 +12,18 @@ export const rideApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["RIDE"],
     }),
-
+    // Get ride details
+    rideDetails: builder.query<IRide, string>({
+      query: (rideId) => ({
+        url: `/rides/${rideId}/details`,
+        method: "GET",
+      }),
+      providesTags: ["RIDE"],
+      transformResponse: (response: { data: IRide }) => {
+        console.log(response, "ride details response");
+        return response.data;
+      },
+    }),
     // Admin: List all rides
     getAllRides: builder.query({
       query: () => ({
@@ -70,4 +82,5 @@ export const {
   useGetDriverEarningsQuery,
   useUpdateRideStatusMutation,
   useCancelRideMutation,
+  useRideDetailsQuery
 } = rideApi;

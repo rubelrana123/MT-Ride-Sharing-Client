@@ -26,6 +26,7 @@ import {
 import { useUpdateDriverStatusMutation } from "@/redux/features/driver/driver.api";
 import { useUpdateRiderStatusMutation } from "@/redux/features/user/user.api";
  
+ 
 import type { IUser } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Dispatch, type SetStateAction } from "react";
@@ -54,14 +55,15 @@ export function UserStatusUpdateModal({
   const form = useForm<z.infer<typeof userStatusSchema>>({
     resolver: zodResolver(userStatusSchema),
     defaultValues: {
-      status: user.status,
+      status: user.isActive,
     },
   });
 
-  console.log(user, "user in modal", open, "modal open", user?.status, "user status");
+  console.log(user, "user in modal", open, "modal open", user?.isActive, "user status");
   const onSubmit = async (values: z.infer<typeof userStatusSchema>) => {
     const toastId = toast.loading("Updating...");
-   
+   console.log( "staus here",user._id,
+           values.status,)
     try {
       if (user?.role === "RIDER") {
         const res = await updateRiderStatus({

@@ -7,13 +7,12 @@ import type {
   IUpdateProfile,
   IUser,
 } from "@/types";
-import type { get } from "http";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getUserProfile: builder.query({
       query: () => ({
-        url: "/user/me",
+        url: "/users/me",
         method: "GET",
       }),
       providesTags: ["USER"],
@@ -57,9 +56,16 @@ export const userApi = baseApi.injectEndpoints({
     //   },
     //   providesTags: ["USER"],
     // }),
+    getUserById: builder.query<IResponse<IUser>, string>({
+      query: (userId) => ({
+        url: `/users/${userId}`,
+        method: "GET",
+      }),
+      providesTags: ["USER"],
+    }),
     updateUserInfo: builder.mutation<IResponse<IUser>, IUpdateProfile>({
       query: ({ userId, userData }) => ({
-        url: `/user/${userId}`,
+        url: `/users/${userId}`,
         method: "PATCH",
         data: userData,
       }),
@@ -67,7 +73,7 @@ export const userApi = baseApi.injectEndpoints({
     }),
     updateRiderStatus: builder.mutation<IResponse<IUser>, IRiderUpdateStatus>({
       query: (userData) => ({
-        url: `/user/${userData.userId}/userStatus`,
+        url: `/users/${userData.userId}/userStatus`,
         method: "PATCH",
         data: userData,
       }),
@@ -75,7 +81,7 @@ export const userApi = baseApi.injectEndpoints({
     }),
     deleteUser: builder.mutation<IResponse<null>, string>({
       query: (userId) => ({
-        url: `/user/${userId}`,
+        url: `/users/${userId}`,
         method: "DELETE",
       }),
       invalidatesTags: ["USER"],
@@ -89,4 +95,5 @@ export const {
   useUpdateUserInfoMutation,
   useUpdateRiderStatusMutation,
   useDeleteUserMutation,
+  useGetUserByIdQuery
 } = userApi;
