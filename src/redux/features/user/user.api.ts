@@ -18,44 +18,32 @@ export const userApi = baseApi.injectEndpoints({
       providesTags: ["USER"],
       transformResponse: (response) => response.data,
     }),
-    getAllUsers: builder.query<IResponse<IUser[]>, IRidesParams>({
-      query: () => ({
-        url: "/users/all-users",
-        method: "GET",
-      }),
-      providesTags: ["USER"],
-    //   transformResponse: (response) => response.data,
-    }),
     // getAllUsers: builder.query<IResponse<IUser[]>, IRidesParams>({
-    //   query: ({
-    //     page = 1,
-    //     limit = 10,
-    //     sortBy = "createdAt",
-    //     sortOrder = "desc",
-    //     searchTerm,
-    //     fields,
-    //   }) => {
-    //     const params = new URLSearchParams();
-
-    //     if (page) params.append("page", page.toString());
-    //     if (limit) params.append("limit", limit.toString());
-    //     if (sortBy) params.append("sortBy", sortBy);
-    //     if (sortOrder) params.append("sortOrder", sortOrder);
-    //     if (searchTerm) {
-    //       params.append("searchTerm", searchTerm);
-    //     }
-    //     if (fields) {
-    //       params.append("fields", fields);
-    //     }
-
-    //     return {
-    //       url: "/users/all-users",
-    //       method: "GET",
-    //       params: params,
-    //     };
-    //   },
+    //   query: () => ({
+    //     url: "/users/all-users",
+    //     method: "GET",
+    //   }),
     //   providesTags: ["USER"],
+    // //   transformResponse: (response) => response.data,
     // }),
+getAllUsers: builder.query<IResponse<IUser[]>, IRidesParams>({
+  query: ({ page, limit, sort, searchTerm, fields }) => {
+    const params = new URLSearchParams();
+    if (sort) params.append("sort", sort.toString());
+    if (fields) params.append("fields", fields); // 👈 backend wants comma separated, not space separated
+    if (limit) params.append("limit", limit.toString());
+    if (page) params.append("page", page.toString()); // optional if backend supports
+    if (searchTerm) params.append("searchTerm", searchTerm);
+
+    return {
+      url: "/users/all-users",
+      method: "GET",
+      params,
+    };
+  },
+  providesTags: ["USER"],
+}),
+
     getUserById: builder.query<IResponse<IUser>, string>({
       query: (userId) => ({
         url: `/users/${userId}`,

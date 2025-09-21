@@ -1,3 +1,6 @@
+ 
+
+
 import Loading from "@/components/modules/shared/Loading";
 import PaginationPage from "@/components/modules/shared/Pagination";
 import { UserStatusUpdateModal } from "@/components/modules/user/UserStatusUpdateModal";
@@ -19,6 +22,7 @@ import { cn } from "@/lib/utils";
 import {
   useDeleteUserMutation,
   useGetAllUsersQuery,
+  useUpdateRiderStatusMutation,
 } from "@/redux/features/user/user.api";
 
 import type { IUser } from "@/types";
@@ -29,23 +33,23 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 
-//    const userStatusColorMap: Record<string, string> = {
-//   // IsActive statuses
-//   active:
-//     "text-green-800 bg-green-100 dark:text-green-300 dark:bg-green-900/50",
-//   inactive: "text-gray-800 bg-gray-100 dark:text-gray-400 dark:bg-gray-800/50",
-//   blocked: "text-red-800 bg-red-100 dark:text-red-300 dark:bg-red-900/50",
+   const userStatusColorMap: Record<string, string> = {
+  // IsActive statuses
+  active:
+    "text-green-800 bg-green-100 dark:text-green-300 dark:bg-green-900/50",
+  inactive: "text-gray-800 bg-gray-100 dark:text-gray-400 dark:bg-gray-800/50",
+  blocked: "text-red-800 bg-red-100 dark:text-red-300 dark:bg-red-900/50",
 
-//   // DriverStatus statuses
-//   pending:
-//     "text-yellow-800 bg-yellow-100 dark:text-yellow-300 dark:bg-yellow-900/50",
-//   approved:
-//     "text-green-800 bg-green-100 dark:text-green-300 dark:bg-green-900/50",
-//   rejected: "text-red-800 bg-red-100 dark:text-red-300 dark:bg-red-900/50",
-//   //
-//   suspend:
-//     "text-orange-800 bg-orange-100 dark:text-orange-300 dark:bg-orange-900/50",
-// };
+  // DriverStatus statuses
+  pending:
+    "text-yellow-800 bg-yellow-100 dark:text-yellow-300 dark:bg-yellow-900/50",
+  approved:
+    "text-green-800 bg-green-100 dark:text-green-300 dark:bg-green-900/50",
+  rejected: "text-red-800 bg-red-100 dark:text-red-300 dark:bg-red-900/50",
+  //
+  suspend:
+    "text-orange-800 bg-orange-100 dark:text-orange-300 dark:bg-orange-900/50",
+};
 
 export default function AllUsers() {
   const [page, setPage] = useState(1);
@@ -54,6 +58,7 @@ export default function AllUsers() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [deleteUser] = useDeleteUserMutation();
+ 
   const limit = 20;
 
   // --- Debounce Logic ---
@@ -69,23 +74,23 @@ export default function AllUsers() {
   }, [inputValue]);
 
   // fetch all rides
-  const { data, isLoading } = useGetAllUsersQuery({
+  const { data, isLoading, isError } = useGetAllUsersQuery({
     page,
     limit,
-    sortBy: "createdAt",
-    sortOrder: "desc",
+    sort: "createdAt",
+    // sortOrder: "desc",
     searchTerm,
     fields:
       "name email role isActive isDeleted status phoneNumber address createdAt",
   });
-
-  console.log(data, "all users data");
+ 
+  console.log(data?.data, "all users data");
 
   if (isLoading && !data) return <Loading />;
 
   const allUsers = data?.data;
   const pagination = data?.meta;
-
+console.log(pagination, "pagination");
   const serialNumber = (page - 1) * limit;
 
   // handle search when enter key was clicked
@@ -108,10 +113,11 @@ export default function AllUsers() {
       confirmButtonText: "Yes, delete it!",
     });
 
-    const toastId = toast.loading("Deleting...");
     try {
       if (result.isConfirmed) {
+
         const res = await deleteUser(userId).unwrap();
+        const toastId = toast.loading("Deleting...");
         if (res.success && res.statusCode === 200) {
           toast.success(res.message, { id: toastId });
         }
@@ -206,7 +212,7 @@ export default function AllUsers() {
                       ? "Deleted"
                       : user?.isActive
                       ? user?.isActive
-                      : "Inactive"}
+                      : "Blocked"}
                   </Badge>
                 </TableCell>
                 <TableCell>{dateFormater(new Date(user?.createdAt))}</TableCell>
@@ -239,7 +245,7 @@ export default function AllUsers() {
       {Array.isArray(allUsers) &&
         allUsers.length > 0 &&
         pagination &&
-        pagination.total > 20 && (
+        pagination.total > 10 && (
           <div className="mt-10">
             <PaginationPage
               page={page}
@@ -260,3 +266,6 @@ export default function AllUsers() {
     </div>
   );
 }
+
+
+ 

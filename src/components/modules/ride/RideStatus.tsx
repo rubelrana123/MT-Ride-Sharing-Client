@@ -1,7 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { dateFormater } from "@/utils/dateFormater";
-import { Clock, CheckCircle, XCircle, Car } from "lucide-react";
+import { Clock, CheckCircle, XCircle, Car, UserCheck, Navigation, MapPin } from "lucide-react";
+ 
 
 interface RideStatusProps {
   rideStatus: string;
@@ -9,48 +10,71 @@ interface RideStatusProps {
 }
 
 export default function RideStatus({ rideStatus, createdAt }: RideStatusProps) {
-  const getStatusConfig = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "requested":
-        return {
-          color: "bg-yellow-500",
-          icon: Clock,
-          label: "Requested",
-          description: "Looking for a driver"
-        };
-      case "accepted":
-        return {
-          color: "bg-blue-500",
-          icon: Car,
-          label: "Accepted",
-          description: "Driver is on the way"
-        };
-      case "completed":
-        return {
-          color: "bg-green-500",
-          icon: CheckCircle,
-          label: "Completed",
-          description: "Trip completed successfully"
-        };
-      case "cancelled":
-        return {
-          color: "bg-red-500",
-          icon: XCircle,
-          label: "Cancelled",
-          description: "Trip was cancelled"
-        };
-      default:
-        return {
-          color: "bg-gray-500",
-          icon: Clock,
-          label: status,
-          description: "Status unknown"
-        };
+  const statusFlow = [
+    {
+      id: "requested",
+      label: "Requested",
+      icon: Clock,
+      color: "bg-yellow-500",
+      description: "Looking for a driver"
+    },
+    {
+      id: "rejected",
+      label: "Rejected",
+      icon: XCircle,
+      color: "bg-red-500",
+      description: "Request was rejected"
+    },
+    {
+      id: "accepted",
+      label: "Accepted",
+      icon: CheckCircle,
+      color: "bg-blue-500",
+      description: "Driver accepted the ride"
+    },
+    {
+      id: "picked_up",
+      label: "Picked Up",
+      icon: UserCheck,
+      color: "bg-indigo-500",
+      description: "Passenger has been picked up"
+    },
+    {
+      id: "in_transit",
+      label: "In Transit",
+      icon: Navigation,
+      color: "bg-purple-500",
+      description: "Trip is in progress"
+    },
+    {
+      id: "completed",
+      label: "Completed",
+      icon: MapPin,
+      color: "bg-green-500",
+      description: "Trip completed successfully"
     }
+  ];
+
+  const getStatusConfig = (status: string) => {
+    const foundStatus = statusFlow.find(s => s.id === status.toLowerCase());
+    if (foundStatus) return foundStatus;
+    
+    // Fallback for unknown status
+    return {
+      color: "bg-gray-500",
+      icon: Clock,
+      label: status,
+      description: "Status unknown"
+    };
+  };
+
+  const getCurrentStatusIndex = () => {
+    return statusFlow.findIndex(s => s.id === rideStatus.toLowerCase());
   };
 
   const config = getStatusConfig(rideStatus);
   const Icon = config.icon;
+  const currentIndex = getCurrentStatusIndex();
 
   return (
     <Card>
@@ -61,8 +85,9 @@ export default function RideStatus({ rideStatus, createdAt }: RideStatusProps) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-3">
-          <Badge className={`${config.color} text-white`}>
+        {/* Current Status Badge */}
+        <div className="flex items-center gap-3 mb-6">
+          <Badge className={`${config.color} text-white px-3 py-1`}>
             {config.label}
           </Badge>
           <div>
@@ -74,89 +99,74 @@ export default function RideStatus({ rideStatus, createdAt }: RideStatusProps) {
             </p>
           </div>
         </div>
+
+        {/* Status Flow Timeline */}
+        <div className="space-y-3">
+          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            Status Timeline
+          </h4>
+          <div className="relative">
+            {statusFlow.map((status, index) => {
+              const StatusIcon = status.icon;
+              const isActive = index <= currentIndex;
+              const isCurrent = index === currentIndex;
+              const isCompleted = index < currentIndex;
+              
+              return (
+                <div key={status.id} className="flex items-center gap-3 relative">
+                  {/* Timeline Line */}
+                  {index !== statusFlow.length - 1 && (
+                    <div 
+                      className={`absolute left-4 top-8 w-0.5 h-8 ${
+                        isCompleted ? 'bg-green-500' : 'bg-gray-200 dark:bg-gray-700'
+                      }`}
+                    />
+                  )}
+                  
+                  {/* Status Icon */}
+                  <div 
+                    className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center ${
+                      isCurrent 
+                        ? status.color + ' text-white' 
+                        : isCompleted
+                        ? 'bg-green-500 text-white'
+                        : 'bg-gray-200 dark:bg-gray-700 text-gray-400'
+                    }`}
+                  >
+                    <StatusIcon className="h-4 w-4" />
+                  </div>
+                  
+                  {/* Status Label */}
+                  <div className="flex-1">
+                    <p className={`text-sm font-medium ${
+                      isActive 
+                        ? 'text-gray-900 dark:text-white' 
+                        : 'text-gray-400 dark:text-gray-600'
+                    }`}>
+                      {status.label}
+                    </p>
+                    <p className={`text-xs ${
+                      isActive 
+                        ? 'text-gray-600 dark:text-gray-400' 
+                        : 'text-gray-400 dark:text-gray-600'
+                    }`}>
+                      {status.description}
+                    </p>
+                  </div>
+                  
+                  {/* Active/Completed Indicator */}
+                  {isCurrent && (
+                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                  )}
+                  {isCompleted && (
+                    <CheckCircle className="h-4 w-4 text-green-500" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
 }
-
-// import { Badge } from "@/components/ui/badge";
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import type { IStatusLog } from "@/types/ride.type";
-// import { CheckCircle, Clock, XCircle } from "lucide-react";
-
-// export default function RideStatus( { rideStatus, statusLogs }: { rideStatus: string, statusLogs: IStatusLog[] } ) {
-//   const getStatusColor = (status: string) => {
-//     switch (status) {
-//       case "completed":
-//         return "bg-green-500 text-accent-foreground";
-//       case "in_transit":
-//         return "bg-primary text-primary-foreground";
-//       case "picked_up":
-//         return "bg-primary text-primary-foreground";
-//       case "accepted":
-//         return "bg-secondary text-secondary-foreground";
-//       case "rejected":
-//         return "bg-destructive text-destructive-foreground";
-//       case "requested":
-//         return "text-yellow-800 bg-yellow-100 dark:text-yellow-300 dark:bg-yellow-900/50";
-//       default:
-//         return "bg-muted text-muted-foreground";
-//     }
-//   };
-
-//   const getStatusIcon = (status: string) => {
-//     switch (status) {
-//       case "completed":
-//         return <CheckCircle className="w-4 h-4" />;
-//       case "rejected":
-//         return <XCircle className="w-4 h-4" />;
-//       default:
-//         return <Clock className="w-4 h-4" />;
-//     }
-//   };
-
-//   const formatTime = (date: Date) => {
-//     return date.toLocaleTimeString("en-US", {
-//       hour: "2-digit",
-//       minute: "2-digit",
-//       second: "2-digit",
-//     });
-//   };
-
-//   return (
-//     <Card>
-//       <CardHeader>
-//         <div className="flex items-center justify-between">
-//           <CardTitle>Ride Status</CardTitle>
-//           <Badge className={getStatusColor(rideStatus)}>
-//             {getStatusIcon(rideStatus)}
-//             {/* {rideStatus.replace("_", " ").toUpperCase()} */}
-//           </Badge>
-//         </div>
-//       </CardHeader>
-//       <CardContent>
-//         <div className="space-y-4">
-//           {statusLogs.map((log, index) => (
-//             <div key={index} className="flex items-center gap-3">
-//               <div
-//                 className={`w-3 h-3 rounded-full ${
-//                   index < statusLogs.length - 1
-//                     ? "bg-accent"
-//                     : "bg-primary"
-//                 }`}
-//               />
-//               <div className="flex-1">
-//                 <p className="font-medium capitalize">
-//                   {/* {log.status.replace("_", " ")} */}
-//                 </p>
-//                 <p className="text-sm text-muted-foreground">
-//                   {formatTime(new Date(log.timestamp))}
-//                 </p>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </CardContent>
-//     </Card>
-//   );
-// }
