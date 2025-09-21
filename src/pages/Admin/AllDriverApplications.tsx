@@ -1,6 +1,6 @@
 // Main AllDriverApplications Component
 import React, { useState } from "react";
-import { Link } from "react-router";
+ 
 import { Eye, Plus, Trash2, Filter, Search, Download } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -22,10 +22,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetDriverApplicationsQuery } from "@/redux/features/driver/driver.api";
+import { useGetDriverApplicationsQuery, useUpdateDriverStatusMutation } from "@/redux/features/driver/driver.api";
 import type { DriverApplication, DriverStatus } from "@/types/driver.type";
 import ApplicationStats from "@/components/modules/driver/ApplicationStats";
 import { ApplicationRow } from "@/components/modules/driver/ApplicationRow";
+import Swal from "sweetalert2";
  
  
 export default function AllDriverApplications() {
@@ -38,13 +39,18 @@ export default function AllDriverApplications() {
     isLoading, 
     error 
   } = useGetDriverApplicationsQuery(undefined);
+
+const [updateApplicationStatus] = useUpdateDriverStatusMutation();
+  
 console.log(driverApplicationsResponse, "driver applications data")
+
   const applications: DriverApplication[] = driverApplicationsResponse || [];
   const meta = driverApplicationsResponse?.meta;
 
   const handleStatusUpdate = async (applicationId: string, newStatus: DriverStatus) => {
     try {
-      // TODO: Implement API call - PATCH /driver-application/:id/status
+      const res =  await updateApplicationStatus({ id: applicationId, driverStatus: newStatus }).unwrap();
+      console.log(res, "status update response");
       toast.success(`Application status updated to ${newStatus}`);
     } catch (error) {
       toast.error("Failed to update application status");
@@ -54,11 +60,26 @@ console.log(driverApplicationsResponse, "driver applications data")
   const handleDelete = async (applicationId: string) => {
     try {
       // TODO: Implement API call - DELETE /driver-application/:id
-      toast.success("Application deleted successfully");
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be undone.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Call the delete API here
+          // toast.success("Application deleted successfully");
+          toast.success("sorry! you cann't delete, - Under the construction");
+        }
+        toast.success("Application deleted successfully");
+      });
     } catch (error) {
       toast.error("Failed to delete application");
     }
-  };
+  }
 
   // Filter applications based on search and filters
   const filteredApplications = applications.filter((app) => {
@@ -256,128 +277,5 @@ console.log(driverApplicationsResponse, "driver applications data")
     </div>
   );
 }
-// import React from "react";
-// import { Link } from "react-router";
-// import { Eye, Plus, Trash2 } from "lucide-react";
-// import { toast } from "sonner";
-
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
-// import { Button } from "@/components/ui/button";
-// import {
-//   AlertDialog,
-//   AlertDialogTrigger,
-//   AlertDialogContent,
-//   AlertDialogHeader,
-//   AlertDialogTitle,
-//   AlertDialogDescription,
-//   AlertDialogFooter,
-//   AlertDialogCancel,
-// } from "@/components/ui/alert-dialog";
-// import { useGetDriverApplicationsQuery } from "@/redux/features/driver/driver.api";
  
-// export default function AllDriverApplications() {
-//   const {data : driverApplications} = useGetDriverApplicationsQuery(undefined);
-//   console.log(driverApplications, "driver applications data")
-//   const handleAccept = (id: string) => {
-//     // TODO: integrate with API call: PATCH /driver-application/:id/status
-//     toast.success(`Application ${id} accepted!`);
-//   };
-
-//   const handleDelete = (id: string) => {
-//     // TODO: integrate with API call: DELETE /driver-application/:id
-//     toast.error(`Application ${id} deleted!`);
-//   };
-
-//   return (
-//     <div className="p-6">
-//       <h1 className="text-2xl font-bold mb-4">Driver Applications</h1>
-//       <Table>
-//         <TableHeader>
-//           <TableRow>
-//             <TableHead>Name</TableHead>
-//             <TableHead>Email</TableHead>
-
-//             <TableHead>Vehicle Type</TableHead>
-//             <TableHead>Model</TableHead>
-
-//             <TableHead className="text-right">Actions</TableHead>
-//           </TableRow>
-//         </TableHeader>
-//         <TableBody>
-//           {driverApplications?.map((application : any) => (
-//             <TableRow key={application._id}>
-//               <TableCell>{application?.driver?.name}</TableCell>
-//               <TableCell>{application?.driver?.email}</TableCell>
-
-//               <TableCell>{application.vehicleInfo.vehicleType}</TableCell>
-//               <TableCell>{application.vehicleInfo.model}</TableCell>
-//               <TableCell className="text-right">
-//                 <div className="flex items-center justify-end space-x-2">
-//                   {/* View button */}
-//                   <Link to={`/applications/${application._id}`}>
-//                     <Button variant="ghost" size="sm">
-//                       <Eye className="h-4 w-4" />
-//                       <span className="sr-only">View details</span>
-//                     </Button>
-//                   </Link>
-
-//                   {/* Accept button */}
-//                   <Button
-//                     variant="ghost"
-//                     size="sm"
-//                     className="text-green-600 hover:text-green-700"
-//                     onClick={() => handleAccept(application._id)}
-//                   >
-//                     <Plus className="h-4 w-4" />
-//                     <span className="sr-only">Accept</span>
-//                   </Button>
-
-//                   {/* Delete button with confirmation */}
-//                   <AlertDialog>
-//                     <AlertDialogTrigger asChild>
-//                       <Button
-//                         variant="ghost"
-//                         size="sm"
-//                         className="text-destructive"
-//                       >
-//                         <Trash2 className="h-4 w-4" />
-//                         <span className="sr-only">Delete application</span>
-//                       </Button>
-//                     </AlertDialogTrigger>
-//                     <AlertDialogContent>
-//                       <AlertDialogHeader>
-//                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-//                         <AlertDialogDescription>
-//                           This will permanently delete "
-//                           {application.vehicleInfo.vehicleType}" application.
-//                           This action cannot be undone.
-//                         </AlertDialogDescription>
-//                       </AlertDialogHeader>
-//                       <AlertDialogFooter>
-//                         <AlertDialogCancel>Cancel</AlertDialogCancel>
-//                         <Button
-//                           variant="destructive"
-//                           onClick={() => handleDelete(application._id)}
-//                         >
-//                           Delete
-//                         </Button>
-//                       </AlertDialogFooter>
-//                     </AlertDialogContent>
-//                   </AlertDialog>
-//                 </div>
-//               </TableCell>
-//             </TableRow>
-//           ))}
-//         </TableBody>
-//       </Table>
-//     </div>
-//   );
-// }
   

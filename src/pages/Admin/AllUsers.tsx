@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import {
   useDeleteUserMutation,
   useGetAllUsersQuery,
+  useUpdateRiderStatusMutation,
 } from "@/redux/features/user/user.api";
 
 import type { IUser } from "@/types";
@@ -54,6 +55,7 @@ export default function AllUsers() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [deleteUser] = useDeleteUserMutation();
+ 
   const limit = 20;
 
   // --- Debounce Logic ---
@@ -78,7 +80,7 @@ export default function AllUsers() {
     fields:
       "name email role isActive isDeleted status phoneNumber address createdAt",
   });
-
+ 
   console.log(data, "all users data");
 
   if (isLoading && !data) return <Loading />;
@@ -206,7 +208,7 @@ export default function AllUsers() {
                       ? "Deleted"
                       : user?.isActive
                       ? user?.isActive
-                      : "Inactive"}
+                      : "Blocked"}
                   </Badge>
                 </TableCell>
                 <TableCell>{dateFormater(new Date(user?.createdAt))}</TableCell>

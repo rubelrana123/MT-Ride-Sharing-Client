@@ -74,12 +74,13 @@ export function ApplicationRow({ application, onStatusUpdate, onDelete }: Applic
       
       <TableCell className="text-right">
         <div className="flex items-center justify-end space-x-2">
-          {/* View Details */}
-          <Link to={`/applications/${application._id}`}>
+          {/* under the construction */}
+          {/* View Details */} 
+          {/* <Link to={`/applications/${application._id}`}>
             <Button variant="ghost" size="sm" className="hover:bg-blue-50">
               <Eye className="h-4 w-4" />
             </Button>
-          </Link>
+          </Link> */}
 
           {/* Status Update */}
           <StatusUpdateDialog
@@ -88,14 +89,15 @@ export function ApplicationRow({ application, onStatusUpdate, onDelete }: Applic
             driverName={application.driver.name}
             onStatusUpdate={onStatusUpdate}
           />
+           {/* under the construction */}
 
           {/* Delete */}
-          <ApplicationDeleteModal
+          {/* <ApplicationDeleteModal
             applicationId={application._id}
             driverName={application.driver.name}
             vehicleInfo={`${application.vehicleInfo.vehicleType} - ${application.vehicleInfo.model}`}
             onDelete={onDelete}
-          />
+          /> */}
         </div>
       </TableCell>
     </TableRow>

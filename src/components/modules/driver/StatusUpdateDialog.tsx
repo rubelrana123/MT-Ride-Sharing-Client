@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
-import { Settings } from "lucide-react";
+import { PencilIcon, Settings } from "lucide-react";
 import type { DriverStatus } from "@/types/driver.type";
  
 
@@ -48,7 +48,7 @@ export default function StatusUpdateDialog({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm" className="hover:bg-orange-50">
-          <Settings className="h-4 w-4" />
+          <PencilIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent>

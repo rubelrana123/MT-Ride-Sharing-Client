@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useUpdateDriverStatusMutation } from "@/redux/features/driver/driver.api";
+
 import { useUpdateRiderStatusMutation } from "@/redux/features/user/user.api";
  
  
@@ -51,7 +51,7 @@ export function UserStatusUpdateModal({
   onChange,
 }: IUserStatusProps) {
   const [updateRiderStatus] = useUpdateRiderStatusMutation();
-  const [updateDriverStatus] = useUpdateDriverStatusMutation();
+  // const [updateDriverStatus] = useUpdateDriverStatusMutation();
   const form = useForm<z.infer<typeof userStatusSchema>>({
     resolver: zodResolver(userStatusSchema),
     defaultValues: {
@@ -65,7 +65,7 @@ export function UserStatusUpdateModal({
    console.log( "staus here",user._id,
            values.status,)
     try {
-      if (user?.role === "RIDER") {
+      if (user?.role) {
         const res = await updateRiderStatus({
           userId: user._id,
           isActive: values.status,
@@ -77,15 +77,15 @@ export function UserStatusUpdateModal({
         }
       }
 
-      const res = await updateDriverStatus({
-          driverId: user._id,
-          driverStatus: values.status,
-        }).unwrap();
+      // const res = await updateDriverStatus({
+      //     driverId: user._id,
+      //     driverStatus: values.status,
+      //   }).unwrap();
 
-        if (res.success && res.statusCode === 200) {
-          toast.success(res.message, { id: toastId });
-          onChange(false);
-        }
+      //   if (res.success && res.statusCode === 200) {
+      //     toast.success(res.message, { id: toastId });
+      //     onChange(false);
+      //   }
     } catch (error: unknown) {
       const errorMessage =
         typeof error === "object" &&
@@ -127,7 +127,7 @@ export function UserStatusUpdateModal({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {user?.role === "RIDER" ? "Rider" : "Driver"} Status
+                      {user?.role === "RIDER" ? "Rider" : "Driver"} - User Status
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}
@@ -142,20 +142,22 @@ export function UserStatusUpdateModal({
                           />
                         </SelectTrigger>
                       </FormControl>
-                      {user?.role === "RIDER" ? (
+                      {user?.role && (
                         <SelectContent>
                           <SelectItem value="active">Active</SelectItem>
                           <SelectItem value="inactive">Inactive</SelectItem>
                           <SelectItem value="blocked">Blocked</SelectItem>
                         </SelectContent>
-                      ) : (
-                        <SelectContent>
-                          {/* <SelectItem value="pending">Pending</SelectItem> */}
-                          <SelectItem value="approved">Approved</SelectItem>
-                          <SelectItem value="rejected">Rejected</SelectItem>
-                          {/* <SelectItem value="suspend">Suspend</SelectItem> */}
-                        </SelectContent>
-                      )}
+                      )
+                      // ) : (
+                      //   <SelectContent>
+                      //     {/* <SelectItem value="pending">Pending</SelectItem> */}
+                      //     <SelectItem value="approved">Approved</SelectItem>
+                      //     <SelectItem value="rejected">Rejected</SelectItem>
+                      //     {/* <SelectItem value="suspend">Suspend</SelectItem> */}
+                      //   </SelectContent>
+                      // )
+                      }
                     </Select>
                     <FormMessage />
                   </FormItem>
