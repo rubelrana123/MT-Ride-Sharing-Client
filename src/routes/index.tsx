@@ -1,6 +1,5 @@
-import App from "@/App";
-import DashBoardLayout from "@/components/layout/DashBoardLayout";
-import About from "@/pages/Home/About";
+ 
+ 
 
 import { createBrowserRouter, Navigate } from "react-router";
 
@@ -12,6 +11,10 @@ import { adminSidebarItems } from "./adminSliderItems";
 import { driverSidebarItems } from "./driverSliderItems";
 import DriverApplications from "@/components/modules/Admin/DriverApplication";
 import RideDetails from "@/pages/Ride/RideDetails";
+import Home from "@/pages/Home/Home";
+import App from "@/App";
+import DashboardLayout from "@/components/layout/DashBoardLayout";
+import AboutPage from "@/pages/About/About";
 
 export const router = createBrowserRouter([
   {
@@ -19,12 +22,16 @@ export const router = createBrowserRouter([
     path: "/",
     children: [
       {
-        Component: About,
-        path: "about",
+        Component: Home,
+        path: "/",
       },
       {
         path: "/ride-book",
         Component: RideBook,
+      },
+            {
+        path: "/about",
+        Component: AboutPage,
       },
       {
         path: "/drivers/driver-application",
@@ -34,7 +41,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    Component: DashBoardLayout,
+    Component: DashboardLayout,
     children: [
       // { index: true, element: <Navigate to="/admin/analytics" /> },
       ...generateRoute(adminSidebarItems),
@@ -42,7 +49,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/drivers",
-    Component: DashBoardLayout,
+    Component: DashboardLayout,
     children: [
       // { index: true, element: <Navigate to="/drivers/:driverId/availability" /> },
       ...generateRoute(driverSidebarItems),
