@@ -5,14 +5,13 @@ export interface IUser {
   email: string;
   password: string;
   role: string;
-  profilePicture: string;
-  phoneNumber: string;
-  address: string;
+  picture?: string;
+  phone?: string;
+  address?: string;
   isActive: string;
   isVerified: boolean;
   isDeleted: boolean;
   status: string;
-  isPasswordResetTokenUsed?: boolean;
   createdAt: string;
   updatedAt: string
 }

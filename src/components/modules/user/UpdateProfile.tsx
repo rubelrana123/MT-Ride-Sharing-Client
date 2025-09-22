@@ -1,4 +1,3 @@
- 
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -31,87 +30,91 @@ import { useGetDriverProfileQuery } from "@/redux/features/driver/driver.api";
 
 export default function UpdateProfile() {
   const { data: userProfile, isLoading } = useGetUserProfileQuery(undefined);
-  const { data: driverInfo } = useGetDriverProfileQuery(undefined, { skip: !userProfile || userProfile?.role !== "DRIVER" });
+  const { data: driverInfo } = useGetDriverProfileQuery(undefined, {
+    skip: !userProfile || userProfile?.role !== "DRIVER"
+  });
   const [updateUserInfo, { isLoading: updateProfileLoading }] = useUpdateUserInfoMutation();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof updateProfileSchema>>({
     resolver: zodResolver(updateProfileSchema),
-    values: {
-      name: userProfile?.name,
-      email: userProfile?.email,
-      phoneNumber: userProfile?.phoneNumber,
-      role: userProfile?.role,
-      address: userProfile?.address,
-      licenseNumber: driverInfo?.licenseNumber,
-      vehicleType: driverInfo?.vehicleInfo?.vehicleType,
-      model: driverInfo?.vehicleInfo?.model,
-      plate: driverInfo?.vehicleInfo?.plate,
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      role: "",
+      address: "",
+      licenseNumber: "",
+      vehicleType: "",
+      model: "",
+      plate: "",
     },
   });
 
   useEffect(() => {
     // userProfile এ ডেটা থাকলে
     if (userProfile) {
-      // reset ফাংশন দিয়ে ফর্মের ভ্যালুগুলো সেট করে দিন
+      // reset ফাংশন দিয়ে ফর্মের ভ্যালুগুলো সেট করে দিন
       form.reset({
-        name: userProfile.name,
-        email: userProfile.email,
-        phoneNumber: userProfile.phoneNumber,
-        role: userProfile?.role,
-        address: userProfile?.address,
-        licenseNumber: driverInfo?.licenseNumber,
-        vehicleType: driverInfo?.vehicleInfo?.vehicleType,
-        model: driverInfo?.vehicleInfo?.model,
-        plate: driverInfo?.vehicleInfo?.plate,
+        name: userProfile.name || "",
+        email: userProfile.email || "",
+        phone: userProfile.phone || "",
+        role: userProfile?.role || "",
+        address: userProfile?.address || "",
+        licenseNumber: driverInfo?.licenseNumber || "",
+        vehicleType: driverInfo?.vehicleInfo?.vehicleType || "",
+        model: driverInfo?.vehicleInfo?.model || "",
+        plate: driverInfo?.vehicleInfo?.plate || "",
       });
     }
-  }, [userProfile, form, driverInfo?.licenseNumber, driverInfo?.vehicleInfo]);
+  }, [userProfile, form, driverInfo]);
 
   if (isLoading) return <Loading />;
 
   // Handle Update Profile
   const onSubmit = async (values: z.infer<typeof updateProfileSchema>) => {
+    console.log(values,'form values')
     const toastId = toast.loading("Updating...");
 
     const baseUserData = {
       name: values.name,
-      phoneNumber: values.phoneNumber,
+      phoneNumber: values.phone, // Fixed: was values.phoneNumber, now values.phone
       address: values.address
     };
 
     let finalUserData;
 
-    if (userProfile?.role === "driver") {
-      if (values.role === "driver") {
-        finalUserData = {
-          ...baseUserData,
-          licenseNumber: values.licenseNumber,
-          vehicleInfo: {
-            vehicleType: values.vehicleType,
-            model: values.model,
-            plate: values.plate,
-          },
-        };
-      } else {
-        finalUserData = baseUserData;
-      }
+    if (userProfile?.role === "DRIVER") {
+      finalUserData = {
+        ...baseUserData,
+        licenseNumber: values?.licenseNumber,
+        vehicleInfo: {
+          vehicleType: values?.vehicleType,
+          model: values?.model,
+          plate: values?.plate,
+        },
+      };
     } else {
-      // যদি রাইডার হয়, তাহলে শুধু বেস ডেটাই থাকবে
+      // যদি রাইডার হয়, তাহলে শুধু বেস ডেটাই থাকবে
       finalUserData = baseUserData;
     }
-
+    
+    console.log(finalUserData,'finalUserData')
+    
     try {
       const res = await updateUserInfo({
         userId: userProfile?._id,
         userData: finalUserData,
       }).unwrap();
-
+      
+      console.log(res,'update profile response')
+      
       if (res.success && res.statusCode === 200) {
         toast.success(res.message, { id: toastId });
         navigate("/dashboard/profile");
       }
     } catch (error: unknown) {
+      console.log(error,'error in update profile')
       const errorMessage =
         typeof error === "object" &&
         error !== null &&
@@ -121,11 +124,13 @@ export default function UpdateProfile() {
         "message" in (error as { data?: { message?: string } }).data!
           ? (error as { data: { message: string } }).data.message
           : "An error occurred";
-          console.log(errorMessage,'errorMessage')
+      console.log(errorMessage,'errorMessage')
       toast.error(errorMessage, { id: toastId });
     }
   };
-   console.log(userProfile,'userProfile', driverInfo,'driverInfo')
+   
+  console.log(userProfile,'userProfile', driverInfo,'driverInfo')
+  
   return (
     <div>
       <div>
@@ -190,7 +195,7 @@ export default function UpdateProfile() {
                 <div className="flex flex-col sm:flex-row w-full sm:items-center gap-5">
                   <FormField
                     control={form.control}
-                    name="phoneNumber"
+                    name="phone"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Phone Number</FormLabel>
@@ -225,7 +230,7 @@ export default function UpdateProfile() {
                   />
                 </div>
 
-                {userProfile?.role === "driver" && (
+                {userProfile?.role === "DRIVER" && (
                   <>
                     <div className="flex flex-col sm:flex-row w-full sm:items-center gap-5">
                       <FormField
@@ -263,6 +268,7 @@ export default function UpdateProfile() {
                         )}
                       />
                     </div>
+                    
                     <div className="flex flex-col sm:flex-row w-full sm:items-center gap-5">
                       <FormField
                         control={form.control}
@@ -307,13 +313,11 @@ export default function UpdateProfile() {
           <CardFooter className="flex justify-end">
             <Button
               type="submit"
-              size="lg"
-              variant="default"
-              className="cursor-pointer"
               form="update-profile-form"
+              className="cursor-pointer"
               disabled={updateProfileLoading}
             >
-              Save
+              {updateProfileLoading ? "Saving..." : "Save changes"}
             </Button>
           </CardFooter>
         </Card>

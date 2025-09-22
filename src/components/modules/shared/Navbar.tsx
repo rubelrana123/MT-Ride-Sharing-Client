@@ -16,6 +16,7 @@ import { ModeToggle } from "@/components/layout/mode.toggler";
 import { useAppDispatch } from "@/redux/hook";
 import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { Logo } from "@/assets/icons/Logo";
+import ProfileAvatar from "../ProfileAvatar";
  
 
 // Navigation links with roles
@@ -96,30 +97,16 @@ export default function Navbar() {
 
             <ModeToggle />
 
-            {data?.data?.email ? (
-              <Button
-                onClick={handleLogout}
-                variant="outline"
-                className="flex items-center space-x-2"
-              >
-                <User className="h-4 w-4" />
-                <span>Logout</span>
-              </Button>
-            ) : (
-              <>
-                <Link to="/login">
-                  <Button variant="outline" className="flex items-center space-x-2">
-                    <User className="h-4 w-4" />
-                    <span>Login</span>
-                  </Button>
-                </Link>
-                <Link to="/register">
-                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                    Register
-                  </Button>
-                </Link>
-              </>
-            )}
+
+            {
+            data?.data?.email ? (
+           
+            <ProfileAvatar name={data?.data?.name} userRole={data?.data?.role} logOutFn={handleLogout} />
+          ) : (
+            <Button asChild variant="default" size="sm" className="text-sm">
+              <Link to="/login">Log In</Link>
+            </Button>
+            )  }
           </div>
 
           {/* Mobile menu button */}
@@ -193,6 +180,8 @@ export default function Navbar() {
                 <div className="flex justify-start">
                   <ModeToggle />
                 </div>
+
+
               </div>
             </div>
           </div>
