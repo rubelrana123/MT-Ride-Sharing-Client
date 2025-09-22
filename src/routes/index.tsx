@@ -19,6 +19,7 @@ import { riderSidebarItems } from "./riderSliderItems";
 import { role, type TRole } from "@/types";
 import { withAuth } from "@/utils/withAuth";
 import UpdateProfile from "@/components/modules/user/UpdateProfile";
+import UserProfile from "@/pages/user/UserProfile";
  
 
 export const router = createBrowserRouter([
@@ -53,6 +54,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/rideDetails/:rideId",
         Component: RideDetails,
+      },
+            {
+        path: "/dashboard/profile",
+        Component: UserProfile,
       },
      {
         path: "/dashboard/updateProfile",

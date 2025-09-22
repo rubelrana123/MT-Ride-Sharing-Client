@@ -77,15 +77,6 @@ export function UserStatusUpdateModal({
         }
       }
 
-      // const res = await updateDriverStatus({
-      //     driverId: user._id,
-      //     driverStatus: values.status,
-      //   }).unwrap();
-
-      //   if (res.success && res.statusCode === 200) {
-      //     toast.success(res.message, { id: toastId });
-      //     onChange(false);
-      //   }
     } catch (error: unknown) {
       const errorMessage =
         typeof error === "object" &&

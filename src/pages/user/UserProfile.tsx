@@ -1,6 +1,7 @@
  
 // import ChangePasswordModal from "@/components/modals/user/ChangePasswordModal";
 import Loading from "@/components/modules/shared/Loading";
+import ChangePasswordModal from "@/components/modules/user/ChangePasswordModal";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -112,7 +113,7 @@ export default function UserProfile() {
             )}
           </CardContent>
           <CardFooter className="flex justify-end">
-            {/* <ChangePasswordModal open={open} onChange={setOpen} /> */}
+            <ChangePasswordModal open={open} onChange={setOpen} />
           </CardFooter>
         </Card>
       </div>

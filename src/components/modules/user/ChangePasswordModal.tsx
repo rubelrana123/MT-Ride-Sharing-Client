@@ -17,14 +17,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Password from "@/components/ui/Password";
-import { useChangePasswordMutation } from "@/redux/feature/auth/auth.api";
-import type { IModalsProps } from "@/types";
+import Password from "@/components/ui/password";
+import { useChangePasswordMutation } from "@/redux/features/auth/auth.api";
+ 
 import { changePasswordSchema } from "@/zodSchema/zodSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import z from "zod";
+import type {  Dispatch, SetStateAction } from "react";
+export interface IModalsProps {
+  open: boolean;
+  onChange: Dispatch<SetStateAction<boolean>>;
+}
 
 export default function ChangePasswordModal({ open, onChange }: IModalsProps) {
   const [changePassword, { isLoading }] = useChangePasswordMutation();
@@ -46,12 +51,13 @@ export default function ChangePasswordModal({ open, onChange }: IModalsProps) {
 
     try {
       const res = await changePassword(data).unwrap();
-
+      console.log(res, "change password response");
       if (res.success && res.statusCode === 200) {
         onChange(false);
         toast.success(res.message, { id: toastId });
       }
     } catch (error: unknown) {
+      console.log(error, "error in change password");
       const errorMessage =
         typeof error === "object" &&
         error !== null &&

@@ -2,7 +2,7 @@ import { type Dispatch, type SetStateAction } from "react";
 import type { ComponentType } from 'react';
  
 
-export type { ISendOtp, IVerifyOtp, ILogin }  from  "./auth.type";
+export type {  ILogin }  from  "./auth.type";
 export type {
   IDriver,
   IRider,
