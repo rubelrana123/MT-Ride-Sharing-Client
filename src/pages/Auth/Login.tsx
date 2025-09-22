@@ -1,32 +1,63 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router';
-import LoginForm from '../../components/modules/Auth/LoginForm';
-import { useLoginMutation } from '@/redux/features/auth/auth.api';
-import { toast } from 'sonner';
-import   Logo from '@/assets/icons/Logo';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
-type LoginFormData = {
-  email: string;
-  password: string;
-};
+import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { useState } from "react";
+import z from "zod";
+import { Logo } from "@/assets/icons/Logo";
+import Password from "@/components/ui/password";
+
+// ✅ Validation schema
+const loginSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const [login] = useLoginMutation();
-  const onSubmit = async (data: LoginFormData) => {
+
+  // ✅ react-hook-form setup
+  const form = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  // ✅ Submit handler
+  const onSubmit = async (values: LoginFormData) => {
+    setIsSubmitting(true);
     try {
-      const res = await login(data).unwrap();
-      console.log(res ,"response in log");
+      const res = await login(values).unwrap();
+      console.log(res, "response in log");
+
       if (res.success) {
         toast.success("Logged in successfully");
         navigate("/");
       }
-    } catch (err : any) {
+    } catch (err: any) {
       console.error(err, "error in log");
-
- 
-      } finally {
+      toast.error(
+        err?.data?.message || "Invalid credentials, please try again"
+      );
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -38,13 +69,7 @@ const Login = () => {
         <div className="text-center mb-8">
           <div className="mb-4">
             <div className="w-16 h-16 bg-primary rounded-full mx-auto flex items-center justify-center mb-4">
-              {/* <span className="text-2xl font-bold text-primary-foreground">
-
-              </span> */}
-       
-
-              <Logo/>
-            
+              <Logo />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Welcome to My Trip
@@ -58,14 +83,55 @@ const Login = () => {
             Sign in
           </h2>
 
-          <LoginForm onSubmit={onSubmit} isSubmitting={isSubmitting} />
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              {/* Email */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="john@example.com"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Password */}
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Password {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Submit Button */}
+              <Button type="submit" disabled={isSubmitting} className="w-full">
+                {isSubmitting ? "Signing in..." : "Sign in"}
+              </Button>
+            </form>
+          </Form>
 
           {/* Signup Link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Don't have an account?{' '}
-              <Link 
-                to="/register" 
+              Don't have an account?{" "}
+              <Link
+                to="/register"
                 className="text-primary hover:underline font-medium"
               >
                 Create one

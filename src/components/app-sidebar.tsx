@@ -15,16 +15,16 @@ import {
  
 import { Link } from "react-router"
 import { getSildeBarItems } from "@/utils/getSildeBarItems"
+ 
+import { Logo } from "@/assets/icons/Logo"
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api"
-import Logo from "@/assets/icons/Logo"
-import { Nav } from "react-day-picker"
  
  
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-//   const {data} = useUserInfoQuery(undefined)
-// const role = data?.data?.role;
+  const {data} = useUserInfoQuery(undefined)
+const role = data?.data?.role;
 const NavItems = {
-  navMain: getSildeBarItems("ADMIN"),
+  navMain: getSildeBarItems(role),
 
 }
   return (

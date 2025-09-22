@@ -4,9 +4,11 @@ import MapView from "@/components/modules/ride/MapView";
 import PriceSummary from "@/components/modules/ride/PriceSummary";
 import RideOptions from "@/components/modules/ride/RideOptions";
 import { Button } from "@/components/ui/button";
+import { useRequestRideMutation } from "@/redux/features/ride/ride.api";
 import { extractCoordinates } from "@/utils/extractCoordinates";
 import { Search } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
  
 export default function RideBook() {
@@ -17,8 +19,10 @@ export default function RideBook() {
   const [selectingPickup, setSelectingPickup] = useState(true);
   const [rideType, setRideType] = useState<string>("alto");
   const [paymentMethod, setPaymentMethod] = useState<string>("cash");
-
-  const handleBooking = () => {
+  
+  const [requestRide] = useRequestRideMutation()
+  
+  const handleBooking = async() => {
     const riderData = {
       pickupLoc: {
         type: "Point",
@@ -28,10 +32,31 @@ export default function RideBook() {
         type: "Point",
         coordinates: extractCoordinates(destAddress)
       },
-      rideType,
-      paymentMethod
+      //under the construction
+      // rideType,
+      // paymentMethod
     };
     console.log("rideData", riderData);
+    try {
+      const res = await requestRide(riderData).unwrap();
+      if(res.success){
+        toast.success("Ride requested successfully!")
+        //reset form
+        setPickupLoc(null);
+        setDestLoc(null);
+        setPickupAddress("");
+        setDestAddress("");
+        setSelectingPickup(true);
+        setRideType("alto");
+        setPaymentMethod("cash");
+      }
+
+    } catch (error) { 
+      console.log("error in ride request", error);
+      toast.error( error?.message ||"Failed to request ride. Please try again.")
+    }
+    
+
   };
 
   return (
@@ -209,7 +234,7 @@ export default function RideBook() {
 
 //   const useCurrentLocation = () => {
 //     if (!('geolocation' in navigator)) {
-//       alert('Geolocation is not supported by your browser.');
+//       toast.success('Geolocation is not supported by your browser.');
 //       return;
 //     }
 //     navigator.geolocation.getCurrentPosition(

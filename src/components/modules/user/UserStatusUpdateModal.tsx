@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+import { useUpdateDriverStatusMutation } from "@/redux/features/driver/driver.api";
 import { useUpdateRiderStatusMutation } from "@/redux/features/user/user.api";
  
  
@@ -127,7 +127,7 @@ export function UserStatusUpdateModal({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {user?.role === "RIDER" ? "Rider" : "Driver"} - User Status
+                      {user?.role === "RIDER" ? "Rider" : "Driver"} Status
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}

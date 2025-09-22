@@ -14,7 +14,7 @@ export const driverSidebarItems: ISliderItem[] = [
   {
     title: "Driver Management",
     items: [
-      { title: "Availability", url: ":driverId/availability", Component: DriverAvailability },
+      { title: "Availability", url: "dashboard/drivers/:driverId/availability", Component: DriverAvailability },
     ],
   },
 ];

@@ -132,7 +132,7 @@ console.log(pagination, "pagination");
         "message" in (error as { data?: { message?: string } }).data!
           ? (error as { data: { message: string } }).data.message
           : "An error occurred";
-      toast.error(errorMessage, { id: toastId });
+      toast.error(errorMessage);
     }
   };
 

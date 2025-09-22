@@ -8,7 +8,7 @@ export const rideApi = baseApi.injectEndpoints({
     requestRide: builder.mutation({
       query: (rideData) => ({
         url: "/rides/request",
-        method: "POST",
+      method: "POST",
         data: rideData,
       }),
       invalidatesTags: ["RIDE"],
@@ -64,12 +64,33 @@ export const rideApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["RIDE"],
     }),
-
+    //Rider: Get my active ride
+      myActiveRide: builder.query<IRide, undefined>({
+      query: () => ({    rideDetails: builder.query<IRide, string>({
+      query: (rideId) => ({
+        url: `/rides/${rideId}/details`,
+        method: "GET",
+      }),
+      providesTags: ["RIDE"],
+      transformResponse: (response: { data: IRide }) => response.data,
+    }),
+        url: `/rides/myActiveRide`,
+        method: "GET",
+      }),
+      providesTags: ["RIDE", "USER"],
+      transformResponse: (response: { data: IRide }) => response.data,
+    }),
     // Rider: Cancel ride
+    // /*  */
+    // //       query: ({ rideId, status }) => ({
+    //     url: `/rides/${rideId}/status`,
+    //     method: "PATCH",
+    //     data: { status },
+    //   }),
     cancelRide: builder.mutation({
       query: (rideId) => ({
         url: `/rides/${rideId}/cancel`,
-        method: "PATCH",
+        method: "PATCH"
       }),
       invalidatesTags: ["RIDE"],
     }),
@@ -83,5 +104,6 @@ export const {
   useGetDriverEarningsQuery,
   useUpdateRideStatusMutation,
   useCancelRideMutation,
-  useRideDetailsQuery
+  useRideDetailsQuery,
+  useMyActiveRideQuery,
 } = rideApi;

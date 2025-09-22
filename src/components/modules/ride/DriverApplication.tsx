@@ -13,25 +13,34 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-Select,
-SelectContent,
-SelectItem,
-SelectTrigger,
-SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useApplyDriverMutation } from "@/redux/features/driver/driver.api";
- 
+import RideHeader from "./RideHeader";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 // Zod schema for validation
-const vehicleSchema = z.object({
+
+export const vehicleSchema = z.object({
+  licenseNumber: z
+    .string()
+    .min(6, "License number must be at least 6 characters")
+    .max(20, "License number must be at most 20 characters"),
+
   vehicleInfo: z.object({
     vehicleType: z.string().min(1, "Vehicle type is required"),
     model: z.string().min(1, "Model is required"),
-    plate: z.string().min(1, "Plate number is required"),
+    plate: z
+      .string()
+      .min(5, "Plate number must be at least 5 characters")
+      .max(15, "Plate number must be at most 15 characters"),
   }),
-  licenseNumber: z.string().min(1, "License number is required"),
 });
 
 type VehicleFormValues = z.infer<typeof vehicleSchema>;
@@ -39,11 +48,11 @@ type VehicleFormValues = z.infer<typeof vehicleSchema>;
 // Default values coming from the user's JSON
 const defaultValues: VehicleFormValues = {
   vehicleInfo: {
-    vehicleType: "Bikee",
-    model: "BM REife",
-    plate: "SYL-562e1fi",
+    vehicleType: "Bike",
+    model: "",
+    plate: "",
   },
-  licenseNumber: "DX-20e25-0789fi",
+  licenseNumber: "",
 };
 function DriverApplications() {
   const [applyForDriver] = useApplyDriverMutation();
@@ -53,25 +62,39 @@ function DriverApplications() {
     mode: "onTouched",
   });
 
-  async function onSubmit  (values: VehicleFormValues) {
+  async function onSubmit(values: VehicleFormValues) {
     // Replace this with your API call / state update
-    try {
-      const res = await applyForDriver(values);
+try {
+  const res = await applyForDriver(values);
+  console.log(res, "driver application response");
+  console.log("Submitted values:", values);
 
-      console.log("Submitted values:", values,res);
-      toast.success("Form submitted — check dahboard for status!");
-      toast.success("your application is under review" );
+  if (res?.success) {
+    toast.success("Your application has been submitted successfully!");
+  } else {
+    // backend sent a failure response
+    const errMsg = getErrorMessage(res.error);
+    toast.error(errMsg ||"Application failed. Please try again.");
+    
+  }
+} catch (error: any) {
+  const errMsg =
+    error?.data?.message || // backend error
+    error?.error || // RTK Query network error
+    "Failed to submit form. Please try again."; // fallback
 
-    } catch (error) {
-      toast.error("Failed to submit form. Please try again." );
-      
-    } 
+  toast.error(errMsg);
+  console.log(error, "error in driver application");
+}
+
   }
 
   return (
-    <Card className="max-w-2xl mx-auto">
+    <Card className="max-w-2xl min-w-dvh mx-auto my-6">
       <CardHeader>
-        <CardTitle>Vehicle & License Form</CardTitle>
+        <CardTitle className="text-center text-2xl">
+          Vehicle & License Form
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -85,13 +108,15 @@ function DriverApplications() {
                   <FormControl>
                     <Select
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      defaultValue={field.value || "Bike"}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select vehicle type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Bike">Bike</SelectItem>
+                        <SelectItem defaultChecked value="Bike">
+                          Bike
+                        </SelectItem>
                         <SelectItem value="AC Car">AC Car</SelectItem>
                         <SelectItem value="Non-AC Car">Non-AC Car</SelectItem>
                         <SelectItem value="Scooter">Scooter</SelectItem>
