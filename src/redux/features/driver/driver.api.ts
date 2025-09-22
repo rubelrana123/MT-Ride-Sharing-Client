@@ -1,7 +1,17 @@
 import { baseApi } from "@/redux/baseApi";
+import type { IDriverProfile } from "@/types/driver.type";
 
 export const driverApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // Driver: Get driver profile
+     getDriverProfile: builder.query<IDriverProfile, undefined>({
+      query: () => ({
+        url: "/drivers/me",
+        method: "GET",
+      }),
+      providesTags: ["USER", "DRIVER"],
+      transformResponse: (response: { data: IDriverProfile }) => response.data,
+    }),
     // Rider applies as driver
     applyDriver: builder.mutation({
       query: (driverData) => ({
@@ -10,6 +20,7 @@ export const driverApi = baseApi.injectEndpoints({
         data: driverData,
       }),
       invalidatesTags: ["DRIVER"],
+      transformResponse: (response: { data: any }) => response.data,
     }),
  //
     // Admin / Super Admin: List driver applications
@@ -34,7 +45,7 @@ export const driverApi = baseApi.injectEndpoints({
       providesTags: ["DRIVER"],
       transformResponse: (response) => response.data,
     }),
-
+  
     // Admin / Super Admin: Update application status
     updateDriverStatus: builder.mutation({
       query: ({ id, driverStatus }) => ({
@@ -58,6 +69,7 @@ export const driverApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useGetDriverProfileQuery,
   useApplyDriverMutation,
   useGetDriverApplicationsQuery,
   useGetDriversQuery,

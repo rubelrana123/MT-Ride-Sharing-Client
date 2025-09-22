@@ -15,28 +15,29 @@ import { ModeToggle } from "@/components/layout/mode.toggler";
 // import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { useAppDispatch } from "@/redux/hook";
 import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api";
-import Logo from "@/assets/icons/Logo";
+import { Logo } from "@/assets/icons/Logo";
+ 
 
 // Navigation links with roles
 const navigationLinks = [
   { href: "/", label: "Home", icon: Car, role: "PUBLIC" },
   { href: "/about", label: "About", icon: MenuSquare, role: "PUBLIC" },
-  { href: "/ride-book", label: "Book a Ride", icon: Car, role: "RIDER" },//rider
+  { href: "/riders/ride-book", label: "Book a Ride", icon: Car, role: "RIDER" },//rider
   { href: "/drivers/driver-application", label: "Become a Drive", icon: Car, role: "RIDER" },//driver
-  { href: "/rider", label: "Dashboard", icon: LayoutDashboard, role: "RIDER" },//admin
-  { href: "/driver", label: "Dashboard", icon: LayoutDashboard, role: "DRIVER" },//admin
+  { href: "/riders", label: "Dashboard", icon: LayoutDashboard, role: "RIDER" },//admin
+  { href: "/drivers", label: "Dashboard", icon: LayoutDashboard, role: "DRIVER" },//admin
   { href: "/admin", label: "Admin Panel", icon: LayoutDashboard, role: "ADMIN" },//admin
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard, role: "SUPER_ADMIN" },//SUPER_ADMIN
+  { href: "/super-admin", label: "Dashboard", icon: LayoutDashboard, role: "SUPER_ADMIN" },//SUPER_ADMIN
 ];
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const { data } = useUserInfoQuery(undefined);
+  const { data , isLoading } = useUserInfoQuery(undefined);
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
-  console.log("user data", data)
+  !isLoading && console.log("user data", data)
   const handleLogout = async () => {
     await logout(undefined);
     dispatch(authApi.util.resetApiState());

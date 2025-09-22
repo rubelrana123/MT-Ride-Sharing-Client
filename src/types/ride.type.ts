@@ -16,8 +16,8 @@ export interface IStatusLog {
 export interface IRidesParams {
   page?: number;
   limit?: number;
-  sortBy?: string;
-  sortOrder?: string;
+  // sortBy?: string;
+  sort?: string;
   searchTerm?: string;
   fields?: string;
   minFare?: string;
@@ -50,3 +50,4 @@ export interface RideType {
   price: number;
   color: string;
 }
+

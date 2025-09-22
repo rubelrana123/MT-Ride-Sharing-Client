@@ -9,12 +9,17 @@ import RideBook from "@/pages/Ride/RideBook";
 import generateRoute from "@/utils/generateRoute";
 import { adminSidebarItems } from "./adminSliderItems";
 import { driverSidebarItems } from "./driverSliderItems";
-import DriverApplications from "@/components/modules/Admin/DriverApplication";
+import DriverApplications from "@/components/modules/ride/DriverApplication";
 import RideDetails from "@/pages/Ride/RideDetails";
 import Home from "@/pages/Home/Home";
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashBoardLayout";
 import AboutPage from "@/pages/About/About";
+import { riderSidebarItems } from "./riderSliderItems";
+import { role, type TRole } from "@/types";
+import { withAuth } from "@/utils/withAuth";
+import UpdateProfile from "@/components/modules/user/UpdateProfile";
+ 
 
 export const router = createBrowserRouter([
   {
@@ -39,11 +44,30 @@ export const router = createBrowserRouter([
       },
     ],
   },
+
+    {
+    path: "/dashboard",
+    Component: withAuth(DashboardLayout, ["RIDER", "DRIVER", "ADMIN", "SUPER_ADMIN"]),
+    children: [
+      { index: true, element: <Navigate to="/dashboard/profile" /> },
+      {
+        path: "/dashboard/rideDetails/:rideId",
+        Component: RideDetails,
+      },
+     {
+        path: "/dashboard/updateProfile",
+        Component: UpdateProfile,
+      },
+    ],
+  },
+
+
+
   {
     path: "/admin",
     Component: DashboardLayout,
     children: [
-      // { index: true, element: <Navigate to="/admin/analytics" /> },
+      { index: true, element: <Navigate to="/admin/analytics" /> },
       ...generateRoute(adminSidebarItems),
     ],
   },
@@ -51,8 +75,16 @@ export const router = createBrowserRouter([
     path: "/drivers",
     Component: DashboardLayout,
     children: [
-      // { index: true, element: <Navigate to="/drivers/:driverId/availability" /> },
+      { index: true, element: <Navigate to="/dashboard/drivers/:driverId/availability" /> },
       ...generateRoute(driverSidebarItems),
+    ],
+  },
+    {
+    path: "/riders",
+    Component: DashboardLayout,
+    children: [
+      { index: true, element: <Navigate to="/riders/history" /> },
+      ...generateRoute(riderSidebarItems),
     ],
   },
   {

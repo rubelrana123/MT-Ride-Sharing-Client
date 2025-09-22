@@ -1,5 +1,6 @@
 import { adminSidebarItems } from "@/routes/adminSliderItems";
 import { driverSidebarItems } from "@/routes/driverSliderItems";
+import { riderSidebarItems } from "@/routes/riderSliderItems";
 import type { TRole } from "@/types";
 
 export const getSildeBarItems = (role: TRole) => {
@@ -9,7 +10,9 @@ export const getSildeBarItems = (role: TRole) => {
         return adminSidebarItems;
       case 'DRIVER':
         return driverSidebarItems;
+       case 'RIDER':
+        return riderSidebarItems; 
       default:
-        return adminSidebarItems;
+        return [];
     }
   }
