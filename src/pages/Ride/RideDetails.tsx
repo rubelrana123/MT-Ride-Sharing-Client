@@ -29,7 +29,8 @@ export default function RideDetails() {
   } = useRideDetailsQuery(rideId as string);
   
   const { data: userProfile } = useGetUserProfileQuery(undefined);
-  
+  console.log(rideDetailsResponse, "ride details respomse")
+  console.log(userProfile,"user profile in user details")
   // Extract nested data structure
   const rideDetails = rideDetailsResponse?.data;
   

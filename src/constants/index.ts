@@ -1,8 +1,27 @@
 import type { RideType } from "@/types/ride.type";
-import { BikeIcon, Car, CheckCircle, Clock, CreditCard, DollarSign, LucideBike, MapPin, Shield } from "lucide-react";
+import {
+  BikeIcon,
+  Car,
+  CheckCircle,
+  Clock,
+  CreditCard,
+  DollarSign,
+  LucideBike,
+  MapPin,
+  Shield,
+  XCircle,
+  Truck,
+  Play,
+} from "lucide-react";
 
 export const rideTypes: RideType[] = [
-  { id: "scooter", name: "Scooter", icon: LucideBike, price: 1, color: "bg-blue-500" },
+  {
+    id: "scooter",
+    name: "Scooter",
+    icon: LucideBike,
+    price: 1,
+    color: "bg-blue-500",
+  },
   { id: "bike", name: "Bike", icon: BikeIcon, price: 2, color: "bg-green-500" },
   { id: "nac", name: "N/A Car", icon: Car, price: 3, color: "bg-blue-600" },
   { id: "ac", name: "AC Car", icon: Car, price: 4, color: "bg-orange-500" },
@@ -11,21 +30,25 @@ export const rideTypes: RideType[] = [
 import L from "leaflet";
 
 export const pickupIcon = new L.Icon({
-  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+  shadowSize: [41, 41],
 });
 
 export const destinationIcon = new L.Icon({
-  iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
-  shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
-  shadowSize: [41, 41]
+  shadowSize: [41, 41],
 });
 export const faqs = [
   {
@@ -90,9 +113,6 @@ export const faqs = [
   },
 ];
 
-
-
-
 export const steps = [
   {
     icon: MapPin,
@@ -138,7 +158,6 @@ export const highlights = [
   },
 ];
 
-
 export const teamMembers = [
   {
     name: "Sarah Johnson",
@@ -165,3 +184,39 @@ export const teamMembers = [
     email: "emily@MyTrip.com",
   },
 ];
+
+export const sortOptions = [
+  { value: "createdAt-desc", label: "Date: Newest to Oldest" },
+  { value: "createdAt-asc", label: "Date: Oldest to Newest" },
+];
+
+export const getStatusColor = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "completed":
+      return "bg-green-100 text-green-800 hover:bg-green-100";
+    case "cancelled":
+      return "bg-red-100 text-red-800 hover:bg-red-100";
+    case "in-transit":
+      return "bg-blue-100 text-blue-800 hover:bg-blue-100";
+    case "accepted":
+      return "bg-yellow-100 text-yellow-800 hover:bg-yellow-100";
+    case "requested":
+      return "bg-gray-100 text-gray-800 hover:bg-gray-100";
+    default:
+      return "bg-gray-100 text-gray-800 hover:bg-gray-100";
+  }
+};
+export const getStatusIcon = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "completed":
+      return <CheckCircle className="h-4 w-4" />;
+    case "cancelled":
+      return <XCircle className="h-4 w-4" />;
+    case "in-transit":
+      return <Truck className="h-4 w-4" />;
+    case "accepted":
+      return <Play className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
+  }
+};
