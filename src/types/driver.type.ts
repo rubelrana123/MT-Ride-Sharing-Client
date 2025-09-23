@@ -1,3 +1,5 @@
+ 
+
 // types/applicationTypes.ts
 export type DriverStatus = "pending" | "approved" | "rejected" | "suspend";
 
@@ -40,3 +42,40 @@ export interface IVehicleInfo {
   model: string;
   plate: string;
 }
+
+export interface IDriverDailyEarning {
+  date: string;
+  totalDriverEarnings: number;
+}
+export interface IDriverStats {
+  totalEarnings: number;
+  totalCompletedRides: number;
+  driverDailyEarnings: IDriverDailyEarning[];
+}
+
+
+
+interface ILocation {
+  type: "Point";
+  coordinates: [number, number];
+}
+
+export interface IDriverEarningHistory {
+  _id: string;
+  rider: string;
+  pickupLoc: ILocation;
+  destLoc: ILocation;
+  distance: string;
+  fare: string;
+  rideStatus: string;
+  requestedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  cancelledAt?: string;
+  acceptedAt?: string;
+  driver: string;
+  pickedupAt?: string;
+  inTransitAt?: string;
+  completedAt?: string;
+}
+

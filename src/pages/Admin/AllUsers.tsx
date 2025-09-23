@@ -33,23 +33,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 
-   const userStatusColorMap: Record<string, string> = {
-  // IsActive statuses
-  active:
-    "text-green-800 bg-green-100 dark:text-green-300 dark:bg-green-900/50",
-  inactive: "text-gray-800 bg-gray-100 dark:text-gray-400 dark:bg-gray-800/50",
-  blocked: "text-red-800 bg-red-100 dark:text-red-300 dark:bg-red-900/50",
-
-  // DriverStatus statuses
-  pending:
-    "text-yellow-800 bg-yellow-100 dark:text-yellow-300 dark:bg-yellow-900/50",
-  approved:
-    "text-green-800 bg-green-100 dark:text-green-300 dark:bg-green-900/50",
-  rejected: "text-red-800 bg-red-100 dark:text-red-300 dark:bg-red-900/50",
-  //
-  suspend:
-    "text-orange-800 bg-orange-100 dark:text-orange-300 dark:bg-orange-900/50",
-};
 
 export default function AllUsers() {
   const [page, setPage] = useState(1);
@@ -67,7 +50,6 @@ export default function AllUsers() {
       setSearchTerm(inputValue); // Updating searchTerm after 500ms
     }, 500); // 500ms delay
 
-    // Cleanup function to clear the timeout if inputValue changes before 500ms
     return () => {
       clearTimeout(timerId);
     };
@@ -198,7 +180,7 @@ console.log(pagination, "pagination");
                 <TableCell className="font-medium">{user?.name}</TableCell>
                 <TableCell className="font-medium">{user?.email}</TableCell>
                 <TableCell className="font-medium">
-                  {user?.phoneNumber || "Not Provided"}
+                  {user?.phone || "Not Provided"}
                 </TableCell>
                 <TableCell className="font-medium">
                   {user?.address || "Not Provided"}

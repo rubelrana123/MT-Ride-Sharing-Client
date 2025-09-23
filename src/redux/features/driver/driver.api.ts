@@ -1,8 +1,18 @@
 import { baseApi } from "@/redux/baseApi";
-import type { IDriverProfile } from "@/types/driver.type";
+import type { IResponse } from "@/types";
+import type { IDriverProfile, IDriverStats } from "@/types/driver.type";
 
 export const driverApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // Driver: Get driver analytics`
+        getDriverAnalytics: builder.query<IDriverStats, undefined>({
+      query: () => ({
+        url: "/analytics/driverStats",
+        method: "GET",
+      }),
+      providesTags: ["DRIVER"],
+      transformResponse: (response: { data: IDriverStats }) => response.data,
+    }),
     // Driver: Get driver profile
      getDriverProfile: builder.query<IDriverProfile, undefined>({
       query: () => ({
@@ -65,14 +75,36 @@ export const driverApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["DRIVER"],
     }),
+//<IResponse<IIncomingRideRequest[]>, IIncomingRequestParams>
+     getIncomingRideRequests: builder.query({
+      query: ({
+        page = 1,
+        limit = 1,
+        sort = "desc",
+      }) => {
+        const params = new URLSearchParams();
+
+        if (page) params.append("page", page.toString());
+        if (limit) params.append("limit", limit.toString());
+        if (sort) params.append("sort", sort);
+        return {
+          url: "/drivers/incoming-request",
+          method: "GET",
+          params: params,
+        };
+      },
+      providesTags: ["RIDE"],
+    }),
   }),
 });
 
 export const {
+  useGetDriverAnalyticsQuery,
   useGetDriverProfileQuery,
   useApplyDriverMutation,
   useGetDriverApplicationsQuery,
   useGetDriversQuery,
   useUpdateDriverStatusMutation,
   useUpdateAvailabilityMutation,
+  useGetIncomingRideRequestsQuery,
 } = driverApi;

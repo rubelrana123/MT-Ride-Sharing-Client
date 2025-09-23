@@ -95,7 +95,7 @@ export default function UpdateProfile() {
         },
       };
     } else {
-      // যদি রাইডার হয়, তাহলে শুধু বেস ডেটাই থাকবে
+ //if user is a driver
       finalUserData = baseUserData;
     }
     

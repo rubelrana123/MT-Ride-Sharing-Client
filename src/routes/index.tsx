@@ -16,7 +16,7 @@ import App from "@/App";
 import DashboardLayout from "@/components/layout/DashBoardLayout";
 import AboutPage from "@/pages/About/About";
 import { riderSidebarItems } from "./riderSliderItems";
-import { role, type TRole } from "@/types";
+ 
 import { withAuth } from "@/utils/withAuth";
 import UpdateProfile from "@/components/modules/user/UpdateProfile";
 import UserProfile from "@/pages/user/UserProfile";
@@ -80,7 +80,7 @@ export const router = createBrowserRouter([
     path: "/drivers",
     Component: DashboardLayout,
     children: [
-      { index: true, element: <Navigate to="/dashboard/drivers/:driverId/availability" /> },
+      { index: true, element: <Navigate to="/drivers/analytics" /> },
       ...generateRoute(driverSidebarItems),
     ],
   },

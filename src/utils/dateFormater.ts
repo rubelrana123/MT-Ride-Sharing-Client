@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 export const dateFormater = (newsDate: Date) => {
   const date = new Date(newsDate);
 
@@ -9,3 +11,7 @@ export const dateFormater = (newsDate: Date) => {
   });
   return formattedDate;
 };
+
+  export const formatDateTime = (dateString: string) => {
+    return format(new Date(dateString), "MMM dd, yyyy 'at' hh:mm a");
+  };

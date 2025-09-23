@@ -1,20 +1,33 @@
 import type { ISliderItem } from "@/types";
  
-import { DriverEarnings } from "@/pages/Drivers/DriverEarning";
-import { DriverAvailability } from "@/pages/Drivers/DriverAvailability";
+// import { DriverEarnings } from "@/pages/Drivers/DriverEarning";
+import IncomingRequest from "@/pages/Drivers/IncomingRequest";
+import DriverEarnings from "@/pages/Drivers/DriverEarning";
+import DriverAnalytics from "@/pages/Drivers/DriverAnalytics";
+ 
 
 export const driverSidebarItems: ISliderItem[] = [
+    {
+    title: "DashBoard",
+    items: [
+           {
+        title: "Analytics",
+        url: "/drivers/analytics",
+        Component: DriverAnalytics
+      },
+    ],
+  },
   {
     title: "Ride Management",
     items: [
-      { title: "My Earnings", url: "rides/earnings", Component: DriverEarnings },
+            {
+        title: "Incoming Request",
+        url: "/drivers/incoming-request",
+        Component: IncomingRequest,
+      },
+      { title: "My Earnings", url: "drivers/earnings", Component: DriverEarnings },
+
      
     ],
-  },
-  {
-    title: "Driver Management",
-    items: [
-      { title: "Availability", url: "dashboard/drivers/:driverId/availability", Component: DriverAvailability },
-    ],
-  },
+  } 
 ];
