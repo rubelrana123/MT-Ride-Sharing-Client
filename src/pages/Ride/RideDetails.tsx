@@ -33,7 +33,7 @@ export default function RideDetails() {
   console.log(userProfile,"user profile in user details")
   // Extract nested data structure
   const rideDetails = rideDetailsResponse?.data;
-  
+  console.log(rideDetails, "Here Ride Details")
   const processedRideData = useMemo(() => {
     if (!rideDetails) return null;
     

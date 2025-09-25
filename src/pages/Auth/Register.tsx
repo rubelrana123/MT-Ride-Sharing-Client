@@ -24,9 +24,9 @@ export const Register = () => {
       <div className={cn("flex flex-col gap-6 w-full max-sm:mt-10 max-w-3xl mx-auto")}>
         <Card>
           <CardHeader className="text-center">
-            <div className="w-16 h-16 bg-primary rounded-full mx-auto flex items-center justify-center mb-4">
-              <Logo/>
-            
+          <div className="w-24 h-24 bg-secondary rounded-full mx-auto flex items-center justify-center mb-4 ">
+           <Logo className="w-20 h-20 flex content-center ml-5" />
+
             </div>
             <CardTitle className="text-xl">Register your account</CardTitle>
             <CardDescription>

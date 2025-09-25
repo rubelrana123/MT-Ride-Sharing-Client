@@ -109,7 +109,9 @@ const [cancelRideMutation] = useCancelRideMutation(); // ✅ add mutation hook
               <TableCell className="text-right flex items-center justify-end gap-2">
  
                {/* cancel button here */}
-                 <AlertDialog>
+               {
+                ride.rideStatus != "completed" && 
+                  <AlertDialog>
     <AlertDialogTrigger asChild>
       <Button size="icon" variant="destructive">
         <X />
@@ -132,6 +134,9 @@ const [cancelRideMutation] = useCancelRideMutation(); // ✅ add mutation hook
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>
+
+                
+               }
 
  
  

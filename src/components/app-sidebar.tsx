@@ -3,6 +3,7 @@ import * as React from "react"
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -18,10 +19,15 @@ import { getSildeBarItems } from "@/utils/getSildeBarItems"
  
 import { Logo } from "@/assets/icons/Logo"
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api"
+import type { IUser } from "@/types"
+import SidebarUser from "./SidebarUser"
  
- 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
+  userProfile: IUser | undefined;
+}
+export function AppSidebar({ userProfile, ...props }: AppSidebarProps) {
   const {data} = useUserInfoQuery(undefined)
+  console.log(data, "data from sidebar");
 const role = data?.data?.role;
 const NavItems = {
   navMain: getSildeBarItems(role),
@@ -54,7 +60,11 @@ const NavItems = {
           </SidebarGroup>
         ))}
       </SidebarContent>
+      
       <SidebarRail />
+      <SidebarFooter>
+        <SidebarUser user={userProfile as IUser} />
+      </SidebarFooter>
     </Sidebar>
   )
 }

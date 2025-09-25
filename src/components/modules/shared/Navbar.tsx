@@ -5,10 +5,11 @@ import {
   Menu,
   X,
   User,
-  Bell,
-  Settings,
+  
   LayoutDashboard,
   MenuSquare,
+  Contact2,
+  FileQuestion,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/layout/mode.toggler";
@@ -23,6 +24,12 @@ import ProfileAvatar from "../ProfileAvatar";
 const navigationLinks = [
   { href: "/", label: "Home", icon: Car, role: "PUBLIC" },
   { href: "/about", label: "About", icon: MenuSquare, role: "PUBLIC" },
+  { href: "/features", label: "Features", icon: MenuSquare, role: "PUBLIC" },
+  { href: "/faq", label: "FAQ", icon: FileQuestion, role: "PUBLIC" },
+
+  { href: "/contact", label: "Contact", icon: Contact2, role: "PUBLIC" },
+
+ 
   { href: "/riders/ride-book", label: "Book a Ride", icon: Car, role: "RIDER" },//rider
   { href: "/drivers/driver-application", label: "Become a Drive", icon: Car, role: "RIDER" },//driver
   { href: "/riders", label: "Dashboard", icon: LayoutDashboard, role: "RIDER" },//admin
@@ -84,21 +91,11 @@ export default function Navbar() {
 
           {/* Desktop User Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                3
-              </span>
-            </Button>
-
-            <Button variant="ghost" size="icon">
-              <Settings className="h-5 w-5" />
-            </Button>
-
             <ModeToggle />
 
 
             {
+              
             data?.data?.email ? (
            
             <ProfileAvatar name={data?.data?.name} userRole={data?.data?.role} logOutFn={handleLogout} />
@@ -164,20 +161,19 @@ export default function Navbar() {
                   </Button>
                 ) : (
                   <>
-                    <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                      <Button variant="outline" className="w-full justify-start" size="sm">
-                        <User className="h-4 w-4 mr-2" />
-                        Login
-                      </Button>
-                    </Link>
-                    <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                      <Button className="w-full bg-primary hover:opacity-90 text-primary-foreground" size="sm">
-                        Register
-                      </Button>
-                    </Link>
+            {
+              
+            data?.data?.email ? (
+           
+            <ProfileAvatar name={data?.data?.name} userRole={data?.data?.role} logOutFn={handleLogout} />
+          ) : (
+            <Button asChild variant="default" size="sm" className="text-sm">
+              <Link to="/login">Log In</Link>
+            </Button>
+            )  }
                   </>
                 )}
-                <div className="flex justify-start">
+                <div className="flex justify-start ">
                   <ModeToggle />
                 </div>
 

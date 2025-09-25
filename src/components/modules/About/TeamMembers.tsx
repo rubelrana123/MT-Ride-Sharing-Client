@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { teamMembers } from "@/constants";
 import { Linkedin, Mail } from "lucide-react";
-import SectionHeading from "../Home/SectionHeading";
+import SectionHeading from "../public/Home/SectionHeading";
  
 
 export default function TeamMembers() {

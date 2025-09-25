@@ -68,8 +68,9 @@ const Login = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="mb-4">
-            <div className="w-16 h-16 bg-primary rounded-full mx-auto flex items-center justify-center mb-4">
-              <Logo />
+            <div className="w-24 h-24 bg-secondary rounded-full mx-auto flex items-center justify-center mb-4 ">
+           <Logo className="w-20 h-20 flex content-center ml-5" />
+
             </div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
               Welcome to My Trip

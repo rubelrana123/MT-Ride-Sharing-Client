@@ -1,9 +1,10 @@
  
 
 import type { ISliderItem } from "@/types";
-import RideBook from "@/pages/Ride/RideBook";
+import RideBook from "@/components/modules/ride/RideBook";
 import DriverApplications from "@/components/modules/ride/DriverApplication";
 import RideHistory from "@/pages/Ride/RideHistory";
+import RideRequest from "@/pages/Ride/RequestRide";
  
 export const riderSidebarItems: ISliderItem[] = [
   {
@@ -23,7 +24,7 @@ export const riderSidebarItems: ISliderItem[] = [
           {
         title: "Request Ride",
         url: "/riders/ride-book",
-        Component: RideBook,
+        Component: RideRequest,
       },
 
       { title: "Driver Applications", url: "/riders/driver-application", Component: DriverApplications },
