@@ -1,0 +1,145 @@
+import PaymentMethod from "@/components/modules/payment/PaymentMethod";
+import LocationSelector from "@/components/modules/ride/LocationSelector";
+import MapView from "@/components/modules/ride/MapView";
+import PriceSummary from "@/components/modules/ride/PriceSummary";
+import RideOptions from "@/components/modules/ride/RideOptions";
+import { Button } from "@/components/ui/button";
+import { useRequestRideMutation } from "@/redux/features/ride/ride.api";
+import { extractCoordinates } from "@/utils/extractCoordinates";
+import { Search } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+ 
+import { toast } from "sonner";
+
+ 
+export default function RideBook() {
+  const navigate = useNavigate();
+  const [pickupLoc, setPickupLoc] = useState<[number, number] | null>(null);
+  const [destLoc, setDestLoc] = useState<[number, number] | null>(null);
+  const [pickupAddress, setPickupAddress] = useState("");
+  const [destAddress, setDestAddress] = useState("");
+  const [selectingPickup, setSelectingPickup] = useState(true);
+  const [rideType, setRideType] = useState<string>("alto");
+  const [paymentMethod, setPaymentMethod] = useState<string>("cash");
+  
+  const [requestRide] = useRequestRideMutation()
+  
+  const handleBooking = async() => {
+    const riderData = {
+      pickupLoc: {
+        type: "Point",
+        coordinates: extractCoordinates(pickupAddress)
+      },
+      destLoc: {
+        type: "Point",
+        coordinates: extractCoordinates(destAddress)
+      },
+      //under the construction
+      // rideType,
+      // paymentMethod
+    };
+    console.log("rideData", riderData);
+    try {
+      const res = await requestRide(riderData).unwrap();
+      if(res.success){
+        toast.success("Ride requested successfully!")
+         navigate("/riders")
+        //reset form
+        setPickupLoc(null);
+        setDestLoc(null);
+        setPickupAddress("");
+        setDestAddress("");
+        setSelectingPickup(true);
+        setRideType("bike");
+        setPaymentMethod("cash");
+      }
+
+    } catch (error) { 
+      console.log("error in ride request", error);
+      toast.error( error?.message ||"Failed to request ride. Please try again.")
+    }
+    
+
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Book Your Ride
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            Choose your pickup and destination to get started
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Panel - Booking Form */}
+          <div className="lg:col-span-1 space-y-6">
+            <LocationSelector
+              pickupLoc={pickupLoc}
+              destLoc={destLoc}
+              pickupAddress={pickupAddress}
+              destAddress={destAddress}
+              selectingPickup={selectingPickup}
+              onPickupChange={setPickupLoc}
+              onDestChange={setDestLoc}
+              onPickupAddressChange={setPickupAddress}
+              onDestAddressChange={setDestAddress}
+              onSelectingPickupChange={setSelectingPickup}
+            />
+
+            <RideOptions
+              selectedRideType={rideType}
+              onRideTypeChange={setRideType}
+            />
+
+            <PaymentMethod
+              selectedMethod={paymentMethod}
+              onMethodChange={setPaymentMethod}
+            />
+
+            {pickupLoc && destLoc && (
+              <PriceSummary
+                pickupLoc={pickupLoc}
+                destLoc={destLoc}
+                rideType={rideType}
+              />
+            )}
+
+            <Button 
+              onClick={handleBooking}
+              className="w-full py-3 text-lg font-semibold"
+              disabled={!pickupLoc || !destLoc}
+            >
+              <Search className="h-5 w-5 mr-2" />
+              Book Ride Now
+            </Button>
+          </div>
+
+          {/* Right Panel - Map */}
+          <div className="lg:col-span-2">
+            <MapView
+              pickupLoc={pickupLoc}
+              destLoc={destLoc}
+              selectingPickup={selectingPickup}
+              onLocationSelect={(coords) => {
+                if (selectingPickup) {
+                  setPickupLoc(coords);
+                  setPickupAddress(`Location: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`);
+                } else {
+                  setDestLoc(coords);
+                  setDestAddress(`Location: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`);
+                }
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+ 

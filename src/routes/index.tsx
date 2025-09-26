@@ -5,13 +5,13 @@ import { createBrowserRouter, Navigate } from "react-router";
 
 import Login from "@/pages/Auth/Login";
 import { Register } from "@/pages/Auth/Register";
-import RideBook from "@/pages/Ride/RideBook";
+import RideBook from "@/components/modules/ride/RideBook";
 import generateRoute from "@/utils/generateRoute";
 import { adminSidebarItems } from "./adminSliderItems";
 import { driverSidebarItems } from "./driverSliderItems";
 import DriverApplications from "@/components/modules/ride/DriverApplication";
 import RideDetails from "@/pages/Ride/RideDetails";
-import Home from "@/pages/Home/Home";
+import Home from "@/pages/public/Home";
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashBoardLayout";
 import AboutPage from "@/pages/About/About";
@@ -20,6 +20,10 @@ import { riderSidebarItems } from "./riderSliderItems";
 import { withAuth } from "@/utils/withAuth";
 import UpdateProfile from "@/components/modules/user/UpdateProfile";
 import UserProfile from "@/pages/user/UserProfile";
+import Unauthorized from "@/components/modules/shared/Unauthorized";
+import Features from "@/pages/public/FeaturesPage";
+import ContactPage from "@/pages/public/ContactPage";
+import FaqPage from "@/pages/public/FaqPage";
  
 
 export const router = createBrowserRouter([
@@ -43,6 +47,18 @@ export const router = createBrowserRouter([
         path: "/drivers/driver-application",
         Component: DriverApplications,
       },
+      {
+        path :"/features",
+        Component : Features
+      },
+      {
+        path : "/faq",
+        Component : FaqPage
+      },
+      {
+        path : "/contact",
+        Component : ContactPage
+      }
     ],
   },
 
@@ -80,7 +96,7 @@ export const router = createBrowserRouter([
     path: "/drivers",
     Component: DashboardLayout,
     children: [
-      { index: true, element: <Navigate to="/drivers/analytics" /> },
+      { index: true, element: <Navigate to="/drivers/earning-analytics" /> },
       ...generateRoute(driverSidebarItems),
     ],
   },
@@ -93,15 +109,15 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/dashboard/rideDetails/:rideId",
-    Component: RideDetails,
-  },
-  {
     path: "/login",
     Component: Login,
   },
   {
     path: "/register",
     Component: Register,
+  },
+    {
+    path: "/unauthorized",
+    Component: Unauthorized,
   },
 ]);

@@ -23,15 +23,26 @@ import {
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { useGetDriverEarningsQuery } from "@/redux/features/ride/ride.api";
-import { getStatusColor, getStatusIcon } from "@/constants";
+import { getStatusColor } from "@/constants";
 import Loading from "@/components/modules/shared/Loading";
 import type { IDriverEarningHistory } from "@/types/driver.type";
 import { formatDateTime } from "@/utils/dateFormater";
 // Type definition based on your API response
  
-interface IDriverEarningHistoryTableProps {
-  earningHistory: IDriverEarningHistory[];
-}
+export const getStatusIcon = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "completed":
+      return <CheckCircle className="h-4 w-4" />;
+    case "cancelled":
+      return <XCircle className="h-4 w-4" />;
+    case "in-transit":
+      return <Truck className="h-4 w-4" />;
+    case "accepted":
+      return <Play className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
+  }
+};
 
 export default function DriverEarnings() {
 const { data , isLoading } = useGetDriverEarningsQuery(undefined);

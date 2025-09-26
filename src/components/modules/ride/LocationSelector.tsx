@@ -31,7 +31,7 @@ export default function LocationSelector({
 }: LocationSelectorProps) {
   const [pickupSearch, setPickupSearch] = useState("");
   const [pickupResults, setPickupResults] = useState<Array<{ display_name: string; lat: string; lon: string }>>([]);
-  const [isSearching, setIsSearching] = useState(false);
+  // const [isSearching, setIsSearching] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const pickupInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -71,41 +71,41 @@ export default function LocationSelector({
   };
 
   // Search pickup using Nominatim (debounced)
-  useEffect(() => {
-    const q = pickupSearch.trim();
-    if (q.length === 0) {
-      setPickupResults([]);
-      setIsSearching(false);
-      return;
-    }
-    setIsSearching(true);
-    if (abortRef.current) abortRef.current.abort();
-    const controller = new AbortController();
-    abortRef.current = controller;
-    const id = setTimeout(async () => {
-      try {
-        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json`;
-        const res = await fetch(url, {
-          signal: controller.signal,
-          headers: { Accept: 'application/json' },
-        });
+  // useEffect(() => {
+  //   const q = pickupSearch.trim();
+  //   if (q.length === 0) {
+  //     setPickupResults([]);
+  //     setIsSearching(false);
+  //     return;
+  //   }
+  //   setIsSearching(true);
+  //   if (abortRef.current) abortRef.current.abort();
+  //   const controller = new AbortController();
+  //   abortRef.current = controller;
+  //   const id = setTimeout(async () => {
+  //     try {
+  //       const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json`;
+  //       const res = await fetch(url, {
+  //         signal: controller.signal,
+  //         headers: { Accept: 'application/json' },
+  //       });
         
-        if (!res.ok) throw new Error('Search failed');
-        const data = (await res.json()) as Array<{ display_name: string; lat: string; lon: string }>;
-        setPickupResults(data.slice(0, 8));
-      } catch (e) {
-        if ((e as any)?.name !== 'AbortError') {
-          console.error(e);
-        }
-      } finally {
-        setIsSearching(false);
-      }
-    }, 400);
-    return () => {
-      clearTimeout(id);
-      controller.abort();
-    };
-  }, [pickupSearch]);
+  //       if (!res.ok) throw new Error('Search failed');
+  //       const data = (await res.json()) as Array<{ display_name: string; lat: string; lon: string }>;
+  //       setPickupResults(data.slice(0, 8));
+  //     } catch (e) {
+  //       if ((e as any)?.name !== 'AbortError') {
+  //         console.error(e);
+  //       }
+  //     } finally {
+  //       setIsSearching(false);
+  //     }
+  //   }, 400);
+  //   return () => {
+  //     clearTimeout(id);
+  //     controller.abort();
+  //   };
+  // }, [pickupSearch]);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
@@ -123,13 +123,13 @@ export default function LocationSelector({
           <div className="relative">
             <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
-              placeholder="Search pickup (e.g., Baridhara)"
+              placeholder="Select Location From Map"
               ref={pickupInputRef}
               value={pickupSearch}
               onChange={(e) => setPickupSearch(e.target.value)}
               className="pl-10"
             />
-            {(isSearching || pickupResults.length > 0 || pickupSearch.trim().length > 0) && (
+            {/* {(isSearching || pickupResults.length > 0 || pickupSearch.trim().length > 0) && (
               <div className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white text-sm shadow-lg dark:border-gray-700 dark:bg-gray-900">
                 {isSearching && (
                   <div className="px-3 py-2 text-gray-500">Searching...</div>
@@ -162,7 +162,7 @@ export default function LocationSelector({
                   <div className="px-3 py-2 text-gray-500">No results</div>
                 )}
               </div>
-            )}
+            )} */}
           </div>
           <div className="grid grid-cols-2 gap-2">
             <Button

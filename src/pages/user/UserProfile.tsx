@@ -42,7 +42,7 @@ export default function UserProfile() {
               <AvatarImage
                 src={
                   userProfile?.profilePicture ||
-                  "https://avatars.githubusercontent.com/u/124599?v=4"
+                  "https://image.winudf.com/p/aHR0cHM6Ly9wbGF5LWxoLmdvb2dsZXVzZXJjb250ZW50LmNvbS9FOVE3WEdaeDNZVVFzcGxwZDRsSnZLT2xDNWx4ejNnaUszajJpdUV4TlpTYnFWcldzUkQtbW0wTG9BYTJORWY5UFE9aDgwMA?k=66f508aaa629d46d3d843b54633e0c0468e25b12&.jpg"
                 }
               />
               <AvatarFallback>{userProfile?.name}</AvatarFallback>

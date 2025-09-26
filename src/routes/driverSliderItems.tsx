@@ -1,6 +1,5 @@
 import type { ISliderItem } from "@/types";
  
-// import { DriverEarnings } from "@/pages/Drivers/DriverEarning";
 import IncomingRequest from "@/pages/Drivers/IncomingRequest";
 import DriverEarnings from "@/pages/Drivers/DriverEarning";
 import DriverAnalytics from "@/pages/Drivers/DriverAnalytics";
@@ -25,7 +24,7 @@ export const driverSidebarItems: ISliderItem[] = [
         url: "/drivers/incoming-request",
         Component: IncomingRequest,
       },
-      { title: "My Earnings", url: "drivers/earnings", Component: DriverEarnings },
+      { title: "My Earnings", url: "/drivers/earning-analytics", Component: DriverEarnings },
 
      
     ],

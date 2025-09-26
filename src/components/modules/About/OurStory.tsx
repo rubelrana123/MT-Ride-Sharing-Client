@@ -23,24 +23,24 @@ export default function OurStory() {
         </div>
       </div>
 
-      <div className="gradient-primary rounded-xl p-8 text-primary-foreground">
+      <div className="gradient-primary rounded-xl p-8 text-primary-foreground dark:text-white/80">
         <h3 className="text-2xl font-ride-title font-bold mb-6">Our Impact</h3>
         <div className="grid grid-cols-2 gap-6">
           <div className="text-center">
             <div className="text-3xl font-bold font-ride-title">50K+</div>
-            <div className="text-primary-foreground/80">Happy Riders</div>
+            <div className="text-primary-foreground/80 dark:text-primary">Happy Riders</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold font-ride-title">5K+</div>
-            <div className="text-primary-foreground/80">Active Drivers</div>
+            <div className="text-primary-foreground/80 dark:text-primary">Active Drivers</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold font-ride-title">1M+</div>
-            <div className="text-primary-foreground/80">Rides Completed</div>
+            <div className="text-primary-foreground/80 dark:text-primary">Rides Completed</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold font-ride-title">15</div>
-            <div className="text-primary-foreground/80">Cities Served</div>
+            <div className="text-primary-foreground/80 dark:text-primary">Cities Served</div>
           </div>
         </div>
       </div>

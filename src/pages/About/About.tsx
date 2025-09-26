@@ -1,7 +1,7 @@
 import OurMissionAndVission from "@/components/modules/About/OurMissionAndVission";
 import OurStory from "@/components/modules/About/OurStory";
 import TeamMembers from "@/components/modules/About/TeamMembers";
-import PageHeading from "@/components/modules/Home/PageHeading";
+import PageHeading from "@/components/modules/public/Home/PageHeading";
 
 export default function AboutPage() {
   return (

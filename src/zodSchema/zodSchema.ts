@@ -32,7 +32,7 @@ export const baseSchema = z.object({
 
 export const riderSchema = baseSchema
   .extend({
-    role: z.literal("rider"),
+    role: z.literal("RIDER"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password do not match",
@@ -40,7 +40,7 @@ export const riderSchema = baseSchema
   });
 
 export const driverSchema = baseSchema.extend({
-  role: z.literal("driver"),
+  role: z.literal("DRIVER"),
   licenseNumber: z
     .string()
     .min(6, "License number must be at least 6 characters")
@@ -53,10 +53,10 @@ export const driverSchema = baseSchema.extend({
     .max(30, "Plate number must be at most 30 characters"),
 });
 
-// export const registerZodSchema = z.discriminatedUnion("role", [
-//   riderSchema,
-//   driverSchema,
-// ]);
+export const registerZodSchema = z.discriminatedUnion("role", [
+  riderSchema,
+  driverSchema,
+]);
 
 
 export const baseUpdateSchema = z.object({

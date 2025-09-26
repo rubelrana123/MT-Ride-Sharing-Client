@@ -13,18 +13,18 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-Select,
-SelectContent,
-SelectItem,
-SelectTrigger,
-SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useApplyDriverMutation } from "@/redux/features/driver/driver.api";
- 
+import { useNavigate } from "react-router";
 
-// Zod schema for validation
+// Zod schema
 const vehicleSchema = z.object({
   vehicleInfo: z.object({
     vehicleType: z.string().min(1, "Vehicle type is required"),
@@ -36,16 +36,17 @@ const vehicleSchema = z.object({
 
 type VehicleFormValues = z.infer<typeof vehicleSchema>;
 
-// Default values coming from the user's JSON
 const defaultValues: VehicleFormValues = {
   vehicleInfo: {
-    vehicleType: "Bikee",
+    vehicleType: "Bike",
     model: "BM REife",
     plate: "SYL-562e1fi",
   },
   licenseNumber: "DX-20e25-0789fi",
 };
-function DriverApplications() {
+
+export default function DriverApplications() {
+  const navigate = useNavigate();
   const [applyForDriver] = useApplyDriverMutation();
   const form = useForm<VehicleFormValues>({
     resolver: zodResolver(vehicleSchema),
@@ -53,29 +54,27 @@ function DriverApplications() {
     mode: "onTouched",
   });
 
-  async function onSubmit  (values: VehicleFormValues) {
-    // Replace this with your API call / state update
+  async function onSubmit(values: VehicleFormValues) {
     try {
-      const res = await applyForDriver(values);
-
-      console.log("Submitted values:", values,res);
-      toast.success("Form submitted — check dahboard for status!");
-      toast.success("your application is under review" );
-
+      await applyForDriver(values);
+      toast.success("Form submitted — check dashboard for status!");
+      navigate("/riders/ride-book")
     } catch (error) {
-      toast.error("Failed to submit form. Please try again." );
-      
-    } 
+      toast.error("Failed to submit form. Please try again.");
+    }
   }
 
   return (
-    <Card className="max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle>Vehicle & License Form</CardTitle>
+    <Card className="max-w-2xl min-w-2/3 mx-auto mt-12 shadow-lg rounded-xl border bg-background text-foreground border-border transition-colors duration-300">
+      <CardHeader className="pb-0">
+        <CardTitle className="text-2xl font-bold text-primary">
+          Vehicle & License Form
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Vehicle Type */}
             <FormField
               control={form.control}
               name="vehicleInfo.vehicleType"
@@ -83,14 +82,11 @@ function DriverApplications() {
                 <FormItem>
                   <FormLabel>Vehicle Type</FormLabel>
                   <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-full">
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="w-full rounded-lg border border-border bg-input focus:ring-2 focus:ring-accent">
                         <SelectValue placeholder="Select vehicle type" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-background text-foreground rounded-lg">
                         <SelectItem value="Bike">Bike</SelectItem>
                         <SelectItem value="AC Car">AC Car</SelectItem>
                         <SelectItem value="Non-AC Car">Non-AC Car</SelectItem>
@@ -103,6 +99,7 @@ function DriverApplications() {
               )}
             />
 
+            {/* Model */}
             <FormField
               control={form.control}
               name="vehicleInfo.model"
@@ -110,13 +107,18 @@ function DriverApplications() {
                 <FormItem>
                   <FormLabel>Model</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. BM REife" {...field} />
+                    <Input
+                      placeholder="e.g. BM REife"
+                      {...field}
+                      className="rounded-lg border border-border bg-input focus:ring-2 focus:ring-accent"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* Plate Number */}
             <FormField
               control={form.control}
               name="vehicleInfo.plate"
@@ -124,13 +126,18 @@ function DriverApplications() {
                 <FormItem>
                   <FormLabel>Plate Number</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. SYL-562e1fi" {...field} />
+                    <Input
+                      placeholder="e.g. SYL-562e1fi"
+                      {...field}
+                      className="rounded-lg border border-border bg-input focus:ring-2 focus:ring-accent"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* License Number */}
             <FormField
               control={form.control}
               name="licenseNumber"
@@ -138,15 +145,25 @@ function DriverApplications() {
                 <FormItem>
                   <FormLabel>License Number</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. DX-20e25-0789fi" {...field} />
+                    <Input
+                      placeholder="e.g. DX-20e25-0789fi"
+                      {...field}
+                      className="rounded-lg border border-border bg-input focus:ring-2 focus:ring-accent"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
+            {/* Submit Button */}
             <div className="flex justify-end">
-              <Button type="submit">Save</Button>
+              <Button
+                type="submit"
+                className="bg-primary text-accent-foreground hover:bg-accent/90 rounded-lg px-6 py-2"
+              >
+                Save
+              </Button>
             </div>
           </form>
         </Form>
@@ -154,5 +171,3 @@ function DriverApplications() {
     </Card>
   );
 }
-
-export default DriverApplications;

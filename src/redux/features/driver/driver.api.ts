@@ -1,11 +1,10 @@
 import { baseApi } from "@/redux/baseApi";
-import type { IResponse } from "@/types";
 import type { IDriverProfile, IDriverStats } from "@/types/driver.type";
 
 export const driverApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Driver: Get driver analytics`
-        getDriverAnalytics: builder.query<IDriverStats, undefined>({
+      getDriverAnalytics: builder.query<IDriverStats, undefined>({
       query: () => ({
         url: "/analytics/driverStats",
         method: "GET",
@@ -67,14 +66,15 @@ export const driverApi = baseApi.injectEndpoints({
     }),
 
     // Driver: Update availability
-    updateAvailability: builder.mutation({
-      query: ({ driverId, availability }) => ({
-        url: `/drivers/${driverId}/availability`,
-        method: "PATCH",
-        data: { availability },
-      }),
-      invalidatesTags: ["DRIVER"],
-    }),
+updateAvailability: builder.mutation({
+  query: ({ driverId, availability }) => ({
+    url: `/drivers/${driverId}/availability`,
+    method: "PATCH",
+    data: { availability },  
+  }),
+  invalidatesTags: ["DRIVER"],
+}),
+
 //<IResponse<IIncomingRideRequest[]>, IIncomingRequestParams>
      getIncomingRideRequests: builder.query({
       query: ({
@@ -95,6 +95,7 @@ export const driverApi = baseApi.injectEndpoints({
       },
       providesTags: ["RIDE"],
     }),
+    
   }),
 });
 

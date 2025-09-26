@@ -6,106 +6,107 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
  
  
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
  
-import z from "zod";
+import { useNavigate, useSearchParams } from "react-router";
+import type z from "zod";
 import { Button } from "@/components/ui/button";
- 
-import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import { useState } from "react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/password";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
-const registerZodSchema =  z
-  .object({
-    name: z
-      .string()
-      .min(3, {
-        error: "Name is too short",
-      })
-      .max(50),
-    email: z.email(),
-    password: z.string().min(8, { error: "Password is too short" }),
-    confirmPassword: z
-      .string()
-      .min(8, { error: "Confirm Password is too short" }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Password do not match",
-    path: ["confirmPassword"],
-  });
+import { registerZodSchema } from "@/zodSchema/zodSchema";
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 
 export default function RegisterForm() {
-  const [register, { isLoading }] = useRegisterMutation();
+   const [register, { isLoading }] = useRegisterMutation();
+  const [searchParams] = useSearchParams();
+  const initialRole = searchParams.get("role");
+  const [userRole, setRole] = useState(initialRole || "RIDER");
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerZodSchema>>({
     resolver: zodResolver(registerZodSchema),
     defaultValues: {
-      name: "",   // ✅ match schema
+      name: "",
       email: "",
+      role: initialRole === "RIDER" ? "DRIVER" : "RIDER",
       password: "",
       confirmPassword: "",
+      licenseNumber: "",
+      vehicleType: "",
+      model: "",
+      plate: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof registerZodSchema>) => {
-
-    const finalUserData = {
-      name: values.name,   // ✅ map schema fullName → API name
+    const toastId = toast.loading("Registering...");
+    const baseUserData = {
+      name: values.name,
       email: values.email,
       password: values.password,
+      role: userRole,
     };
+
+    let finalUserData;
+
+    // 👇 মূল সমাধান: 'values.role' দিয়ে কন্ডিশন চেক করুন
+    if (values.role === "DRIVER") {
+      // এই if ব্লকের ভেতরে, TypeScript এখন ১০০% নিশ্চিত যে 'values' একজন ড্রাইভারের ডেটা
+      // তাই এখন `values.licenseNumber` ইত্যাদি ব্যবহার করলে আর কোনো error হবে না
+      finalUserData = {
+        ...baseUserData,
+        licenseNumber: values.licenseNumber,
+        vehicleInfo: {
+          vehicleType: values.vehicleType,
+          model: values.model,
+          plate: values.plate
+        },
+      };
+    } else {
+      // যদি রাইডার হয়, তাহলে শুধু বেস ডেটাই থাকবে
+      finalUserData = baseUserData;
+    }
 
     try {
       const res = await register(finalUserData).unwrap();
-      console.log(res, "register response");
-  
-        toast.success(res.message || "Registration successful");
-        navigate("/login", { replace: true });
- 
-  } catch (error: unknown) {
-  let errorMessage = "An error occurred";
-  console.log(error, "error");
-  if (
-    typeof error === "object" &&
-    error !== null &&
-    "data" in error &&
-    typeof (error as { data?: unknown }).data === "object" &&
-    (error as { data?: unknown }).data !== null
-  ) {
-    const errData = (error as { data: any }).data;
 
-    // ✅ check both top-level message and nested message
-    if (errData.message) {
-      errorMessage = errData.message;
-    } else if (errData.err?.statusCode === 409) {
-      errorMessage = "User already exists";
+      if (res.success && res.statusCode === 201) {
+        toast.success(res.message, { id: toastId });
+        navigate("/login");
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "data" in error &&
+        typeof (error as { data?: unknown }).data === "object" &&
+        (error as { data?: unknown }).data !== null &&
+        "message" in (error as { data?: { message?: string } }).data!
+          ? (error as { data: { message: string } }).data.message
+          : "An error occurred";
+      toast.error(errorMessage, { id: toastId });
     }
-  }
-
-  toast.error(errorMessage);
-}
-
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* ✅ fullName instead of name */}
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input
-                  type="text"
-                  placeholder="John Doe"
+                  type="name"
+                  placeholder="Jhone Doe"
                   {...field}
                   value={field.value || ""}
                 />
@@ -160,6 +161,117 @@ export default function RegisterForm() {
             </FormItem>
           )}
         />
+
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>Role</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={(value) =>
+                    setRole(value as "RIDER" | "DRIVER")
+                  }
+                  defaultValue={field.value}
+                  className="flex flex-row"
+                >
+                  <FormItem className="flex items-center gap-3">
+                    <FormControl>
+                      <RadioGroupItem value="RIDER" />
+                    </FormControl>
+                    <FormLabel className="font-normal">Rider</FormLabel>
+                  </FormItem>
+                  <FormItem className="flex items-center gap-3">
+                    <FormControl>
+                      <RadioGroupItem value="DRIVER" />
+                    </FormControl>
+                    <FormLabel className="font-normal">Driver</FormLabel>
+                  </FormItem>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* ================ driver field ================= */}
+        {userRole === "DRIVER" && (
+          <>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-5">
+              <FormField
+                control={form.control}
+                name="licenseNumber"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>License Number</FormLabel>
+                    <FormControl className="w-full">
+                      <Input
+                        placeholder="NS9765FG56"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="vehicleType"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Vehicle Type</FormLabel>
+                    <FormControl className="w-full">
+                      <Input
+                        placeholder="Moto bike"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row w-full sm:items-center gap-5">
+              <FormField
+                control={form.control}
+                name="model"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Vehicle Model</FormLabel>
+                    <FormControl className="w-full">
+                      <Input
+                        placeholder="Yamaha FZS v3"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="plate"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Plate</FormLabel>
+                    <FormControl className="w-full">
+                      <Input
+                        placeholder="XYZ-34-Z-90"
+                        {...field}
+                        value={field.value || ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </>
+        )}
 
         <Button
           type="submit"

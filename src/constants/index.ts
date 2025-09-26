@@ -1,3 +1,4 @@
+import L from "leaflet";
 import type { RideType } from "@/types/ride.type";
 import {
   BikeIcon,
@@ -12,6 +13,14 @@ import {
   XCircle,
   Truck,
   Play,
+  Phone,
+  Mail,
+  Settings,
+  BarChart3,
+  Star,
+  HistoryIcon,
+  Eye,
+  Users,
 } from "lucide-react";
 
 export const rideTypes: RideType[] = [
@@ -27,7 +36,7 @@ export const rideTypes: RideType[] = [
   { id: "ac", name: "AC Car", icon: Car, price: 4, color: "bg-orange-500" },
 ];
 
-import L from "leaflet";
+ 
 
 export const pickupIcon = new L.Icon({
   iconUrl:
@@ -110,6 +119,29 @@ export const faqs = [
     question: "Which cities do you serve?",
     answer:
       "We currently operate in 15 major cities across the country, with plans to expand to more areas. Check our app or website to see if MyTrip is available in your location.",
+  },
+];
+
+export const contactInfo = [
+  {
+    icon: MapPin,
+    title: "Office Address",
+    content: "Dinajpur, Bangladesh",
+  },
+  {
+    icon: Phone,
+    title: "Phone Number",
+    content: "+880 1700-123456",
+  },
+  {
+    icon: Mail,
+    title: "Email Address",
+    content: "support@mytrip.com",
+  },
+  {
+    icon: Clock,
+    title: "Business Hours",
+    content: "24/7 Customer Support",
   },
 ];
 
@@ -206,17 +238,96 @@ export const getStatusColor = (status: string) => {
       return "bg-gray-100 text-gray-800 hover:bg-gray-100";
   }
 };
-export const getStatusIcon = (status: string) => {
-  switch (status.toLowerCase()) {
-    case "completed":
-      return <CheckCircle className="h-4 w-4" />;
-    case "cancelled":
-      return <XCircle className="h-4 w-4" />;
-    case "in-transit":
-      return <Truck className="h-4 w-4" />;
-    case "accepted":
-      return <Play className="h-4 w-4" />;
-    default:
-      return <Clock className="h-4 w-4" />;
-  }
-};
+
+export const adminFeatures = [
+  {
+    icon: Settings,
+    title: "Ride Management",
+    description:
+      "Monitor all active rides, resolve disputes, and ensure smooth operations across the entire platform.",
+    highlight: "Complete oversight",
+  },
+  {
+    icon: Users,
+    title: "User Management",
+    description:
+      "Manage driver and rider profiles, verify identities, handle account issues, and maintain platform safety standards.",
+    highlight: "User safety first",
+  },
+  {
+    icon: BarChart3,
+    title: "Analytics Dashboard",
+    description:
+      "Comprehensive insights into platform performance, user behavior, revenue trends, and operational metrics.",
+    highlight: "Data-driven decisions",
+  },
+  {
+    icon: Shield,
+    title: "Safety Controls",
+    description:
+      "Advanced safety features including driver background checks, ride monitoring, and emergency response protocols.",
+    highlight: "Enhanced security",
+  },
+];
+
+export const riderFeatures = [
+  {
+    icon: MapPin,
+    title: "Easy Ride Booking",
+    description:
+      "Book rides instantly with our simple interface. Enter pickup and destination, and we'll connect you with nearby drivers.",
+    highlight: "One-tap booking",
+  },
+  {
+    icon: CreditCard,
+    title: "Cash-Only Payments",
+    description:
+      "No credit card required! Pay your driver directly in cash. Simple, secure, and accessible to everyone.",
+    highlight: "100% Cash accepted",
+  },
+  {
+    icon: Eye,
+    title: "Live Ride Tracking",
+    description:
+      "See your driver's location in real-time, get accurate ETAs, and track your ride progress on our interactive map.",
+    highlight: "Real-time GPS",
+  },
+  {
+    icon: HistoryIcon,
+    title: "Ride History",
+    description:
+      "Access your complete ride history with details on routes, duration, cost, and driver ratings for every trip.",
+    highlight: "Complete records",
+  },
+];
+
+export const driverFeatures = [
+  {
+    icon: CheckCircle,
+    title: "Accept Ride Requests",
+    description:
+      "Receive instant notifications for nearby ride requests. Accept or decline based on your availability and preferences.",
+    highlight: "Smart matching",
+  },
+  {
+    icon: DollarSign,
+    title: "Earning Summaries",
+    description:
+      "Track your daily and weekly earnings with detailed breakdowns. See completed trips, total distance, and payment summaries.",
+    highlight: "Transparent earnings",
+  },
+  {
+    icon: Clock,
+    title: "Trip History",
+    description:
+      "Access your complete driving history with rider information, routes taken, and earnings per trip for easy record keeping.",
+    highlight: "Detailed logs",
+  },
+  {
+    icon: Star,
+    title: "Rider Ratings",
+    description:
+      "Rate riders after each trip and see ratings from other drivers to help maintain a safe and respectful community.",
+    highlight: "Two-way ratings",
+  },
+];
