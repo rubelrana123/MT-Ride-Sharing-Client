@@ -9,7 +9,7 @@ export default function Hero() {
     <section className="relative w-full min-h-screen px-4 z-10">
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/50 dark:bg-black/70 z-30" />
-      
+
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -29,14 +29,16 @@ export default function Hero() {
 
           {/* Heading */}
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight text-white dark:text-white">
-            Reliable Rides,
-            <span className="text-primary dark:text-primary/80"> Cash Payments</span>
+            Your Trusted Ride,
+            <span className="text-primary dark:text-primary/80">
+              {" "}
+              Cash-Friendly
+            </span>
           </h1>
 
-          {/* Paragraph */}
           <p className="text-xl md:text-2xl mb-8 text-white/90 dark:text-white/80 leading-relaxed">
-            Book safe, affordable rides 24/7. Pay in cash, track your ride, and
-            experience professional service every time.
+            Get around safely and conveniently, anytime. Pay in cash, track your
+            ride live, and enjoy top-notch service with every trip.
           </p>
 
           {/* Buttons */}

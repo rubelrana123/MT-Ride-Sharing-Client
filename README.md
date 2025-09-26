@@ -1,7 +1,7 @@
 # MyTrip -  Ride Booking Platform (Frontend)
 
-![Mytrip Homepage](https://mytrip.vercel.app/home.png)
-<!-- <img src="./public/home.png" alt="mytrip photo" /> -->
+<!-- ![Mytrip Homepage](https://mytrip.vercel.app/home.png) -->
+<img src="./public/Home.png" alt="mytrip photo" />
 
 **mytrip** is a modern, full-stack, role-based ride booking platform designed to provide a seamless and secure experience for riders, drivers, and administrators. Built with a production-grade technology stack, this application demonstrates complex state management, real-time communication, and a robust, scalable architecture.
 

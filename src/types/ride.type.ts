@@ -24,22 +24,26 @@ export interface IRidesParams {
   maxFare?: string;
   rideStatus?: string;
 }
+export interface IRideLocation {
+  type: "Point";
+  coordinates: [number, number];
+}
 export interface IRide {
   _id: string;
   rider: IRider;
   driver: IDriver;
   pickupAddress: string;
   destinationAddress: string;
-  pickupCoordinates: IPickedupCoordinates;
-  destinationCoordinates: IPickedupCoordinates;
-  fare: number;
+ pickupLoc: IRideLocation;
+  destLoc: IRideLocation;
   rideStatus: string;
-  statusLogs: IStatusLog[];
-  createdAt: string;
-  updatedAt: string;
-  platformEarnings: number;
-  commisionRate: number;
-  paymentMethod: string;
+  requestedAt: Date;
+  cancelledAt: Date;
+  rejectedAt: Date;
+  acceptedAt: Date;
+  completedAt: Date;
+  pickedupAt: Date;
+  inTransitAt: Date;
 }
  
 

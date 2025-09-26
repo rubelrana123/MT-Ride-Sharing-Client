@@ -27,7 +27,7 @@ import SidebarUser from "./SidebarUser"
 }
 export function AppSidebar({ userProfile, ...props }: AppSidebarProps) {
   const {data} = useUserInfoQuery(undefined)
-  console.log(data, "data from sidebar");
+  // console.log(data, "data from sidebar");
 const role = data?.data?.role;
 const NavItems = {
   navMain: getSildeBarItems(role),

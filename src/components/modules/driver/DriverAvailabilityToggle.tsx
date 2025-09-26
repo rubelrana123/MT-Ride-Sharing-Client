@@ -22,7 +22,7 @@ export default function UserAvailabilityToggle({
     undefined,
     { skip: userRole !== "DRIVER" }
   );
-  console.log(driverProfile, "driver profile here");
+  // console.log(driverProfile, "driver profile here");
   const [updateAvailability] = useUpdateAvailabilityMutation();
   const [isOnline, setIsOnline] = useState(false);
 
@@ -32,7 +32,7 @@ export default function UserAvailabilityToggle({
     }
   }, [driverProfile]);
 
-  console.log(driverProfile?._id, "here id paiche");
+  // console.log(driverProfile?._id, "here id paiche");
   const handleToggle = async (checked: boolean) => {
     setIsOnline(checked);
     try {
@@ -41,10 +41,10 @@ export default function UserAvailabilityToggle({
         availability: checked ? "online" : "offline",
       }).unwrap();
 
-      console.log(res, "res from toggler");
+      // console.log(res, "res from toggler");
       toast.success("availability successfully update");
     } catch (error) {
-      console.log(error , "error from toggler")
+      // console.log(error , "error from toggler")
       setIsOnline(!checked);
     }
   };

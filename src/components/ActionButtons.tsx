@@ -24,12 +24,12 @@ export default function ActionButtons({ rideStatus, userRole, rideId }: ActionBu
       if (res.success) {
         // You can add a toast notification here for success
         toast.success(res.message || "Ride accepted successfully");
-        console.log(res.message);
+        // console.log(res.message);
       } else {
         toast.error(res.message || "Failed to accept the ride");
       }
     } catch (error) {
-      console.log(error , "error in accept ride");
+      // console.log(error , "error in accept ride");
       toast.error("An unexpected error occurred");
   
       toast.error("An unexpected error occurred");
