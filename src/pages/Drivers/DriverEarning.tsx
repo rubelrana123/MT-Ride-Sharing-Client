@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+ 
 import {
   Table,
   TableBody,
@@ -27,7 +27,7 @@ import { getStatusColor } from "@/constants";
 import Loading from "@/components/modules/shared/Loading";
 import type { IDriverEarningHistory } from "@/types/driver.type";
 import { formatDateTime } from "@/utils/dateFormater";
-// Type definition based on your API response
+ 
  
 export const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {

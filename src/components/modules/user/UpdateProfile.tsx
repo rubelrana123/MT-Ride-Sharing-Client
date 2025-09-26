@@ -16,17 +16,43 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useGetUserProfileQuery, useUpdateUserInfoMutation } from "@/redux/features/user/user.api";
-import { updateProfileSchema } from "@/zodSchema/zodSchema";
- 
+import { updateDriverSchma } from "@/zodSchema/zodSchema";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
- 
+
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 import Loading from "../shared/Loading";
 import { useGetDriverProfileQuery } from "@/redux/features/driver/driver.api";
+
+// zodSchema.ts
+ 
+
+ const updateProfileSchema = z.object({
+  role: z.enum(["RIDER", "DRIVER"]).optional(),
+
+  // base update fields (all optional for partial update)
+  name: z.string().min(3, "name must be contain at least 3 characters long").optional(),
+  email: z.string().email().optional(),
+  phone: z
+    .string()
+    .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
+      message:
+        "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
+    })
+    .optional(),
+  address: z.string().max(200, "Address cannot exceed 200 characters.").optional(),
+
+  // driver-specific update fields (all optional)
+  licenseNumber: z.string().min(6, "License number must be at least 6 characters").max(20).optional(),
+  vehicleType: z.string().min(1, "Vehicle type is required").optional(),
+  model: z.string().min(1, "Model is required").optional(),
+  plate: z.string().min(8, "Plate number must be at least 8 characters").max(30).optional(),
+});
+
 
 export default function UpdateProfile() {
   const { data: userProfile, isLoading } = useGetUserProfileQuery(undefined);
@@ -36,25 +62,28 @@ export default function UpdateProfile() {
   const [updateUserInfo, { isLoading: updateProfileLoading }] = useUpdateUserInfoMutation();
   const navigate = useNavigate();
 
-  const form = useForm<z.infer<typeof updateProfileSchema>>({
+  // Type aliases for clarity
+  type UpdateProfileValues = z.infer<typeof updateProfileSchema>;
+  type DriverValues = z.infer<typeof updateDriverSchma>;
+
+  const form = useForm<UpdateProfileValues>({
     resolver: zodResolver(updateProfileSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      role: "",
-      address: "",
-      licenseNumber: "",
-      vehicleType: "",
-      model: "",
-      plate: "",
-    },
+    values: {
+      name: userProfile?.name,
+      email: userProfile?.email,
+      phone: userProfile?.phoneNumber,
+      role: userProfile?.role,
+      address: userProfile?.address,
+      licenseNumber: driverInfo?.licenseNumber,
+      vehicleType: driverInfo?.vehicleInfo?.vehicleType,
+      model: driverInfo?.vehicleInfo?.model,
+      plate: driverInfo?.vehicleInfo?.plate,
+    } as Partial<UpdateProfileValues>,
   });
 
   useEffect(() => {
-    // userProfile এ ডেটা থাকলে
-    if (userProfile) {
-      // reset ফাংশন দিয়ে ফর্মের ভ্যালুগুলো সেট করে দিন
+    // userProfile data
+    if (userProfile) { 
       form.reset({
         name: userProfile.name || "",
         email: userProfile.email || "",
@@ -65,37 +94,40 @@ export default function UpdateProfile() {
         vehicleType: driverInfo?.vehicleInfo?.vehicleType || "",
         model: driverInfo?.vehicleInfo?.model || "",
         plate: driverInfo?.vehicleInfo?.plate || "",
-      });
+      } as Partial<UpdateProfileValues>);
     }
   }, [userProfile, form, driverInfo]);
 
   if (isLoading) return <Loading />;
 
   // Handle Update Profile
-  const onSubmit = async (values: z.infer<typeof updateProfileSchema>) => {
+  const onSubmit = async (values: UpdateProfileValues) => {
     console.log(values,'form values')
     const toastId = toast.loading("Updating...");
 
     const baseUserData = {
       name: values.name,
-      phoneNumber: values.phone, // Fixed: was values.phoneNumber, now values.phone
+      phoneNumber: values.phone, // values uses 'phone' field in form
       address: values.address
     };
 
-    let finalUserData;
+    let finalUserData: Record<string, unknown>;
 
-    if (userProfile?.role === "DRIVER") {
+    // Narrow the discriminated union by checking role
+    if (values.role === "DRIVER") {
+      // cast to DriverValues after narrowing so TS knows driver-only fields exist
+      const drv = values as DriverValues;
       finalUserData = {
         ...baseUserData,
-        licenseNumber: values?.licenseNumber,
+        licenseNumber: drv.licenseNumber,
         vehicleInfo: {
-          vehicleType: values?.vehicleType,
-          model: values?.model,
-          plate: values?.plate,
+          vehicleType: drv.vehicleType,
+          model: drv.model,
+          plate: drv.plate,
         },
       };
     } else {
- //if user is a driver
+      // RIDER or any non-driver
       finalUserData = baseUserData;
     }
     

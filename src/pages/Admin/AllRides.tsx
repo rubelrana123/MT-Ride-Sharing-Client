@@ -27,7 +27,7 @@ import { useGetAllRidesQuery } from "@/redux/features/ride/ride.api";
 import type { IRide } from "@/types/ride.type";
 
 import { dateFormater } from "@/utils/dateFormater";
-import { formatCurrency } from "@/utils/formateCurrency";
+ 
 
 import { ChevronDown, ChevronUp, Eye, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";

@@ -83,11 +83,14 @@ export default function RideDetails() {
               createdAt={rideDetails.createdAt}
             />
             
-            <RouteInformation
-              pickupCoordinates={rideDetails.pickupCoordinates}
-              destinationCoordinates={rideDetails.destinationCoordinates}
-              distance={processedRideData?.distance || 0}
-            />
+      <RouteInformation
+        pickupCoordinates={rideDetails.pickupLoc}
+        destinationCoordinates={rideDetails.destLoc}
+        distance={calculateDistance(
+          rideDetails.pickupLoc.coordinates,
+          rideDetails.destLoc.coordinates
+        )}
+      />
             
             <FareBreakDown
               fare={rideDetails.fare}
@@ -106,7 +109,7 @@ export default function RideDetails() {
             <ActionButtons 
               rideStatus={rideDetails.rideStatus}
               userRole={userProfile?.role}
-              rideId={rideDetails._id}
+              rideId={rideDetails?._id}
             />
           </div>
         </div>

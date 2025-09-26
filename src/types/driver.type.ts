@@ -1,4 +1,5 @@
  
+ 
 
 // types/applicationTypes.ts
 export type DriverStatus = "pending" | "approved" | "rejected" | "suspend";
@@ -78,4 +79,141 @@ export interface IDriverEarningHistory {
   inTransitAt?: string;
   completedAt?: string;
 }
+export interface Root {
+  statusCode: number
+  success: boolean
+  message: string
+  data: Data
+}
 
+export interface Data {
+  statusCode: number
+  success: boolean
+  message: string
+  data: Data2
+}
+
+export interface Data2 {
+  _id: string
+  rider: Rider
+  fare: string
+  rideStatus: string
+  createdAt: string
+  pickupLoc: PickupLoc
+  destLoc: DestLoc
+  driver: Driver
+}
+
+export interface Rider {
+  _id: string
+  name: string
+  phone: string
+  email: string
+  role: string
+}
+
+export interface PickupLoc {
+  type: string
+  coordinates: number[]
+}
+
+export interface DestLoc {
+  type: string
+  coordinates: number[]
+}
+
+export interface Driver {
+  _id: string
+  name: string
+  phone: string
+  email: string
+  role: string
+  vehicleInfo: VehicleInfo
+  licenseNumber: string
+}
+
+ export interface IRidesResponse {
+  statusCode: number
+  success: boolean
+  message: string
+  data: Data
+}
+
+export interface Data {
+  statusCode: number
+  success: boolean
+  message: string
+  data: Data2
+}
+
+export interface Data2 {
+  _id: string
+  rider: Rider
+  fare: string
+  rideStatus: string
+  createdAt: string
+  pickupLoc: PickupLoc
+  destLoc: DestLoc
+  driver: Driver
+}
+
+export interface Rider {
+  _id: string
+  name: string
+  phone: string
+  email: string
+  role: string
+}
+
+export interface PickupLoc {
+  type: string
+  coordinates: number[]
+}
+
+export interface DestLoc {
+  type: string
+  coordinates: number[]
+}
+
+export interface Driver {
+  _id: string
+  name: string
+  phone: string
+  email: string
+  role: string
+  vehicleInfo: VehicleInfo
+  licenseNumber: string
+}
+
+export interface VehicleInfo {
+  vehicleType: string
+  model: string
+  plate: string
+}
+
+// // ========== Generic API Response Wrapper ==========
+// export interface IApiResponse<T> {
+//   statusCode: number;
+//   success: boolean;
+//   message: string;
+//   data: T;
+// }
+
+// // ========== Common Reusable Interfaces ==========
+// export interface IUser {
+//   _id: string;
+//   name: string;
+//   phone: string;
+//   email: string;
+//   role: string;
+// }
+
+ 
+// // ========== Driver Extends User ==========
+// export interface IDriver extends IUser {
+//   licenseNumber: string;
+//   vehicleInfo: IVehicleInfo;
+// }
+
+// // ========== Nested Response (Root → Data → Ride) ==========
+// export type IRidesResponse = IApiResponse<IApiResponse<IRide>>;

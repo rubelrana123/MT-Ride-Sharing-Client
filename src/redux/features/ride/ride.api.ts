@@ -14,16 +14,13 @@ export const rideApi = baseApi.injectEndpoints({
       invalidatesTags: ["RIDE"],
     }),
     // Get ride details
-    rideDetails: builder.query<IRide, string>({
+    rideDetails: builder.query({
       query: (rideId) => ({
         url: `/rides/${rideId}/details`,
         method: "GET",
       }),
       providesTags: ["RIDE"],
-      transformResponse: (response: { data: IRide }) => {
-        console.log(response, "ride details response");
-        return response.data;
-      },
+      transformResponse: (response) =>  response.data
     }),
     // Admin: List all rides
     getAllRides: builder.query({

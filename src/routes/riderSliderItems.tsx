@@ -1,7 +1,6 @@
  
 
 import type { ISliderItem } from "@/types";
-import RideBook from "@/components/modules/ride/RideBook";
 import DriverApplications from "@/components/modules/ride/DriverApplication";
 import RideHistory from "@/pages/Ride/RideHistory";
 import RideRequest from "@/pages/Ride/RequestRide";

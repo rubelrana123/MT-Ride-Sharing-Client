@@ -1,5 +1,5 @@
 // components/UserStats.tsx
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Users, UserCheck, UserX, Shield } from "lucide-react";
 import type { IUser } from "@/types";
 
@@ -12,9 +12,9 @@ export default function UserStats({ users }: UserStatsProps) {
     total: users.length,
     active: users.filter(user => !user.isDeleted && user.isActive).length,
     blocked: users.filter(user => !user.isDeleted && !user.isActive).length,
-    riders: users.filter(user => user.role === "rider").length,
-    drivers: users.filter(user => user.role === "driver").length,
-    admins: users.filter(user => user.role === "admin").length,
+    riders: users.filter(user => user.role === "RIDER").length,
+    drivers: users.filter(user => user.role === "DRIVER").length,
+    admins: users.filter(user => user.role === "ADMIN").length,
   };
 
   const statCards = [

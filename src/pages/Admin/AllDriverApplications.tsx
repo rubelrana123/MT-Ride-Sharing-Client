@@ -1,7 +1,7 @@
 // Main AllDriverApplications Component
-import React, { useState } from "react";
+import { useState } from "react";
  
-import { Eye, Plus, Trash2, Filter, Search, Download } from "lucide-react";
+import { Filter, Search, Download } from "lucide-react";
 import { toast } from "sonner";
 import {
   Table,
@@ -57,7 +57,7 @@ console.log(driverApplicationsResponse, "driver applications data")
     }
   };
 
-  const handleDelete = async (applicationId: string) => {
+  const handleDelete = async () => {
     try {
       // TODO: Implement API call - DELETE /driver-application/:id
       Swal.fire({

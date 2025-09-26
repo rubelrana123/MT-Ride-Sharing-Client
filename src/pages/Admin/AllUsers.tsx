@@ -18,11 +18,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { cn } from "@/lib/utils";
 import {
   useDeleteUserMutation,
   useGetAllUsersQuery,
-  useUpdateRiderStatusMutation,
 } from "@/redux/features/user/user.api";
 
 import type { IUser } from "@/types";
@@ -56,7 +54,7 @@ export default function AllUsers() {
   }, [inputValue]);
 
   // fetch all rides
-  const { data, isLoading, isError } = useGetAllUsersQuery({
+  const { data, isLoading } = useGetAllUsersQuery({
     page,
     limit,
     sort: "createdAt",

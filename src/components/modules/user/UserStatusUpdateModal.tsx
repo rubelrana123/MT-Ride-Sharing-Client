@@ -23,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useUpdateDriverStatusMutation } from "@/redux/features/driver/driver.api";
 import { useUpdateRiderStatusMutation } from "@/redux/features/user/user.api";
  
  

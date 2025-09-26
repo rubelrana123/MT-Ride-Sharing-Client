@@ -4,13 +4,13 @@ import axios from 'axios';
 console.log(config.BASE_URL, "config");
 export const axiosInstance = axios.create({
   baseURL: config.BASE_URL,
-  withCredentials : true,
-  // headers: {
-  //   'Content-Type': 'application/json',
-  //   Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
-  // },
-  
+  withCredentials : true
 });
+// /*const api = axios.create({
+//   baseURL: 'https://your-backend.vercel.app',
+//   withCredentials: true,
+// });  */
+
 // Add a request interceptor
 axiosInstance.interceptors.request.use(function (config) {
     // Do something before request is sent
