@@ -1,4 +1,4 @@
-import { useGetRiderActiveRideQuery } from "@/redux/features/ride/ride.api";
+import { useGetActiveRideQuery } from "@/redux/features/ride/ride.api";
 import RideBook from "../../components/modules/ride/RideBook";
 import ActiveRideNotice from "@/components/modules/ride/ActiveRide";
 import Loading from "@/components/modules/shared/Loading";
@@ -7,7 +7,7 @@ const RideRequest = () => {
   const {
     data: activeRide,
     isLoading, 
-  } = useGetRiderActiveRideQuery(undefined);
+  } = useGetActiveRideQuery(undefined);
   console.log(activeRide, "here active ride");
   if (isLoading) return <Loading />; 
 

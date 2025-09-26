@@ -13,7 +13,7 @@ import UserAvailabilityToggle from "../modules/driver/DriverAvailabilityToggle";
 
 export default function DashboardLayout() {
   const { data: userProfile } = useGetUserProfileQuery(undefined);
-
+console.log(userProfile, "userprofile")
   return (
     <SidebarProvider>
       <AppSidebar  userProfile={userProfile} />
@@ -25,7 +25,7 @@ export default function DashboardLayout() {
             orientation="vertical"
             className="mr-2 data-[orientation=vertical]:h-4"
           />
-         {userProfile?.role === "DRIVER" || userProfile?.role === "RIDER" && <UserAvailabilityToggle userRole={userProfile.role}/>}
+         {userProfile?.role === "DRIVER"  && <UserAvailabilityToggle userRole={userProfile.role}/>}
 
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4">

@@ -22,7 +22,7 @@ export default function TeamMembers() {
             className="shadow-card hover:shadow-lg transition-shadow"
           >
             <CardContent className="p-6 text-center">
-              <div className="w-32 h-32 gradient-primary rounded-full mx-auto mb-4 flex items-center justify-center">
+              <div className="w-32 h-32 gradient-primary rounded-full border-2 border-primary mx-auto mb-4 flex items-center justify-center">
                 <span className="text-2xl font-bold text-primary-foreground">
                   {member.name
                     .split(" ")

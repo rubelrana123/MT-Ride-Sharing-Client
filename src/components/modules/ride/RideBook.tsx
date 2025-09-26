@@ -24,28 +24,28 @@ export default function RideBook() {
   const [paymentMethod, setPaymentMethod] = useState<string>("cash");
   
   const [requestRide] = useRequestRideMutation()
-  
+  console.log(pickupLoc,destAddress)
   const handleBooking = async() => {
     const toastId = toast.loading("Ride booking.....");
 
-    const riderData = {
-      pickupLoc: {
-        type: "Point",
-        coordinates: extractCoordinates(pickupAddress)
-      },
-      destLoc: {
-        type: "Point",
-        coordinates: extractCoordinates(destAddress)
-      },
-      //under the construction
-      // rideType,
-      // paymentMethod
-    };
-    // console.log("rideData", riderData);
+   const riderData = {
+  pickupLoc: {
+    type: "Point",
+    coordinates: pickupLoc ? [pickupLoc[0], pickupLoc[1]] : extractCoordinates(pickupAddress)
+  },
+  destLoc: {
+    type: "Point",
+    coordinates: destLoc ? [destLoc[0], destLoc[1]] : extractCoordinates(destAddress)
+  },
+  rideType,
+  paymentMethod
+};
+
+    console.log("rideData", riderData);
     try {
       const res = await requestRide(riderData).unwrap();
       if(res.success){
-        toast.success("Ride requested successfully!")
+        toast.success("Ride requested successfully!", {id : toastId  })
          navigate("/riders")
         //reset form
         setPickupLoc(null);
@@ -58,7 +58,7 @@ export default function RideBook() {
       }
 
     } catch (error) { 
-      // console.log("error in ride request", error);
+      console.log("error in ride request", error);
            const errorMessage =
         typeof error === "object" &&
         error !== null &&

@@ -33,8 +33,8 @@ export default function RideHistory() {
 const [cancelRideMutation] = useCancelRideMutation(); // ✅ add mutation hook
   if (isLoading && !data) return <Loading />;
 
-  const rideHistory = data || []; // ✅ use data.data (API structure)
-
+  const rideHistory = data?.data || []; // ✅ use data.data (API structure)
+console.log(data, "ride history")
   if (rideHistory.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-[85vh]">
@@ -87,7 +87,7 @@ const [cancelRideMutation] = useCancelRideMutation(); // ✅ add mutation hook
           {rideHistory.map((ride: any, idx: number) => (
             <TableRow key={ride._id}>
               <TableCell>{idx + 1}</TableCell>
-              <TableCell>{ride.rider}</TableCell>
+              <TableCell>{ride.rider._id}</TableCell>
               <TableCell>
                 {ride.pickupLoc?.coordinates?.join(", ")}
               </TableCell>

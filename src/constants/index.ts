@@ -189,33 +189,33 @@ export const highlights = [
     color: "text-primary",
   },
 ];
-
 export const teamMembers = [
   {
-    name: "Sarah Johnson",
+    name: "Sarah Bennett",
     role: "CEO & Founder",
     image: "/team/sarah.jpg",
-    bio: "With 15 years in transportation tech, Sarah founded MyTrip to revolutionize urban mobility.",
-    linkedin: "#",
-    email: "sarah@MyTrip.com",
+    bio: "Sarah has over 12 years of experience in the transportation industry and founded MyTrip to make urban travel safer and more convenient for everyone.",
+    linkedin: "https://www.linkedin.com/in/sarah-bennett",
+    email: "sarah.bennett@mytrip.com",
   },
   {
-    name: "Michael Chen",
+    name: "Michael Liu",
     role: "CTO",
     image: "/team/michael.jpg",
-    bio: "Former Google engineer passionate about building scalable, user-friendly transportation solutions.",
-    linkedin: "#",
-    email: "michael@MyTrip.com",
+    bio: "Michael, a former software engineer at a leading tech company, leads MyTrip’s technology with a focus on reliability and seamless user experience.",
+    linkedin: "https://www.linkedin.com/in/michael-liu",
+    email: "michael.liu@mytrip.com",
   },
   {
     name: "Emily Rodriguez",
     role: "Head of Operations",
     image: "/team/emily.jpg",
-    bio: "Operations expert ensuring safe, efficient rides and exceptional customer experiences.",
-    linkedin: "#",
-    email: "emily@MyTrip.com",
+    bio: "Emily oversees daily operations to ensure every ride is safe, on time, and meets the highest standards of service.",
+    linkedin: "https://www.linkedin.com/in/emily-rodriguez",
+    email: "emily.rodriguez@mytrip.com",
   },
 ];
+
 
 export const sortOptions = [
   { value: "createdAt-desc", label: "Date: Newest to Oldest" },

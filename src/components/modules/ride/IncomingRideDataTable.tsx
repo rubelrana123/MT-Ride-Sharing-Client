@@ -19,13 +19,17 @@ import { toast } from "sonner";
 interface QueryParams {
   page?: number;
   limit?: number;
-  sort?: string;
- 
+  sortBy?: string;
+  sortOrder?: string;
+  minFare?: string;
+  maxFare?: string;
 }
 
 export default function IncomingRideDataTable({
   allIncomingRides,
   queryParams,
+}: {
+  allIncomingRides: any[], queryParams: QueryParams;
 }) {
  
   const [updateRideStatus] = useUpdateRideStatusMutation();
@@ -33,12 +37,18 @@ export default function IncomingRideDataTable({
  
 
   const acceptRide = async (rideId: string) => {
-    try {
-      const rideStatus = { rideStatus: "accepted" };
-      const res = await updateRideStatus({ rideId, rideStatus, ...queryParams }).unwrap();
+    const toastId = toast.loading("Update Ride Status")
+     try {
+ 
+      const res = await updateRideStatus({ rideId, status: "accepted" }).unwrap();
       if (res.success) {
-        toast.success(res.message);
+        // You can add a toast notification here for success
+        toast.success(res.message || "Ride accepted successfully");
+        // console.log(res.message);
+      } else {
+        toast.error(res.message || "Failed to accept the ride");
       }
+    
     } catch (error: unknown) {
       const errorMessage =
         typeof error === "object" &&
@@ -46,11 +56,12 @@ export default function IncomingRideDataTable({
         "data" in error &&
         typeof (error as { data?: unknown }).data === "object" &&
         (error as { data?: unknown }).data !== null &&
-        "message" in (error as { data?: { message?: string } }).data!
+        "message" in (error as { data: { message?: string } }).data!
           ? (error as { data: { message: string } }).data.message
           : "An error occurred";
-      toast.error(errorMessage);
+      toast.error(errorMessage, { id: toastId });
     }
+  
   };
 
   return (

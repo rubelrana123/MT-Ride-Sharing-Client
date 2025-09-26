@@ -32,14 +32,27 @@ export default function Features() {
             Join thousands of satisfied riders and drivers who choose Rydex
             for reliable, affordable transportation.
           </p>
+ 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-green-600 cursor-pointer hover:bg-green-700 duration-700 hover:duration-700 px-8 py-6 rounded-lg font-semibold transition-colors">
-              <Link to="/register">Start Riding Today</Link>
-            </Button>
-            <Button className="bg-primary-foreground/20 hover:bg-primary-foreground/30 duration-700 hover:duration-700 px-8 py-6 rounded-lg font-semibold transition-colors">
-              <Link to="/register">Become a Driver</Link>
-            </Button>
-          </div>
+  {/* Contact Support Button */}
+  <Button
+    asChild
+    size="lg"
+    className="bg-green-600 hover:bg-green-700 text-xl transition-colors text-white duration-700 px-8 py-6"
+  >
+     <Link to="/register">Start Riding Today</Link>
+  </Button>
+
+  {/* Email Us Button */}
+  <Button
+    asChild
+    size="lg"
+    variant="outline"
+    className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/20 hover:text-foreground text-lg transition-colors duration-700 px-8 py-6"
+  >
+          <Link to="/register">Become a Driver</Link>
+  </Button>
+</div>
         </div>
       </div>
     </main>

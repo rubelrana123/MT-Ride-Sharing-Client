@@ -29,10 +29,10 @@ export default function Hero() {
 
           {/* Heading */}
           <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight text-white dark:text-white">
-            Your Trusted Ride,
+            Your Ride, Your Way,
             <span className="text-primary dark:text-primary/80">
               {" "}
-              Cash-Friendly
+              Pay Cash Easily
             </span>
           </h1>
 
