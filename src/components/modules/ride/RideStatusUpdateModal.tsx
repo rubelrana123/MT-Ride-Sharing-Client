@@ -56,7 +56,7 @@ export function RideStatusUpdateModal({
       rideStatus: ride.rideStatus,
     },
   });
-console.log(ride,'ride')
+// console.log(ride,'ride')
   const onSubmit = async (values: z.infer<typeof rideStatusSchema>) => {
     const toastId = toast.loading("Updating...")
     

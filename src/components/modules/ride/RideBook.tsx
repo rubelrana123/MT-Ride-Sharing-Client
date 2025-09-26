@@ -26,6 +26,8 @@ export default function RideBook() {
   const [requestRide] = useRequestRideMutation()
   
   const handleBooking = async() => {
+    const toastId = toast.loading("Ride booking.....");
+
     const riderData = {
       pickupLoc: {
         type: "Point",
@@ -39,7 +41,7 @@ export default function RideBook() {
       // rideType,
       // paymentMethod
     };
-    console.log("rideData", riderData);
+    // console.log("rideData", riderData);
     try {
       const res = await requestRide(riderData).unwrap();
       if(res.success){
@@ -56,9 +58,19 @@ export default function RideBook() {
       }
 
     } catch (error) { 
-      console.log("error in ride request", error);
-      toast.error( error?.message ||"Failed to request ride. Please try again.")
+      // console.log("error in ride request", error);
+           const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "data" in error &&
+        typeof (error as { data?: unknown }).data === "object" &&
+        (error as { data?: unknown }).data !== null &&
+        "message" in (error as { data?: { message?: string } }).data!
+          ? (error as { data: { message: string } }).data.message
+          : "An error occurred";
+      toast.error(errorMessage, { id: toastId });
     }
+  
     
 
   };

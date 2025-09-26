@@ -4,12 +4,10 @@ import "./index.css";
 import { RouterProvider } from "react-router";
 import { router } from "./routes";
 import { ThemeProvider } from "./provider/theme.provider";
- 
+
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./redux/store";
 import { Toaster } from "./components/ui/sonner";
- 
- 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
