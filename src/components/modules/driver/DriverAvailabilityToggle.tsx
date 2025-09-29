@@ -36,7 +36,7 @@ export default function UserAvailabilityToggle({
   const handleToggle = async (checked: boolean) => {
     setIsOnline(checked);
     try {
-      const res = await updateAvailability({
+      await updateAvailability({
         driverId: driverProfile?.driver, // 👈 not "id", must match your mutation
         availability: checked ? "online" : "offline",
       }).unwrap();

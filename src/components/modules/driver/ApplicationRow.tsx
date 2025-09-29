@@ -3,12 +3,8 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import type { DriverApplication, DriverStatus } from "@/types/driver.type";
  
 import StatusUpdateDialog from "./StatusUpdateDialog";
-import { Eye } from "lucide-react";
-import { Link } from "react-router";
-import ApplicationDeleteModal from "./ApplicationDeleteModal";
 import StatusBadge from "./StatusBadge";
 import { dateFormater } from "@/utils/dateFormater";
-import { Button } from "@/components/ui/button";
  
 
 interface ApplicationRowProps {
@@ -17,7 +13,7 @@ interface ApplicationRowProps {
   onDelete: (id: string) => void;
 }
 
-export function ApplicationRow({ application, onStatusUpdate, onDelete }: ApplicationRowProps) {
+export function ApplicationRow({ application, onStatusUpdate }: ApplicationRowProps) {
   return (
     <TableRow className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
       <TableCell>

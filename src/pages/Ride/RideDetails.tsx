@@ -1,13 +1,12 @@
 // Main RideDetails Component
 import { useMemo } from "react";
 import { useParams } from "react-router";
- 
+
 import { useRideDetailsQuery } from "@/redux/features/ride/ride.api";
 import { useGetUserProfileQuery } from "@/redux/features/user/user.api";
- 
+
 import { calculateDistance } from "@/utils/calculateDistance";
 import Loading from "@/components/modules/shared/Loading";
- 
 
 import { formatCurrency } from "@/utils/formateCurrency";
 import RideHeader from "@/components/modules/ride/RideHeader";
@@ -21,38 +20,40 @@ import ActionButtons from "@/components/ActionButtons";
 
 export default function RideDetails() {
   const { rideId } = useParams<{ rideId: string }>();
-  
-  const { 
-    data: rideDetailsResponse, 
-    isLoading, 
-    isError 
+
+  const {
+    data: rideDetailsResponse,
+    isLoading,
+    isError,
   } = useRideDetailsQuery(rideId as string);
-  
+
   const { data: userProfile } = useGetUserProfileQuery(undefined);
-  console.log(rideDetailsResponse, "ride details respomse")
-  console.log(userProfile,"user profile in user details")
+  console.log(rideDetailsResponse, "ride details respomse");
+  console.log(userProfile, "user profile in user details");
   // Extract nested data structure
-  const rideDetails = rideDetailsResponse?.data;
-  console.log(rideDetails, "Here Ride Details")
+  const ride = rideDetailsResponse?.data;
+  console.log(ride, "Here Ride Details");
+ 
   const processedRideData = useMemo(() => {
-    if (!rideDetails) return null;
-    
-    const pickup = rideDetails.pickupCoordinates?.coordinates;
-    const destination = rideDetails.destinationCoordinates?.coordinates;
-    
+    if (!ride) return null;
+
+    const pickup = ride.pickupLoc?.coordinates;
+    const destination = ride.destLoc?.coordinates;
+
+    if (!pickup || !destination) return null;
+
     return {
-      ...rideDetails,
-      distance: pickup && destination ? 
-        calculateDistance([pickup[0], pickup[1]], [destination[0], destination[1]]) : 0,
-      formattedFare: formatCurrency(parseFloat(rideDetails.fare?.replace(' BDT', '') || '0')),
-      pickupLocation: pickup ? [pickup[1], pickup[0]] as [number, number] : null,
-      destinationLocation: destination ? [destination[1], destination[0]] as [number, number] : null
+      ...ride,
+      distance: calculateDistance([pickup[1], pickup[0]], [destination[1], destination[0]]),
+     formattedFare: formatCurrency(parseFloat(ride.fare?.replace(' BDT', '') || '0')),
+      pickupLocation: [pickup[1], pickup[0]] as [number, number],
+      destinationLocation: [destination[1], destination[0]] as [number, number],
     };
-  }, [rideDetails]);
+  }, [ride]);
 
   if (isLoading) return <Loading />;
-  
-  if (isError || !rideDetails) {
+
+  if (isError || !ride) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
@@ -70,56 +71,53 @@ export default function RideDetails() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 lg:p-6">
       <div className="max-w-7xl mx-auto">
-        <RideHeader 
-          rideDetails={processedRideData}
-          userProfile={userProfile}
-        />
+        <RideHeader rideDetails={processedRideData} userProfile={userProfile} />
 
         <div className="grid gap-6 lg:grid-cols-5">
           {/* Main Content */}
           <div className="lg:col-span-3 space-y-6">
-            <RideStatus 
-              rideStatus={rideDetails.rideStatus}
-              createdAt={rideDetails.createdAt}
+            <RideStatus
+              rideStatus={ride.rideStatus}
+              createdAt={ride.createdAt}
             />
-            
-      <RouteInformation
-        pickupCoordinates={rideDetails.pickupLoc}
-        destinationCoordinates={rideDetails.destLoc}
-        distance={calculateDistance(
-          rideDetails.pickupLoc.coordinates,
-          rideDetails.destLoc.coordinates
-        )}
-      />
-            
+
+            <RouteInformation
+              pickupCoordinates={ride.pickupLoc}
+              destinationCoordinates={ride.destLoc}
+              distance={calculateDistance(
+                ride.pickupLoc.coordinates,
+                ride.destLoc.coordinates
+              )}
+            />
+
             <FareBreakDown
-              fare={rideDetails.fare}
+              fare={ride.fare}
               distance={processedRideData?.distance || 0}
             />
           </div>
 
           {/* Sidebar */}
           <div className="lg:col-span-2 space-y-6">
-            {rideDetails.driver && (
-              <DriverInformation driver={rideDetails.driver} />
+            {ride.driver && (
+              <DriverInformation driver={ride.driver} />
             )}
-            
-            <RiderInformation rider={rideDetails.rider} />
-            
-            <ActionButtons 
-              rideStatus={rideDetails.rideStatus}
+
+            <RiderInformation rider={ride.rider} />
+
+            <ActionButtons
+              rideStatus={ride.rideStatus}
               userRole={userProfile?.role}
-              rideId={rideDetails?._id}
+              rideId={ride?._id}
             />
           </div>
         </div>
 
-        {processedRideData?.pickupLocation && processedRideData?.destinationLocation && (
+        {processedRideData?.pickupLoc && processedRideData?.destLoc && (
           <div className="mt-8">
-            <RideMap
-              pickupLocation={processedRideData.pickupLocation}
-              destinationLocation={processedRideData.destinationLocation}
-            />
+          <RideMap
+            pickupLocation={processedRideData?.pickupLocation}
+            destinationLocation={processedRideData?.destinationLocation}
+          />
           </div>
         )}
       </div>

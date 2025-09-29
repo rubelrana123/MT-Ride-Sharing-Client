@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import PaymentMethod from "@/components/modules/payment/PaymentMethod";
 import LocationSelector from "@/components/modules/ride/LocationSelector";
 import MapView from "@/components/modules/ride/MapView";
@@ -10,7 +11,6 @@ import { Search } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router";
  
-import { toast } from "sonner";
 
  
 export default function RideBook() {

@@ -29,8 +29,8 @@ export const rideTypes: RideType[] = [
     color: "bg-blue-500",
   },
   { id: "bike", name: "Bike", icon: BikeIcon, price: 2, color: "bg-green-500" },
-  { id: "nac", name: "N/A Car", icon: Car, price: 3, color: "bg-blue-600" },
-  { id: "ac", name: "AC Car", icon: Car, price: 4, color: "bg-orange-500" },
+  { id: "nac-car", name: "N/A Car", icon: Car, price: 3, color: "bg-blue-600" },
+  { id: "ac-car", name: "AC Car", icon: Car, price: 4, color: "bg-orange-500" },
 ];
 
  

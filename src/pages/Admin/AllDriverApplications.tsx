@@ -180,8 +180,8 @@ console.log(driverApplicationsResponse, "driver applications data")
               <SelectContent>
                 <SelectItem value="all">All Vehicles</SelectItem>
                 <SelectItem value="bike">Bike</SelectItem>
-                <SelectItem value="car">Car</SelectItem>
-                <SelectItem value="taxi">Taxi</SelectItem>
+                <SelectItem value="ac-car">AC Car</SelectItem>
+                <SelectItem value="nac-car">Car</SelectItem>
                 <SelectItem value="scooter">Scooter</SelectItem>
               </SelectContent>
             </Select>

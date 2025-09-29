@@ -11,25 +11,19 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/ui/toggle-group";
+import Loading from "@/components/modules/shared/Loading";
  
 
 export default function DriverAnalytics() {
   const {data, isLoading, isError} = useGetDriverAnalyticsQuery(undefined);
   const [filter, setFilter] = useState("7"); // default: 7 days
 console.log(data, "here ana data")
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="animate-spin w-8 h-8 text-primary" />
-      </div>
-    );
-  }
+  if (isLoading) return <Loading/>
 
   if (isError || !data) {
     return <p className="text-center text-red-500">Failed to load dashboard data.</p>;

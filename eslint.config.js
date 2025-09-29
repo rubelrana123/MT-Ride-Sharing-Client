@@ -8,6 +8,10 @@ import { globalIgnores } from 'eslint/config'
 export default tseslint.config([
   globalIgnores(['dist']),
   {
+    rules: {
+            // Enforces 2-space indentation and treats violations as warnings
+      "no-unused-vars": "off"      // Disables the rule preventing unused variables
+    },
     files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
@@ -19,5 +23,14 @@ export default tseslint.config([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+         'react-refresh/only-export-components': [
+      'warn',
+      { allowConstantExport: true },
+    ],
+      'no-unused-vars': 'off', // turn off base rule
+      '@typescript-eslint/no-unused-vars': 'warn',
+    },
   },
+
 ])

@@ -6,49 +6,39 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"; 
+} from "@/components/ui/table";
 import { useUpdateRideStatusMutation } from "@/redux/features/ride/ride.api";
- 
 import { dateFormater } from "@/utils/dateFormater";
- 
-import { Eye } from "lucide-react"; 
- 
+import { Eye, ChevronUp, ChevronDown } from "lucide-react";
 import { Link } from "react-router";
 import { toast } from "sonner";
 
-interface QueryParams {
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: string;
-  minFare?: string;
-  maxFare?: string;
+ 
+interface Props {
+  allIncomingRides: any[];
+  serialNumber: number;
+  sortConfig: { sortBy: string; sortOrder: string };
+  handleSort: (field: string) => void;
 }
 
 export default function IncomingRideDataTable({
   allIncomingRides,
-  queryParams,
-}: {
-  allIncomingRides: any[], queryParams: QueryParams;
-}) {
- 
+  serialNumber,
+  sortConfig,
+  handleSort,
+}: Props) {
   const [updateRideStatus] = useUpdateRideStatusMutation();
-
  
-
-  const acceptRide = async (rideId: string) => {
-    const toastId = toast.loading("Update Ride Status")
-     try {
- 
-      const res = await updateRideStatus({ rideId, status: "accepted" }).unwrap();
+  const updateStatus = async (rideId: string, status: "accepted" | "rejected") => {
+    const toastId = toast.loading(`Updating Ride Status to ${status}...`);
+    try {
+      const res = await updateRideStatus({ rideId, status }).unwrap();
       if (res.success) {
-        // You can add a toast notification here for success
-        toast.success(res.message || "Ride accepted successfully");
-        // console.log(res.message);
+        toast.success(res.message || `Ride ${status} successfully`, { id: toastId });
       } else {
-        toast.error(res.message || "Failed to accept the ride");
+        toast.error(res.message || `Failed to ${status} the ride`, { id: toastId });
       }
-    
+    //  navigate("/drivers/ride-history")
     } catch (error: unknown) {
       const errorMessage =
         typeof error === "object" &&
@@ -61,100 +51,69 @@ export default function IncomingRideDataTable({
           : "An error occurred";
       toast.error(errorMessage, { id: toastId });
     }
-  
+  };
+
+  const renderSortIcon = (field: string) => {
+    if (sortConfig.sortBy !== field) return null;
+    return sortConfig.sortOrder === "asc" ? <ChevronUp size={16} /> : <ChevronDown size={16} />;
   };
 
   return (
-    <>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-xl text-forground font-ride-title font-semibold">
-              Rider name
-            </TableHead>
-            <TableHead className="text-xl text-forground font-ride-title font-semibold">
-             email
-            </TableHead>
-            <TableHead className="text-xl text-forground font-ride-title font-semibold">
-              Distance
-            </TableHead>
-            <TableHead className="text-xl text-forground font-ride-title font-semibold">
-              Fare
-            </TableHead>
-            <TableHead className="text-xl text-forground font-ride-title font-semibold">
-              Date
-            </TableHead>
-            <TableHead className="text-right text-xl text-forground font-ride-title font-semibold">
-              Action
-            </TableHead>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>SL</TableHead>
+          <TableHead>Rider</TableHead>
+          <TableHead
+            className="cursor-pointer"
+            onClick={() => handleSort("rideType")}
+          >
+            Ride Type {renderSortIcon("rideType")}
+          </TableHead>
+          <TableHead
+            className="cursor-pointer"
+            onClick={() => handleSort("distance")}
+          >
+            Distance {renderSortIcon("distance")}
+          </TableHead>
+          <TableHead
+            className="cursor-pointer"
+            onClick={() => handleSort("fare")}
+          >
+            Fare {renderSortIcon("fare")}
+          </TableHead>
+          <TableHead
+            className="cursor-pointer"
+            onClick={() => handleSort("createdAt")}
+          >
+            Date {renderSortIcon("createdAt")}
+          </TableHead>
+          <TableHead>Action</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {allIncomingRides.map((ride, idx) => (
+          <TableRow key={ride._id}>
+            <TableCell>{serialNumber + idx + 1}</TableCell>
+            <TableCell>{ride.rider?.name}</TableCell>
+            <TableCell>{ride.rideType?.toUpperCase()}</TableCell>
+            <TableCell>{ride.distance}</TableCell>
+            <TableCell>{ride.fare}</TableCell>
+            <TableCell>{dateFormater(ride.createdAt)}</TableCell>
+            <TableCell className="flex gap-2">
+              <Button onClick={() => updateStatus(ride._id, "accepted")}>Accept</Button>
+              <Button variant="destructive" onClick={() => updateStatus(ride._id, "rejected")}>
+                Reject
+              </Button>
+              <Button variant="outline">
+                <Link to={`/dashboard/rideDetails/${ride._id}`}>
+                  <Eye />
+                </Link>
+              </Button>
+            </TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody>
-          {allIncomingRides?.length > 0 &&
-            allIncomingRides?.map((ride) => (
-              <TableRow key={ride._id}>
-                <TableCell className="font-medium">
-                  {ride?.rider?.name}
-                </TableCell>
-                <TableCell className="font-medium max-w-sm truncate">
-                  {ride?.rider?.email}
-                </TableCell>
-                <TableCell className="font-medium max-w-sm truncate">
-                  {ride?.distance}
-                </TableCell>
-                <TableCell>{ride?.fare}</TableCell>
-                <TableCell>{dateFormater(new Date(ride?.createdAt))}</TableCell>
-                <TableCell className="text-right flex items-center justify-end gap-3">
-                  {/* <div> */}
-                  <Button
-                    size="sm"
-                    variant="default"
-                    className="cursor-pointer"
-                    onClick={() => acceptRide(ride._id)}
-                  >
-                    Accept
-                  </Button>
-                  <Button
-                    size="icon"
-                    variant="outline"
-                    className="cursor-pointer"
-                    asChild
-                  >
-                    <Link to={`/dashboard/rideDetails/${ride?._id}`}>
-                      <Eye />
-                    </Link>
-                  </Button>
-                  {/* </div> */}
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-
-      {allIncomingRides.length === 0 && (
-        <div className="flex justify-center items-center w-full min-h-[60vh]">
-          <div className="text-center">
-            <h3 className="text-xl font-semibold">All Caught Up!</h3>
-            <p className="text-muted-foreground mt-2">
-              There are no new ride requests at the moment.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {allIncomingRides.length === 0 && (
-        <div className="flex justify-center items-center w-full min-h-[60vh]">
-          <div className="text-center">
-            <h3 className="text-xl font-semibold font-ride-title">
-              List Cleared
-            </h3>
-            <p className="text-muted-foreground mt-2">
-              You have dismissed all current requests. New rides will appear
-              here.
-            </p>
-          </div>
-        </div>
-      )}
-    </>
+        ))}
+      </TableBody>
+    </Table>
   );
 }

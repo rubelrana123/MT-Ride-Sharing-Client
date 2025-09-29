@@ -132,7 +132,7 @@ const { data , isLoading } = useGetDriverEarningsQuery(undefined);
                   <TableHead className="font-semibold">Fare</TableHead>
                   <TableHead className="font-semibold">Status</TableHead>
                   <TableHead className="font-semibold">Timeline</TableHead>
-                  <TableHead className="font-semibold">Duration</TableHead>
+ 
                 </TableRow>
               </TableHeader>
               <TableBody>

@@ -1,4 +1,4 @@
-import React from "react";
+ 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,11 +38,11 @@ type VehicleFormValues = z.infer<typeof vehicleSchema>;
 
 const defaultValues: VehicleFormValues = {
   vehicleInfo: {
-    vehicleType: "Bike",
-    model: "BM REife",
-    plate: "SYL-562e1fi",
+    vehicleType: "",
+    model: "",
+    plate: "",
   },
-  licenseNumber: "DX-20e25-0789fi",
+  licenseNumber: "",
 };
 
 export default function DriverApplications() {
@@ -58,7 +58,7 @@ export default function DriverApplications() {
     try {
       await applyForDriver(values);
       toast.success("Form submitted — check dashboard for status!");
-      navigate("/riders/ride-book")
+      navigate("/dashboard")
     } catch (error) {
       toast.error("Failed to submit form. Please try again.");
     }

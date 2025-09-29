@@ -9,7 +9,7 @@ interface FareBreakDownProps {
 }
 
 export default function FareBreakDown({ fare, distance }: FareBreakDownProps) {
-  const fareAmount = parseFloat(fare.replace(' BDT', '') || '0');
+const fareAmount = parseFloat(fare.replace(' BDT', '') || '0');
   const basePrice = 50;
   const pricePerKm = 15;
   const distanceCost = distance * pricePerKm;

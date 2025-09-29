@@ -1,11 +1,12 @@
+import IncomingRideRequest from "@/pages/Drivers/IncomingRideRequest";
 import type { ISliderItem } from "@/types";
+import { lazy } from "react";
  
-import IncomingRequest from "@/pages/Drivers/IncomingRequest";
-import DriverEarnings from "@/pages/Drivers/DriverEarning";
-import DriverAnalytics from "@/pages/Drivers/DriverAnalytics";
-import RideHistory from "@/pages/Ride/RideHistory";
- 
- 
+// Lazy load driver & ride pages
+// const IncomingRequest = lazy(() => import("@/components/modules/driver/IncomingRequest"));
+const DriverEarnings = lazy(() => import("@/pages/Drivers/DriverEarning"));
+const DriverAnalytics = lazy(() => import("@/pages/Drivers/DriverAnalytics"));
+const RideHistory = lazy(() => import("@/pages/Ride/RideHistory"));
 
 export const driverSidebarItems: ISliderItem[] = [
     {
@@ -24,7 +25,7 @@ export const driverSidebarItems: ISliderItem[] = [
             {
         title: "Incoming Request",
         url: "/drivers/incoming-request",
-        Component: IncomingRequest,
+        Component: IncomingRideRequest,
       },
       { title: "My Earnings", url: "/drivers/earning-analytics", Component: DriverEarnings },
       {

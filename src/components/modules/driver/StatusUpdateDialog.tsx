@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
-import { PencilIcon, Settings } from "lucide-react";
+import { PencilIcon } from "lucide-react";
 import type { DriverStatus } from "@/types/driver.type";
  
 

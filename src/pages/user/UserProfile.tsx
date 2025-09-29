@@ -19,7 +19,7 @@ import { Link } from "react-router";
 export default function UserProfile() {
   const { data: userProfile, isLoading } = useGetUserProfileQuery(undefined);
   const { data: driverInfo } = useGetDriverProfileQuery(undefined, {
-    skip: !userProfile || userProfile?.role !== "driver",
+    skip: !userProfile || userProfile?.role !== "DRIVER",
   });
   const [open, setOpen] = useState(false);
 
@@ -41,7 +41,7 @@ export default function UserProfile() {
             <Avatar className="cursor-pointer w-28 h-28">
               <AvatarImage
                 src={
-                  userProfile?.profilePicture ||
+                  userProfile?.picture ||
                   "https://image.winudf.com/p/aHR0cHM6Ly9wbGF5LWxoLmdvb2dsZXVzZXJjb250ZW50LmNvbS9FOVE3WEdaeDNZVVFzcGxwZDRsSnZLT2xDNWx4ejNnaUszajJpdUV4TlpTYnFWcldzUkQtbW0wTG9BYTJORWY5UFE9aDgwMA?k=66f508aaa629d46d3d843b54633e0c0468e25b12&.jpg"
                 }
               />
@@ -73,8 +73,8 @@ export default function UserProfile() {
                 <div className="flex flex-col items-start min-[400px]:flex-row justify-between mt-5 min-[400px]:items-center gap-4 min-[400px]:gap-20 border-b pb-3">
                   <p>Phone:</p>
                   <span>
-                    {userProfile?.phoneNumber
-                      ? userProfile?.phoneNumber
+                    {userProfile?.phone
+                      ? userProfile?.phone
                       : "N/A"}
                   </span>
                 </div>

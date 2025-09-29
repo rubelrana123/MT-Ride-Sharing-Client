@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Input } from "../../../components/ui/input";
 import { Label } from "../../../components/ui/label";
 import { Button } from "../../../components/ui/button";
@@ -30,9 +30,9 @@ export default function LocationSelector({
   onSelectingPickupChange
 }: LocationSelectorProps) {
   const [pickupSearch, setPickupSearch] = useState("");
-  const [pickupResults, setPickupResults] = useState<Array<{ display_name: string; lat: string; lon: string }>>([]);
+  // const [pickupResults, setPickupResults] = useState<Array<{ display_name: string; lat: string; lon: string }>>([]);
   // const [isSearching, setIsSearching] = useState(false);
-  const abortRef = useRef<AbortController | null>(null);
+  // const abortRef = useRef<AbortController | null>(null);
   const pickupInputRef = useRef<HTMLInputElement | null>(null);
 
   const useCurrentLocation = () => {

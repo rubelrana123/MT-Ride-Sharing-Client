@@ -1,16 +1,18 @@
+import { lazy } from "react";
  
  
 
 import { createBrowserRouter, Navigate } from "react-router";
 
-import Login from "@/pages/Auth/Login";
-import { Register } from "@/pages/Auth/Register";
-import RideBook from "@/components/modules/ride/RideBook";
+const Login = lazy(() => import("@/pages/Auth/Login"));
+const UpdateProfile = lazy(() => import("@/components/modules/user/UpdateProfile"));
+const UserProfile = lazy(() => import("@/pages/user/UserProfile"));
+const Unauthorized = lazy(() => import("@/components/modules/shared/Unauthorized"));
+const RideDetails = lazy(() => import("@/pages/Ride/RideDetails"));
+
 import generateRoute from "@/utils/generateRoute";
 import { adminSidebarItems } from "./adminSliderItems";
 import { driverSidebarItems } from "./driverSliderItems";
-import DriverApplications from "@/components/modules/ride/DriverApplication";
-import RideDetails from "@/pages/Ride/RideDetails";
 import Home from "@/pages/public/Home";
 import App from "@/App";
 import DashboardLayout from "@/components/layout/DashBoardLayout";
@@ -18,12 +20,10 @@ import AboutPage from "@/pages/About/About";
 import { riderSidebarItems } from "./riderSliderItems";
  
 import { withAuth } from "@/utils/withAuth";
-import UpdateProfile from "@/components/modules/user/UpdateProfile";
-import UserProfile from "@/pages/user/UserProfile";
-import Unauthorized from "@/components/modules/shared/Unauthorized";
 import Features from "@/pages/public/FeaturesPage";
 import ContactPage from "@/pages/public/ContactPage";
 import FaqPage from "@/pages/public/FaqPage";
+import { Register } from "@/pages/Auth/Register";
  
 
 export const router = createBrowserRouter([
@@ -35,18 +35,11 @@ export const router = createBrowserRouter([
         Component: Home,
         path: "/",
       },
-      {
-        path: "/ride-book",
-        Component: RideBook,
-      },
-            {
+     {
         path: "/about",
         Component: AboutPage,
       },
-      {
-        path: "/drivers/driver-application",
-        Component: DriverApplications,
-      },
+
       {
         path :"/features",
         Component : Features
@@ -86,7 +79,7 @@ export const router = createBrowserRouter([
 
   {
     path: "/admin",
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout ,["ADMIN", "SUPER_ADMIN"]),
     children: [
       { index: true, element: <Navigate to="/admin/analytics" /> },
       ...generateRoute(adminSidebarItems),
@@ -94,15 +87,15 @@ export const router = createBrowserRouter([
   },
   {
     path: "/drivers",
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout ,["DRIVER"]),
     children: [
-      { index: true, element: <Navigate to="/drivers/earning-analytics" /> },
+      { index: true, element: <Navigate to="/drivers/analytics" /> },
       ...generateRoute(driverSidebarItems),
     ],
   },
     {
     path: "/riders",
-    Component: DashboardLayout,
+    Component: withAuth(DashboardLayout ,["RIDER"]),
     children: [
       { index: true, element: <Navigate to="/riders/history" /> },
       ...generateRoute(riderSidebarItems),

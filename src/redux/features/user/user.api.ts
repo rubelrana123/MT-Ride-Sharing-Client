@@ -10,13 +10,13 @@ import type {
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getUserProfile: builder.query({
+    getUserProfile: builder.query<IUser, undefined>({
       query: () => ({
         url: "/users/me",
         method: "GET",
       }),
       providesTags: ["USER"],
-      transformResponse: (response) => response.data,
+      transformResponse: (response : IResponse<IUser>) => response?.data,
     }),
     // getAllUsers: builder.query<IResponse<IUser[]>, IRidesParams>({
     //   query: () => ({
@@ -30,9 +30,9 @@ getAllUsers: builder.query<IResponse<IUser[]>, IRidesParams>({
   query: ({ page, limit, sort, searchTerm, fields }) => {
     const params = new URLSearchParams();
     if (sort) params.append("sort", sort.toString());
-    if (fields) params.append("fields", fields); // 👈 backend wants comma separated, not space separated
+    if (fields) params.append("fields", fields);  
     if (limit) params.append("limit", limit.toString());
-    if (page) params.append("page", page.toString()); // optional if backend supports
+    if (page) params.append("page", page.toString());  
     if (searchTerm) params.append("searchTerm", searchTerm);
 
     return {
@@ -42,6 +42,7 @@ getAllUsers: builder.query<IResponse<IUser[]>, IRidesParams>({
     };
   },
   providesTags: ["USER"],
+  transformResponse : (response : IResponse<IUser[]>) => response,
 }),
 
     getUserById: builder.query<IResponse<IUser>, string>({

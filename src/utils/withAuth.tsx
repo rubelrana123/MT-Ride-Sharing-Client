@@ -32,7 +32,7 @@ export const withAuth = (Component: ComponentType, requiredRoles?: TRole | TRole
       
 
       if (Array.isArray(requiredRoles)) {
-        if (!requiredRoles.includes(userRole)) {
+        if (!requiredRoles.includes(userRole as TRole)) {
           return <Navigate to="/unauthorized" />;
         }
       } else {

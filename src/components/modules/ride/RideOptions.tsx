@@ -1,6 +1,6 @@
 // components/RideOptions.tsx
 import { rideTypes } from "@/constants";
-import { Car, LucideBike, BikeIcon } from "lucide-react";
+import { Car} from "lucide-react";
  
 
 interface RideOptionsProps {

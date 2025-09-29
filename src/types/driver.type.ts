@@ -96,7 +96,7 @@ export interface Data {
 export interface Data2 {
   _id: string
   rider: Rider
-  fare: string
+  fare: number
   rideStatus: string
   createdAt: string
   pickupLoc: PickupLoc
@@ -149,7 +149,7 @@ export interface Data {
 export interface Data2 {
   _id: string
   rider: Rider
-  fare: string
+  fare: number
   rideStatus: string
   createdAt: string
   pickupLoc: PickupLoc

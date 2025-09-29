@@ -45,7 +45,7 @@ export default function PriceSummary({ pickupLoc, destLoc, rideType }: PriceSumm
         <hr className="border-gray-200 dark:border-gray-700" />
         <div className="flex justify-between text-lg font-bold">
           <span>Total:</span>
-          <span className="text-blue-600">৳{total}</span>
+          <span className="text-blue-600">৳{total} BDT</span>
         </div>
       </div>
     </div>

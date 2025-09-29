@@ -21,7 +21,7 @@ export interface IRider {
   name: string
   email: string
   role: string
-  phoneNumber: string;
+  phone: string;
 }
 
 export interface IDriver {
@@ -46,7 +46,7 @@ export interface IUpdateProfile {
 
 export interface IUserProfile {
   name?: string;
-  phoneNumber?: string;
+  phone?: string;
   address?: string;
   vehicleInfo?: IVehicleInfo
   licenseNumber?: string

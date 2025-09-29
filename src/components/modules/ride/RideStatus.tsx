@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { dateFormater } from "@/utils/dateFormater";
-import { Clock, CheckCircle, XCircle, Car, UserCheck, Navigation, MapPin } from "lucide-react";
+import { Clock, CheckCircle, XCircle, UserCheck, Navigation, MapPin } from "lucide-react";
  
 
 interface RideStatusProps {

@@ -1,13 +1,11 @@
- 
-import AllDriverApplications from "@/pages/Admin/AllDriverApplications";
-import AllRides from "@/pages/Admin/AllRides";
-import AllUsers from "@/pages/Admin/AllUsers";
- 
- 
- 
-import Analytics from "@/pages/Admin/AnalyticsStats";
- 
+
+import { lazy } from "react";
 import type { ISliderItem } from "@/types";
+
+ const Analytics = lazy(() => import("@/pages/Admin/AnalyticsStats"));
+const AllRides = lazy(() => import("@/pages/Admin/AllRides"));
+const AllUsers = lazy(() => import("@/pages/Admin/AllUsers"));
+const AllDriverApplications = lazy(() => import("@/pages/Admin/AllDriverApplications"));
  
 
 export const adminSidebarItems: ISliderItem[] = [

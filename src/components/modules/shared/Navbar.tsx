@@ -13,11 +13,12 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/layout/mode.toggler";
-// import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { useAppDispatch } from "@/redux/hook";
-import { authApi, useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { Logo } from "@/assets/icons/Logo";
-import ProfileAvatar from "../ProfileAvatar";
+import ProfileAvatar from "./ProfileAvatar";
+import { userApi } from "@/redux/features/user/user.api";
+import { toast } from "sonner";
+import { useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api";
  
 
 // Navigation links with roles
@@ -47,9 +48,15 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   !isLoading && console.log("user data", data)
   const handleLogout = async () => {
-    await logout(undefined);
-    dispatch(authApi.util.resetApiState());
+     try {
+      await logout(undefined);
+      dispatch(userApi.util.resetApiState())
+      toast.success("Logout Successfully")
+    } catch {
+      toast.error("Logout failed!")
+    }
   };
+
 
   return (
     <nav className="bg-background shadow-lg border-b border-border sticky top-0 z-50">
@@ -58,11 +65,9 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <Link to="/" className="flex items-center space-x-2">
-              {/* <div className="bg-primary p-2 rounded-lg">
-                <Car className="h-6 w-6 text-primary-foreground" />
-              </div> */}
+ 
               <Logo/>
-              {/* <span className="text-xl font-bold text-foreground">MT Ride</span> */}
+             
             </Link>
           </div>
 

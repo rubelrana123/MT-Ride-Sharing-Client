@@ -49,26 +49,25 @@ export function RideStatusUpdateModal({
   open,
   onChange,
 }: IRideStatusProps) {
-  const [updateRideStatus] = useUpdateRideStatusMutation();
+  const [updateRideStatus] = useUpdateRideStatusMutation()
   const form = useForm<z.infer<typeof rideStatusSchema>>({
     resolver: zodResolver(rideStatusSchema),
     defaultValues: {
       rideStatus: ride.rideStatus,
     },
   });
-// console.log(ride,'ride')
+
   const onSubmit = async (values: z.infer<typeof rideStatusSchema>) => {
     const toastId = toast.loading("Updating...")
-    
+    console.log({ rideId: ride._id, rideStatus: values.rideStatus }, "update params here")
     try {
-      const res = await updateRideStatus({ rideId: ride._id, rideStatus: values }).unwrap();
+      const res = await updateRideStatus({ rideId: ride._id, status : values.rideStatus }).unwrap();
 
       if (res.success && res.statusCode === 200) {
         toast.success(res.message, { id: toastId })
         onChange(false)
       }
     } catch (error: unknown) {
-      console.log(error,"error in ride status update modal");
       const errorMessage =
         typeof error === "object" &&
         error !== null &&
@@ -116,18 +115,6 @@ export function RideStatusUpdateModal({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {/* rejected → accepted → picked_up → in_transit → completed 
-                          REQUESTED = "requested",
-                          CANCELLED = "cancelled",
-                          REJECTED = "rejected",
-                          ACCEPTED = "accepted",
-                          PICKED_UP = "picked_up",
-                          IN_TRANSIT = "in_transit",
-                          COMPLETED = "completed",
-                        
-                        */}
-                        <SelectItem value="accepted">Accepted</SelectItem>
-                        <SelectItem value="rejected">Rejected</SelectItem>
                         <SelectItem value="picked_up">Picked Up</SelectItem>
                         <SelectItem value="in_transit">In Transit</SelectItem>
                         <SelectItem value="completed">Completed</SelectItem>

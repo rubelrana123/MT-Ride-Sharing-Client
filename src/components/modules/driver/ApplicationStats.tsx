@@ -1,7 +1,7 @@
 // components/ApplicationStats.tsx
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent} from "@/components/ui/card";
 import type { DriverApplication } from "@/types/driver.type";
-import { Users, Clock, CheckCircle, XCircle, Ban } from "lucide-react";
+import { Users, Clock, CheckCircle, XCircle} from "lucide-react";
  
 
 interface ApplicationStatsProps {

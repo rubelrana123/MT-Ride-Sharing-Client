@@ -53,10 +53,10 @@ export const driverSchema = baseSchema.extend({
     .max(30, "Plate number must be at most 30 characters"),
 });
 
-export const registerZodSchema = z.discriminatedUnion("role", [
-  riderSchema,
-  driverSchema,
-]);
+// export const registerZodSchema = z.discriminatedUnion("role", [
+//   riderSchema,
+//   driverSchema,
+// ]);
 
 
 export const baseUpdateSchema = z.object({
@@ -104,6 +104,65 @@ export const updateProfileSchema = z.discriminatedUnion("role", [
 ]);
 
 
+// Zod schema definition
+export const registerSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, "Name is required")
+      .min(3, "Name must be at least 3 characters long"),
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Please provide a valid email address"),
+    password: z
+      .string()
+      .min(1, "Password is required")
+      .min(8, "Password must be at least 8 characters long")
+      .regex(/^(?=.*[A-Z])/, "Password must contain at least 1 uppercase letter")
+      .regex(/^(?=.*[a-z])/, "Password must contain at least 1 lowercase letter")
+      .regex(/^(?=.*[!@#$%^&*])/, "Password must contain at least 1 special character")
+      .regex(/^(?=.*\d)/, "Password must contain at least 1 number"),
+    confirmPassword: z
+      .string()
+      .min(1, "Please confirm your password"),
+    role: z.enum(["RIDER", "DRIVER"], {
+      message: "Please select a role",
+    }),
+    licenseNumber: z.string().optional(),
+    vehicleType: z.string().optional(),
+    model: z.string().optional(),
+    plate: z.string().optional(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
+  .refine(
+    (data) => {
+      if (data.role === "DRIVER") {
+        return !!(
+          data.licenseNumber &&
+          data.vehicleType &&
+          data.model &&
+          data.plate &&
+          data.licenseNumber.length >= 6 &&
+          data.licenseNumber.length <= 20 &&
+          data.vehicleType.length >= 1 &&
+          data.model.length >= 1 &&
+          data.plate.length >= 8 &&
+          data.plate.length <= 30
+        );
+      }
+      return true;
+    },
+    {
+      message: "All driver fields are required and must meet length requirements",
+      path: ["licenseNumber"],
+    }
+  );
+
+export type RegisterFormData = z.infer<typeof registerSchema>;
 
 
 export const changePasswordSchema = z

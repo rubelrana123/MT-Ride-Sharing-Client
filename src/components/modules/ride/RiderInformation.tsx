@@ -1,20 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User, Phone, Mail } from "lucide-react";
 
-interface Rider {
-  _id: string;
-  name: string;
-  phoneNumber: string;
-  email: string;
-  role: string;
-}
-
-interface RiderInformationProps {
-  rider: Rider;
-}
-
-export default function RiderInformation({ rider }: RiderInformationProps) {
+export default function RiderInformation({ rider }: any) {
   return (
     <Card>
       <CardHeader>
@@ -25,28 +13,40 @@ export default function RiderInformation({ rider }: RiderInformationProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12">
-            <AvatarFallback className="bg-green-100 text-green-600 font-semibold">
-              {rider.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+          <Avatar className="h-8 w-8 rounded-lg grayscale">
+            <AvatarImage
+              src={
+                "https://image.winudf.com/p/aHR0cHM6Ly9wbGF5LWxoLmdvb2dsZXVzZXJjb250ZW50LmNvbS9FOVE3WEdaeDNZVVFzcGxwZDRsSnZLT2xDNWx4ejNnaUszajJpdUV4TlpTYnFWcldzUkQtbW0wTG9BYTJORWY5UFE9aDgwMA?k=66f508aaa629d46d3d843b54633e0c0468e25b12&.jpg"
+              }
+              alt={rider?.name}
+            />
+            <AvatarFallback className="rounded-lg">
+              {rider?.name}
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-semibold text-gray-900 dark:text-white">{rider.name}</p>
+            <p className="font-semibold text-gray-900 dark:text-white">
+              {rider?.name}
+            </p>
             <p className="text-sm text-gray-600 dark:text-gray-400">Rider</p>
           </div>
         </div>
-        
+
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-sm">
             <Phone className="h-4 w-4 text-gray-500" />
-            <span className="text-gray-900 dark:text-white">{rider.phoneNumber}</span>
+            <span className="text-gray-900 dark:text-white">
+              {rider?.phone}
+            </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <Mail className="h-4 w-4 text-gray-500" />
-            <span className="text-gray-900 dark:text-white">{rider.email}</span>
+            <span className="text-gray-900 dark:text-white">
+              {rider?.email}
+            </span>
           </div>
         </div>
       </CardContent>
     </Card>
   );
-} 
+}

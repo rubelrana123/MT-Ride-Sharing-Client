@@ -24,7 +24,7 @@ export default function RideMap({ pickupLocation, destinationLocation }: RideMap
     (pickupLocation[0] + destinationLocation[0]) / 2,
     (pickupLocation[1] + destinationLocation[1]) / 2
   ];
-
+  
   return (
     <Card>
       <CardHeader>

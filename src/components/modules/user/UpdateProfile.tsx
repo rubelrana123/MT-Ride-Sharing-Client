@@ -71,7 +71,7 @@ export default function UpdateProfile() {
     values: {
       name: userProfile?.name,
       email: userProfile?.email,
-      phone: userProfile?.phoneNumber,
+      phone: userProfile?.phone,
       role: userProfile?.role,
       address: userProfile?.address,
       licenseNumber: driverInfo?.licenseNumber,
@@ -135,7 +135,7 @@ export default function UpdateProfile() {
     
     try {
       const res = await updateUserInfo({
-        userId: userProfile?._id,
+        userId: userProfile?._id as string,
         userData: finalUserData,
       }).unwrap();
       
@@ -283,6 +283,29 @@ export default function UpdateProfile() {
                         )}
                       />
                       <FormField
+  control={form.control}
+  name="vehicleType"
+  render={({ field }) => (
+    <FormItem className="flex-1">
+      <FormLabel>Vehicle Type</FormLabel>
+      <FormControl className="w-full">
+        <select
+          {...field}
+          value={field.value}
+          className="w-full rounded-md border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="Bike">Bike</option>
+          <option value="AC Car">Non-AC Car</option>
+          <option value="Non-AC Car">AC Car</option>
+          <option value="Scooter">Scooter</option>
+        </select>
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+
+                      {/* <FormField
                         control={form.control}
                         name="vehicleType"
                         render={({ field }) => (
@@ -298,7 +321,7 @@ export default function UpdateProfile() {
                             <FormMessage />
                           </FormItem>
                         )}
-                      />
+                      /> */}
                     </div>
                     
                     <div className="flex flex-col sm:flex-row w-full sm:items-center gap-5">

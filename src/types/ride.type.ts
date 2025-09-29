@@ -28,25 +28,32 @@ export interface IRideLocation {
   type: "Point";
   coordinates: [number, number];
 }
-export interface IRideResponse {
-  data : IRide
+export interface IRideResponse<T> {
+  data : T
 }
+
+// Ride
 export interface IRide {
   _id: string;
-  rider: IRider;
+  rider?: IRider;
   driver?: IDriver;
-  pickupAddress?: string;
-  destinationAddress?: string;
   pickupLoc?: IRideLocation;
   destLoc?: IRideLocation;
   rideStatus?: string;
-  requestedAt?: Date;
-  cancelledAt?: Date;
-  rejectedAt?: Date;
-  acceptedAt?: Date;
-  completedAt?: Date;
-  pickedupAt?: Date;
-  inTransitAt?: Date;
+
+  // Backend is sending these extra fields
+  distance?: string;   // "10.12 km"
+  fare?: string;       // "657 BDT"
+  createdAt?: string;  // "2025-09-27T20:20:57.195Z"
+
+  // Optional timestamps
+  requestedAt?: string;
+  cancelledAt?: string;
+  rejectedAt?: string;
+  acceptedAt?: string;
+  completedAt?: string;
+  pickedupAt?: string;
+  inTransitAt?: string;
 }
  
 

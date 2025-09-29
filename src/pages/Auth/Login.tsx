@@ -1,3 +1,4 @@
+
 import {
   Form,
   FormControl,
@@ -152,3 +153,119 @@ const Login = () => {
 };
 
 export default Login;
+
+
+
+
+// "use client"
+
+// import { useState } from "react"
+// import { useNavigate, Link } from "react-router"
+// import { z } from "zod"
+// import { toast } from "sonner"
+
+// import { Button } from "@/components/ui/button"
+// import { Input } from "@/components/ui/input"
+// import Password from "@/components/ui/password"
+// import { Logo } from "@/assets/icons/Logo"
+// import { useLoginMutation } from "@/redux/features/auth/auth.api"
+
+// // --------------------- Validation Schema ---------------------
+// const loginSchema = z.object({
+//   email: z.string().email("Please enter a valid email"),
+//   password: z.string().min(6, "Password must be at least 6 characters"),
+// })
+
+// type LoginFormData = z.infer<typeof loginSchema>
+
+// // --------------------- Login Component ---------------------
+// export default function Login() {
+//   const navigate = useNavigate()
+//   const [login] = useLoginMutation()
+//   const [form, setForm] = useState<LoginFormData>({ email: "", password: "" })
+//   const [errors, setErrors] = useState<Partial<LoginFormData>>({})
+//   const [isSubmitting, setIsSubmitting] = useState(false)
+
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setForm({ ...form, [e.target.name]: e.target.value })
+//     setErrors({ ...errors, [e.target.name]: undefined })
+//   }
+
+//   const handleSubmit = async (e: React.FormEvent) => {
+//     e.preventDefault()
+//     try {
+//       // Validate form manually using Zod
+//       loginSchema.parse(form)
+
+//       setIsSubmitting(true)
+//       const res = await login(form).unwrap()
+
+//       if (res.success) {
+//         toast.success("Logged in successfully")
+//         navigate("/")
+//       }
+//     } catch (err: any) {
+//       if (err.errors) {
+//         console.log(err.errors)
+//       } else {
+//         toast.error(err?.data?.message || "Invalid credentials")
+//       }
+//     } finally {
+//       setIsSubmitting(false)
+//     }
+//   }
+
+//   return (
+//     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+//       <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8">
+//         <div className="text-center mb-6">
+//           <Logo className="w-20 h-20 mx-auto mb-2" />
+//           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Welcome to My Trip</h1>
+//         </div>
+
+//         <form onSubmit={handleSubmit} className="space-y-6">
+//           {/* Email */}
+//           <div>
+//             <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
+//               Email
+//             </label>
+//             <Input
+//               type="email"
+//               name="email"
+//               placeholder="john@example.com"
+//               value={form.email}
+//               onChange={handleChange}
+//             />
+//             {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
+//           </div>
+
+//           {/* Password */}
+//           <div>
+//             <label className="block mb-1 text-sm font-medium text-gray-700 dark:text-gray-300">
+//               Password
+//             </label>
+//             <Password
+//               name="password"
+//               value={form.password}
+//               onChange={handleChange}
+//             />
+//             {errors.password && <p className="text-sm text-red-500 mt-1">{errors.password}</p>}
+//           </div>
+
+//           <Button type="submit" className="w-full" disabled={isSubmitting}>
+//             {isSubmitting ? "Signing in..." : "Sign in"}
+//           </Button>
+//         </form>
+
+//         <p className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+//           Don't have an account?{" "}
+//           <Link to="/register" className="text-primary hover:underline font-medium">
+//             Create one
+//           </Link>
+//         </p>
+
+//         <p className="text-center mt-8 text-sm text-gray-600 dark:text-gray-400">Powered by My Trip v1.0.0</p>
+//       </div>
+//     </div>
+//   )
+// }
