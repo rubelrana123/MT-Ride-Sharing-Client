@@ -30,7 +30,7 @@ const ActiveRideNotice  = ( ride  : IRide) => {
   }, [ride]);
 
   if (!processedRideData) return null;
-
+   console.log(ride, "here active  ride")
   return (
     <div className="mx-4 md:mx-12 my-6 p-4 md:p-6 rounded-2xl shadow-lg border bg-background text-foreground dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 transition-colors duration-300">
       {/* Header */}
@@ -49,7 +49,7 @@ const ActiveRideNotice  = ( ride  : IRide) => {
 
 
         {/* Action Buttons */}
-        <ActionButtons rideId={ride?._id} rideStatus={ride?.rideStatus} userRole={ride?.driver?.role} />
+        <ActionButtons rideId={ride?._id} rideStatus={ride?.rideStatus} userRole={ride?.driver?.role? ride?.driver?.role : ride?.rider?.role} />
 
         {/* Ride Map */}
         {processedRideData?.pickupLocation && processedRideData?.destinationLocation && (
@@ -85,10 +85,6 @@ const ActiveRideNotice  = ( ride  : IRide) => {
           </p>
         </div>
 
-        {/* Requested At */}
-        <p className="text-xs md:text-sm text-gray-500 dark:text-gray-400">
-          Requested At: {(ride?.requestedAt)}
-        </p>
       </div>
     </div>
   );

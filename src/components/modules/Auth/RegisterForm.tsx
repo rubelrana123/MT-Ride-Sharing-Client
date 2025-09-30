@@ -20,14 +20,7 @@ import { useForm } from "react-hook-form";
 
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { registerSchema, type RegisterFormData } from "@/zodSchema/zodSchema";
-
  
-interface ApiError {
-  data?: {
-    message?: string;
-  };
-}
-
 export default function RegisterForm() {
   const [register, { isLoading }] = useRegisterMutation();
   const [searchParams] = useSearchParams();
@@ -108,14 +101,16 @@ export default function RegisterForm() {
         navigate("/login");
       }
     } catch (error) {
-      console.error("Registration error:", error);
-      
-      const apiError = error as ApiError;
-      const errorMessage = 
-        apiError?.data?.message || 
-        "Something went wrong. Please try again.";
-      
-      toast.error(errorMessage, { id: toastId });
+        const errorMessage =
+        typeof error === "object" &&
+        error !== null &&
+        "data" in error &&
+        typeof (error as { data?: unknown }).data === "object" &&
+        (error as { data?: unknown }).data !== null &&
+        "message" in (error as { data?: { message?: string } }).data!
+          ? (error as { data: { message: string } }).data.message
+          : "An error occurred";
+      toast.error(errorMessage, {id : toastId});
     }
   };
 
@@ -250,8 +245,8 @@ export default function RegisterForm() {
 
           {/* Driver-Specific Fields */}
           {selectedRole === "DRIVER" && (
-            <div className="space-y-6 p-4 bg-gray-50 rounded-lg border">
-              <h3 className="text-sm font-medium text-gray-900">
+            <div className="space-y-6 p-4 bg-gray-50 dark:bg-secondary rounded-lg border">
+              <h3 className="text-sm font-medium ">
                 Driver Information
               </h3>
               
@@ -284,7 +279,7 @@ export default function RegisterForm() {
         <select
           {...field}
           disabled={isLoading}
-          className="w-full h-12 px-3 py-2 border border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full h-12 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
           <option value="" disabled>
             Select a vehicle type

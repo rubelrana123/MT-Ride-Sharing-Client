@@ -8,13 +8,11 @@ import { Button } from "@/components/ui/button";
 import { useRequestRideMutation } from "@/redux/features/ride/ride.api";
 import { extractCoordinates } from "@/utils/extractCoordinates";
 import { Search } from "lucide-react";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useState } from "react"; 
  
 
  
-export default function RideBook() {
-  const navigate = useNavigate();
+export default function RideBook() { 
   const [pickupLoc, setPickupLoc] = useState<[number, number] | null>(null);
   const [destLoc, setDestLoc] = useState<[number, number] | null>(null);
   const [pickupAddress, setPickupAddress] = useState("");
@@ -46,7 +44,6 @@ export default function RideBook() {
       const res = await requestRide(riderData).unwrap();
       if(res.success){
         toast.success("Ride requested successfully!", {id : toastId  })
-         navigate("/riders")
         //reset form
         setPickupLoc(null);
         setDestLoc(null);

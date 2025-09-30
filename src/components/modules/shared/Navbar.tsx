@@ -32,7 +32,7 @@ const navigationLinks = [
 
  
   { href: "/riders/ride-book", label: "Book a Ride", icon: Car, role: "RIDER" },//rider
-  { href: "/drivers/driver-application", label: "Become a Drive", icon: Car, role: "RIDER" },//driver
+  { href: "/riders/driver-application", label: "Become a Drive", icon: Car, role: "RIDER" },//driver
   { href: "/riders", label: "Dashboard", icon: LayoutDashboard, role: "RIDER" },//admin
   { href: "/drivers", label: "Dashboard", icon: LayoutDashboard, role: "DRIVER" },//admin
   { href: "/admin", label: "Admin Panel", icon: LayoutDashboard, role: "ADMIN" },//admin

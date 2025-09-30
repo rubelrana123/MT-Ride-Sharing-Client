@@ -112,7 +112,7 @@ console.log(userProfile, "user profile")
               <TableCell>{dateFormater(ride.createdAt)}</TableCell>
               <TableCell className="text-right flex items-center justify-end gap-2">
                 {/* cancel button here */}
-                {ride.rideStatus != "completed" && userProfile?.role != "DRIVER" &&(
+                {ride.rideStatus != "completed" && ride.rideStatus != "cancelled"  && userProfile?.role != "DRIVER" &&(
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button size="icon" variant="destructive">

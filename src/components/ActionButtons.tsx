@@ -3,15 +3,25 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Share, RotateCcw, AlertTriangle, CheckCircle, XCircle, Truck } from "lucide-react";
-import { useUpdateRideStatusMutation } from "@/redux/features/ride/ride.api";
+import { useCancelRideMutation, useUpdateRideStatusMutation } from "@/redux/features/ride/ride.api";
 import { toast } from "sonner";
  
 export default function ActionButtons({ rideStatus, userRole, rideId }: any) {
   const [updateRideStatus] = useUpdateRideStatusMutation();
-
+  const [cancelRide] = useCancelRideMutation();
+console.log(rideId, rideStatus, userRole ,"action params")
   const handleUpdateStatus = async (status: string) => {
-    try {
-      const res = await updateRideStatus({ rideId, status }).unwrap();
+try {
+      let res;
+
+      // Rider cancel -> use /cancel endpoint
+      if (userRole === "RIDER" && status === "cancelled") {
+        res = await cancelRide(rideId);
+         toast.success(`Ride ${status} successfully`)
+      } else {
+        // Default: driver actions use mutation
+        res = await updateRideStatus({ rideId, status }).unwrap();
+      }
       if (res.success) {
         toast.success(res.message || `Ride ${status} successfully`);
       } else {

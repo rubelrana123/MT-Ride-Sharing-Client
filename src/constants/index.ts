@@ -328,3 +328,24 @@ export const driverFeatures = [
     highlight: "Two-way ratings",
   },
 ];
+
+export const testimonials = [
+{
+name: "Maria Rodriguez",
+rating: 5,
+text: "Mytrip has truly been a lifesaver! I prefer paying with cash, and this platform makes it simple. The rides are always comfortable, and the drivers are professional.",
+location: "Downtown Rider",
+},
+{
+name: "David Chen",
+rating: 5,
+text: "I’ve been driving with Mytrip for six months, and it’s been an amazing experience. The app is easy to use, and I enjoy providing safe, reliable rides to the community.",
+location: "Mytrip Driver",
+},
+{
+name: "Sarah Johnson",
+rating: 5,
+text: "Fantastic service! I rely on Mytrip for my daily commute, and it’s always on time and dependable. The cash payment option is so convenient, and the drivers are great.",
+location: "Regular Rider",
+},
+];
