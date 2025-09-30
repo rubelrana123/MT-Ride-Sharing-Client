@@ -16,11 +16,10 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useNavigate, useSearchParams } from "react-router";
 import { useForm } from "react-hook-form";
- 
 
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { registerSchema, type RegisterFormData } from "@/zodSchema/zodSchema";
- 
+
 export default function RegisterForm() {
   const [register, { isLoading }] = useRegisterMutation();
   const [searchParams] = useSearchParams();
@@ -28,11 +27,13 @@ export default function RegisterForm() {
 
   // Get initial role from URL params with proper typing
   const urlRole = searchParams.get("role");
-  const initialRole: "RIDER" | "DRIVER" = 
+  const initialRole: "RIDER" | "DRIVER" =
     urlRole === "DRIVER" || urlRole === "RIDER" ? urlRole : "RIDER";
 
   // State for conditional rendering
-  const [selectedRole, setSelectedRole] = useState<"RIDER" | "DRIVER">(initialRole);
+  const [selectedRole, setSelectedRole] = useState<"RIDER" | "DRIVER">(
+    initialRole
+  );
 
   // Form setup with proper typing
   const form = useForm<RegisterFormData>({
@@ -56,7 +57,7 @@ export default function RegisterForm() {
 
   useEffect(() => {
     setSelectedRole(watchedRole);
-    
+
     // Clear driver-specific fields when switching to RIDER
     if (watchedRole === "RIDER") {
       form.setValue("licenseNumber", "");
@@ -80,28 +81,29 @@ export default function RegisterForm() {
       };
 
       // Add driver-specific data if role is DRIVER
-      const finalUserData = values.role === "DRIVER" 
-        ? {
-            ...baseUserData,
-            licenseNumber: values.licenseNumber!,
-            vehicleInfo: {
-              vehicleType: values.vehicleType!,
-              model: values.model!,
-              plate: values.plate!,
-            },
-          }
-        : baseUserData;
+      const finalUserData =
+        values.role === "DRIVER"
+          ? {
+              ...baseUserData,
+              licenseNumber: values.licenseNumber!,
+              vehicleInfo: {
+                vehicleType: values.vehicleType!,
+                model: values.model!,
+                plate: values.plate!,
+              },
+            }
+          : baseUserData;
 
       const response = await register(finalUserData).unwrap();
 
       if (response.success && response.statusCode === 201) {
-        toast.success(response.message || "Account created successfully!", { 
-          id: toastId 
+        toast.success(response.message || "Account created successfully!", {
+          id: toastId,
         });
         navigate("/login");
       }
     } catch (error) {
-        const errorMessage =
+      const errorMessage =
         typeof error === "object" &&
         error !== null &&
         "data" in error &&
@@ -110,7 +112,7 @@ export default function RegisterForm() {
         "message" in (error as { data?: { message?: string } }).data!
           ? (error as { data: { message: string } }).data.message
           : "An error occurred";
-      toast.error(errorMessage, {id : toastId});
+      toast.error(errorMessage, { id: toastId });
     }
   };
 
@@ -124,8 +126,8 @@ export default function RegisterForm() {
   return (
     <div className="w-full max-w-md mx-auto">
       <Form {...form}>
-        <form 
-          onSubmit={form.handleSubmit(handleSubmit)} 
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
           className="space-y-6"
           noValidate
         >
@@ -137,9 +139,9 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Full Name *</FormLabel>
                 <FormControl>
-                  <Input 
-                    placeholder="Enter your full name" 
-                    {...field} 
+                  <Input
+                    placeholder="Enter your full name"
+                    {...field}
                     disabled={isLoading}
                   />
                 </FormControl>
@@ -156,10 +158,10 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Email Address *</FormLabel>
                 <FormControl>
-                  <Input 
+                  <Input
                     type="email"
-                    placeholder="Enter your email address" 
-                    {...field} 
+                    placeholder="Enter your email address"
+                    {...field}
                     disabled={isLoading}
                   />
                 </FormControl>
@@ -176,9 +178,9 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Password *</FormLabel>
                 <FormControl>
-                  <Password 
+                  <Password
                     placeholder="Create a strong password"
-                    {...field} 
+                    {...field}
                     disabled={isLoading}
                   />
                 </FormControl>
@@ -195,9 +197,9 @@ export default function RegisterForm() {
               <FormItem>
                 <FormLabel>Confirm Password *</FormLabel>
                 <FormControl>
-                  <Password 
+                  <Password
                     placeholder="Confirm your password"
-                    {...field} 
+                    {...field}
                     disabled={isLoading}
                   />
                 </FormControl>
@@ -246,10 +248,8 @@ export default function RegisterForm() {
           {/* Driver-Specific Fields */}
           {selectedRole === "DRIVER" && (
             <div className="space-y-6 p-4 bg-gray-50 dark:bg-secondary rounded-lg border">
-              <h3 className="text-sm font-medium ">
-                Driver Information
-              </h3>
-              
+              <h3 className="text-sm font-medium ">Driver Information</h3>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
@@ -258,9 +258,9 @@ export default function RegisterForm() {
                     <FormItem>
                       <FormLabel>License Number *</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="e.g., NS9765FG56" 
-                          {...field} 
+                        <Input
+                          placeholder="e.g., NS9765FG56"
+                          {...field}
                           disabled={isLoading}
                         />
                       </FormControl>
@@ -269,32 +269,39 @@ export default function RegisterForm() {
                   )}
                 />
 
-<FormField
-  control={form.control}
-  name="vehicleType"
-  render={({ field }) => (
-    <FormItem className="w-full">
-      <FormLabel>Vehicle Type *</FormLabel>
-      <FormControl>
-        <select
-          {...field}
-          disabled={isLoading}
-          className="w-full h-12 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-        >
-          <option value="" disabled>
-            Select a vehicle type
-          </option>
-          <option value="bike">Bike</option>
-          <option value="nac-car">Non-AC Car</option>
-          <option value="ac-car">AC Car</option>
-          <option value="scooter">Scooter</option>
-        </select>
-      </FormControl>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
-
+                <FormField
+                  control={form.control}
+                  name="vehicleType"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Vehicle Type *</FormLabel>
+                      <FormControl>
+                        <select
+                          {...field}
+                          disabled={isLoading}
+                          className="w-full h-12 px-3 py-2 border rounded-md bg-gray-50 dark:bg-secondary "
+                        >
+                          <option value="" disabled>
+                            Select a vehicle type
+                          </option>
+                          <option value="bike">
+                            Bike
+                          </option>
+                          <option value="nac-car">
+                            Non-AC Car
+                          </option>
+                          <option value="ac-car">
+                            AC Car
+                          </option>
+                          <option value="scooter">
+                            Scooter
+                          </option>
+                        </select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -305,9 +312,9 @@ export default function RegisterForm() {
                     <FormItem>
                       <FormLabel>Vehicle Model *</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="e.g., Yamaha FZS v3" 
-                          {...field} 
+                        <Input
+                          placeholder="e.g., Yamaha FZS v3"
+                          {...field}
                           disabled={isLoading}
                         />
                       </FormControl>
@@ -323,9 +330,9 @@ export default function RegisterForm() {
                     <FormItem>
                       <FormLabel>License Plate *</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="e.g., XYZ-34-Z-90" 
-                          {...field} 
+                        <Input
+                          placeholder="e.g., XYZ-34-Z-90"
+                          {...field}
                           disabled={isLoading}
                         />
                       </FormControl>
@@ -338,9 +345,9 @@ export default function RegisterForm() {
           )}
 
           {/* Submit Button */}
-          <Button 
-            type="submit" 
-            disabled={isLoading || !form.formState.isValid} 
+          <Button
+            type="submit"
+            disabled={isLoading || !form.formState.isValid}
             className="w-full h-11"
           >
             {isLoading ? "Creating Account..." : "Create Account"}
@@ -348,11 +355,11 @@ export default function RegisterForm() {
 
           {/* Additional Info */}
           <p className="text-xs text-gray-500 text-center">
-            By creating an account, you agree to our Terms of Service and Privacy Policy.
+            By creating an account, you agree to our Terms of Service and
+            Privacy Policy.
           </p>
         </form>
       </Form>
     </div>
   );
 }
- 
