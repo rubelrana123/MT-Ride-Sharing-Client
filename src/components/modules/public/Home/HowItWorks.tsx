@@ -14,7 +14,7 @@ export default function HowItWorks() {
       <div className="container mx-auto px-4">
           <SectionHeading
             title="how it works"
-            desc="Getting a ride with Rydex is simple and straightforward. Here's how:"
+            desc="Getting a ride with My Trip is simple and straightforward. Here's how:"
           />
     
           {/* how it works container */}

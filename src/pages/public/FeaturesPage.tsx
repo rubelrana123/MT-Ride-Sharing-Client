@@ -12,7 +12,7 @@ export default function Features() {
       <div>
         <PageHeading
           title="platform features"
-          desc="Discover the comprehensive features that make Rydex the preferred choice for riders, drivers, and administrators."
+          desc="Discover the comprehensive features that make My Trip the preferred choice for riders, drivers, and administrators."
         />
 
 
@@ -26,10 +26,10 @@ export default function Features() {
         {/* CTA Section */}
         <div className="gradient-hero rounded-2xl p-8 md:p-12 text-center text-primary-foreground">
           <h2 className="text-3xl font-bold mb-4">
-            Ready to Experience Rydex?
+            Ready to Experience My Trip?
           </h2>
           <p className="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of satisfied riders and drivers who choose Rydex
+            Join thousands of satisfied riders and drivers who choose My Trip
             for reliable, affordable transportation.
           </p>
  

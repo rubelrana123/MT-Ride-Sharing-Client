@@ -28,7 +28,7 @@ export default function FaqPage() {
       <div className="mt-20">
         <PageHeading
           title="Frequently Asked Questions"
-          desc="Find answers to common questions about Rydex's services, payments, and policies."
+          desc="Find answers to common questions about My Trip's services, payments, and policies."
         />
 
         {/* ================= search input ================== */}
