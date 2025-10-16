@@ -1,4 +1,3 @@
- 
 import { baseApi } from "@/redux/baseApi";
 import type {
   IResponse,
@@ -16,34 +15,26 @@ export const userApi = baseApi.injectEndpoints({
         method: "GET",
       }),
       providesTags: ["USER"],
-      transformResponse: (response : IResponse<IUser>) => response?.data,
+      transformResponse: (response: IResponse<IUser>) => response?.data,
     }),
-    // getAllUsers: builder.query<IResponse<IUser[]>, IRidesParams>({
-    //   query: () => ({
-    //     url: "/users/all-users",
-    //     method: "GET",
-    //   }),
-    //   providesTags: ["USER"],
-    // //   transformResponse: (response) => response.data,
-    // }),
-getAllUsers: builder.query<IResponse<IUser[]>, IRidesParams>({
-  query: ({ page, limit, sort, searchTerm, fields }) => {
-    const params = new URLSearchParams();
-    if (sort) params.append("sort", sort.toString());
-    if (fields) params.append("fields", fields);  
-    if (limit) params.append("limit", limit.toString());
-    if (page) params.append("page", page.toString());  
-    if (searchTerm) params.append("searchTerm", searchTerm);
+    getAllUsers: builder.query<IResponse<IUser[]>, IRidesParams>({
+      query: ({ page, limit, sort, searchTerm, fields }) => {
+        const params = new URLSearchParams();
+        if (sort) params.append("sort", sort.toString());
+        if (fields) params.append("fields", fields);
+        if (limit) params.append("limit", limit.toString());
+        if (page) params.append("page", page.toString());
+        if (searchTerm) params.append("searchTerm", searchTerm);
 
-    return {
-      url: "/users/all-users",
-      method: "GET",
-      params,
-    };
-  },
-  providesTags: ["USER"],
-  transformResponse : (response : IResponse<IUser[]>) => response,
-}),
+        return {
+          url: "/users/all-users",
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["USER"],
+      transformResponse: (response: IResponse<IUser[]>) => response,
+    }),
 
     getUserById: builder.query<IResponse<IUser>, string>({
       query: (userId) => ({
@@ -84,5 +75,5 @@ export const {
   useUpdateUserInfoMutation,
   useUpdateRiderStatusMutation,
   useDeleteUserMutation,
-  useGetUserByIdQuery
+  useGetUserByIdQuery,
 } = userApi;

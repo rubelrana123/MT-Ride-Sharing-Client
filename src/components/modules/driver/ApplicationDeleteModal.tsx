@@ -24,12 +24,16 @@ export default function ApplicationDeleteModal({
   applicationId,
   driverName,
   vehicleInfo,
-  onDelete
+  onDelete,
 }: DeleteConfirmationDialogProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="sm" className="hover:bg-red-50 text-red-600">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="hover:bg-red-50 text-red-600"
+        >
           <Trash2 className="h-4 w-4" />
         </Button>
       </AlertDialogTrigger>
@@ -41,7 +45,8 @@ export default function ApplicationDeleteModal({
             <strong>{driverName}</strong> ({vehicleInfo})?
             <br />
             <br />
-            This action cannot be undone and will permanently remove all application data.
+            This action cannot be undone and will permanently remove all
+            application data.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

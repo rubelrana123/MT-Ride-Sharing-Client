@@ -1,19 +1,27 @@
- 
 import IncomingRideDataTable from "@/components/modules/ride/IncomingRideDataTable";
 import Loading from "@/components/modules/shared/Loading";
 import PaginationPage from "@/components/modules/shared/Pagination";
-import { useGetDriverProfileQuery, useGetIncomingRideRequestsQuery } from "@/redux/features/driver/driver.api";
+import {
+  useGetDriverProfileQuery,
+  useGetIncomingRideRequestsQuery,
+} from "@/redux/features/driver/driver.api";
 import { useMemo, useState } from "react";
 
 export default function IncomingRequest() {
   const [page, setPage] = useState(1);
   const [limit] = useState(15);
-  const [sortConfig, setSortConfig] = useState({ sortBy: "createdAt", sortOrder: "desc" });
+  const [sortConfig, setSortConfig] = useState({
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
 
   const { data: driverProfile } = useGetDriverProfileQuery(undefined);
 
   // Compute sort param for API: prepend "-" if descending
-  const sort = sortConfig.sortOrder === "asc" ? sortConfig.sortBy : `-${sortConfig.sortBy}`;
+  const sort =
+    sortConfig.sortOrder === "asc"
+      ? sortConfig.sortBy
+      : `-${sortConfig.sortBy}`;
 
   const queryParams = useMemo(
     () => ({
@@ -24,7 +32,9 @@ export default function IncomingRequest() {
     [page, limit, sort]
   );
 
-  const { data, isLoading } = useGetIncomingRideRequestsQuery(queryParams, { pollingInterval: 15000 });
+  const { data, isLoading } = useGetIncomingRideRequestsQuery(queryParams, {
+    pollingInterval: 15000,
+  });
 
   if (isLoading && !data) return <Loading />;
 
@@ -32,7 +42,9 @@ export default function IncomingRequest() {
   if (data && driverProfile?.availability !== "online") {
     return (
       <div>
-        <h1 className="text-3xl text-foreground font-ride-title">Incoming Ride Request</h1>
+        <h1 className="text-3xl text-foreground font-ride-title">
+          Incoming Ride Request
+        </h1>
         <div className="flex justify-center items-center min-h-[80vh]">
           <div className="text-center">
             <h2 className="font-semibold text-2xl min-[370px]:text-4xl font-ride-title">
@@ -51,22 +63,22 @@ export default function IncomingRequest() {
   const pagination = data?.meta;
   const serialNumber = (page - 1) * limit;
 
- 
-
   // Sorting toggle handler
   const handleSort = (field: string) => {
     setSortConfig((prev) => ({
       sortBy: field,
-      sortOrder: prev.sortBy === field && prev.sortOrder === "asc" ? "desc" : "asc",
+      sortOrder:
+        prev.sortBy === field && prev.sortOrder === "asc" ? "desc" : "asc",
     }));
   };
 
   return (
     <div>
       <div className="mb-10">
-        <h1 className="text-3xl text-foreground font-ride-title">Incoming Ride Request</h1>
+        <h1 className="text-3xl text-foreground font-ride-title">
+          Incoming Ride Request
+        </h1>
       </div>
- 
 
       {/* Table */}
       <IncomingRideDataTable
@@ -79,7 +91,11 @@ export default function IncomingRequest() {
       {/* Pagination */}
       {pagination && pagination.totalPages > 1 && (
         <div className="mt-10">
-          <PaginationPage page={page} setPage={setPage} totalPages={pagination.totalPages} />
+          <PaginationPage
+            page={page}
+            setPage={setPage}
+            totalPages={pagination.totalPages}
+          />
         </div>
       )}
     </div>

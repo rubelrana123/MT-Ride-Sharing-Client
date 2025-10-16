@@ -16,7 +16,7 @@ export default function RiderInformation({ rider }: any) {
           <Avatar className="h-8 w-8 rounded-lg grayscale">
             <AvatarImage
               src={
-                "https://image.winudf.com/p/aHR0cHM6Ly9wbGF5LWxoLmdvb2dsZXVzZXJjb250ZW50LmNvbS9FOVE3WEdaeDNZVVFzcGxwZDRsSnZLT2xDNWx4ejNnaUszajJpdUV4TlpTYnFWcldzUkQtbW0wTG9BYTJORWY5UFE9aDgwMA?k=66f508aaa629d46d3d843b54633e0c0468e25b12&.jpg"
+                "https://i.ibb.co.com/3rCdWYF/WIN-20220822-12-01-28-Pro-2.jpg"
               }
               alt={rider?.name}
             />

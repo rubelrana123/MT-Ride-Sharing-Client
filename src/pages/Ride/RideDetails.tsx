@@ -33,7 +33,7 @@ export default function RideDetails() {
   // Extract nested data structure
   const ride = rideDetailsResponse?.data;
   console.log(ride, "Here Ride Details");
- 
+
   const processedRideData = useMemo(() => {
     if (!ride) return null;
 
@@ -44,8 +44,13 @@ export default function RideDetails() {
 
     return {
       ...ride,
-      distance: calculateDistance([pickup[1], pickup[0]], [destination[1], destination[0]]),
-     formattedFare: formatCurrency(parseFloat(ride.fare?.replace(' BDT', '') || '0')),
+      distance: calculateDistance(
+        [pickup[1], pickup[0]],
+        [destination[1], destination[0]]
+      ),
+      formattedFare: formatCurrency(
+        parseFloat(ride.fare?.replace(" BDT", "") || "0")
+      ),
       pickupLocation: [pickup[1], pickup[0]] as [number, number],
       destinationLocation: [destination[1], destination[0]] as [number, number],
     };
@@ -98,9 +103,7 @@ export default function RideDetails() {
 
           {/* Sidebar */}
           <div className="lg:col-span-2 space-y-6">
-            {ride.driver && (
-              <DriverInformation driver={ride.driver} />
-            )}
+            {ride.driver && <DriverInformation driver={ride.driver} />}
 
             <RiderInformation rider={ride.rider} />
 
@@ -114,10 +117,10 @@ export default function RideDetails() {
 
         {processedRideData?.pickupLoc && processedRideData?.destLoc && (
           <div className="mt-8">
-          <RideMap
-            pickupLocation={processedRideData?.pickupLocation}
-            destinationLocation={processedRideData?.destinationLocation}
-          />
+            <RideMap
+              pickupLocation={processedRideData?.pickupLocation}
+              destinationLocation={processedRideData?.destinationLocation}
+            />
           </div>
         )}
       </div>

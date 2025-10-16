@@ -1,4 +1,3 @@
- 
 import {
   Pagination,
   PaginationContent,
@@ -10,7 +9,6 @@ import {
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 import type { PaginationPageProps } from "@/types";
-
 
 const PaginationPage = ({ page, setPage, totalPages }: PaginationPageProps) => {
   const siblingCount = 1; // কতগুলো পেজ নাম্বার দেখাবে current page এর বাম/ডানে

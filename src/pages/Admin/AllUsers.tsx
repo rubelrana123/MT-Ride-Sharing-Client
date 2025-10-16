@@ -1,6 +1,3 @@
- 
-
-
 import Loading from "@/components/modules/shared/Loading";
 import PaginationPage from "@/components/modules/shared/Pagination";
 import { UserStatusUpdateModal } from "@/components/modules/user/UserStatusUpdateModal";
@@ -31,7 +28,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Swal from "sweetalert2";
 
-
 export default function AllUsers() {
   const [page, setPage] = useState(1);
   const [inputValue, setInputValue] = useState("");
@@ -39,7 +35,7 @@ export default function AllUsers() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<IUser | null>(null);
   const [deleteUser] = useDeleteUserMutation();
- 
+
   const limit = 20;
 
   // --- Debounce Logic ---
@@ -63,14 +59,14 @@ export default function AllUsers() {
     fields:
       "name email role isActive isDeleted status phoneNumber address createdAt",
   });
- 
+
   console.log(data?.data, "all users data");
 
   if (isLoading && !data) return <Loading />;
 
   const allUsers = data?.data;
   const pagination = data?.meta;
-console.log(pagination, "pagination");
+  console.log(pagination, "pagination");
   const serialNumber = (page - 1) * limit;
 
   // handle search when enter key was clicked
@@ -95,7 +91,6 @@ console.log(pagination, "pagination");
 
     try {
       if (result.isConfirmed) {
-
         const res = await deleteUser(userId).unwrap();
         const toastId = toast.loading("Deleting...");
         if (res.success && res.statusCode === 200) {
@@ -246,6 +241,3 @@ console.log(pagination, "pagination");
     </div>
   );
 }
-
-
- 

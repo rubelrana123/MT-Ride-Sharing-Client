@@ -13,12 +13,12 @@ export default function Unauthorized() {
         contact an administrator if you believe this is an error.
       </p>
       <div className="flex items-center gap-3">
-          <Button asChild className="mt-6">
-            <Link to="/">Go to Homepage</Link>
-          </Button>
-          <Button asChild className="mt-6" variant="outline">
-            <Link to="/">Contact Support</Link>
-          </Button>
+        <Button asChild className="mt-6">
+          <Link to="/">Go to Homepage</Link>
+        </Button>
+        <Button asChild className="mt-6" variant="outline">
+          <Link to="/">Contact Support</Link>
+        </Button>
       </div>
     </div>
   );

@@ -3,12 +3,9 @@ import RideBook from "../../components/modules/ride/RideBook";
 import ActiveRideNotice from "@/components/modules/ride/ActiveRide";
 import Loading from "@/components/modules/shared/Loading";
 import type { IRide } from "@/types/ride.type";
- 
+
 const RideRequest = () => {
-  const {
-    data,
-    isLoading, 
-  } = useGetActiveRideQuery();
+  const { data, isLoading } = useGetActiveRideQuery();
 
   const activeRide: IRide | undefined = data ?? undefined;
   console.log(activeRide, "here active ride");

@@ -1,4 +1,3 @@
- 
 import {
   Table,
   TableBody,
@@ -9,17 +8,17 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  MapPin, 
-  Clock, 
-  DollarSign, 
+import {
+  MapPin,
+  Clock,
+  DollarSign,
   Calendar,
   Route,
   CheckCircle,
   XCircle,
   Truck,
   Play,
-  Flag
+  Flag,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
 import { useGetDriverEarningsQuery } from "@/redux/features/ride/ride.api";
@@ -27,8 +26,7 @@ import { getStatusColor } from "@/constants";
 import Loading from "@/components/modules/shared/Loading";
 import type { IDriverEarningHistory } from "@/types/driver.type";
 import { formatDateTime } from "@/utils/dateFormater";
- 
- 
+
 export const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {
     case "completed":
@@ -45,25 +43,21 @@ export const getStatusIcon = (status: string) => {
 };
 
 export default function DriverEarnings() {
-const { data , isLoading } = useGetDriverEarningsQuery(undefined);
+  const { data, isLoading } = useGetDriverEarningsQuery(undefined);
   const earningHistory: IDriverEarningHistory[] = data || [];
 
   const formatCoordinates = (coordinates: [number, number]) => {
     return `${coordinates[0]?.toFixed(4)}, ${coordinates[1]?.toFixed(4)}`;
   };
 
-
- 
   const calculateTotalEarnings = () => {
     return earningHistory
-      .filter(ride => ride.rideStatus === 'completed')
+      .filter((ride) => ride.rideStatus === "completed")
       .reduce((total, ride) => {
-        const fareAmount = parseFloat(ride.fare.replace(/[^\d.-]/g, ''));
+        const fareAmount = parseFloat(ride.fare.replace(/[^\d.-]/g, ""));
         return total + fareAmount;
       }, 0);
   };
-
- 
 
   if (!earningHistory || earningHistory.length === 0) {
     return (
@@ -71,7 +65,9 @@ const { data , isLoading } = useGetDriverEarningsQuery(undefined);
         <CardContent className="p-8">
           <div className="text-center">
             <DollarSign className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-lg font-semibold text-gray-900">No earning history</h3>
+            <h3 className="mt-2 text-lg font-semibold text-gray-900">
+              No earning history
+            </h3>
             <p className="mt-1 text-gray-500">
               Your completed rides and earnings will appear here.
             </p>
@@ -108,7 +104,10 @@ const { data , isLoading } = useGetDriverEarningsQuery(undefined);
             </div>
             <div className="text-center p-4 bg-purple-50 rounded-lg">
               <div className="text-2xl font-bold text-purple-600">
-                {earningHistory.filter(r => r.rideStatus === 'completed').length}
+                {
+                  earningHistory.filter((r) => r.rideStatus === "completed")
+                    .length
+                }
               </div>
               <div className="text-sm text-gray-600">Completed Rides</div>
             </div>
@@ -132,7 +131,6 @@ const { data , isLoading } = useGetDriverEarningsQuery(undefined);
                   <TableHead className="font-semibold">Fare</TableHead>
                   <TableHead className="font-semibold">Status</TableHead>
                   <TableHead className="font-semibold">Timeline</TableHead>
- 
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -151,7 +149,7 @@ const { data , isLoading } = useGetDriverEarningsQuery(undefined);
                         </div>
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div className="space-y-2">
                         <div className="flex items-center space-x-1 text-xs">
@@ -168,7 +166,7 @@ const { data , isLoading } = useGetDriverEarningsQuery(undefined);
                         </div>
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div className="flex items-center space-x-1">
                         <Route className="h-4 w-4 text-blue-600" />
@@ -177,7 +175,7 @@ const { data , isLoading } = useGetDriverEarningsQuery(undefined);
                         </span>
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div className="flex items-center space-x-1">
                         <DollarSign className="h-4 w-4 text-green-600" />
@@ -186,57 +184,62 @@ const { data , isLoading } = useGetDriverEarningsQuery(undefined);
                         </span>
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
-                      <Badge 
-                        variant="secondary" 
-                        className={`flex items-center space-x-1 ${getStatusColor(ride.rideStatus)}`}
+                      <Badge
+                        variant="secondary"
+                        className={`flex items-center space-x-1 ${getStatusColor(
+                          ride.rideStatus
+                        )}`}
                       >
                         {getStatusIcon(ride.rideStatus)}
                         <span>
-                          {ride.rideStatus.charAt(0).toUpperCase() + ride.rideStatus.slice(1)}
+                          {ride.rideStatus.charAt(0).toUpperCase() +
+                            ride.rideStatus.slice(1)}
                         </span>
                       </Badge>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div className="space-y-1 text-xs">
                         <div>
-                          <span className="font-medium">Requested:</span> {formatDateTime(ride.requestedAt)}
+                          <span className="font-medium">Requested:</span>{" "}
+                          {formatDateTime(ride.requestedAt)}
                         </div>
                         {ride.acceptedAt && (
                           <div>
-                            <span className="font-medium">Accepted:</span> {formatDateTime(ride.acceptedAt)}
+                            <span className="font-medium">Accepted:</span>{" "}
+                            {formatDateTime(ride.acceptedAt)}
                           </div>
                         )}
                         {ride.pickedupAt && (
                           <div>
-                            <span className="font-medium">Picked up:</span> {formatDateTime(ride.pickedupAt)}
+                            <span className="font-medium">Picked up:</span>{" "}
+                            {formatDateTime(ride.pickedupAt)}
                           </div>
                         )}
                         {ride.completedAt && (
                           <div>
-                            <span className="font-medium">Completed:</span> {formatDateTime(ride.completedAt)}
+                            <span className="font-medium">Completed:</span>{" "}
+                            {formatDateTime(ride.completedAt)}
                           </div>
                         )}
                         {ride.cancelledAt && (
                           <div className="text-red-600">
-                            <span className="font-medium">Cancelled:</span> {formatDateTime(ride.cancelledAt)}
+                            <span className="font-medium">Cancelled:</span>{" "}
+                            {formatDateTime(ride.cancelledAt)}
                           </div>
                         )}
                       </div>
                     </TableCell>
-                    
+
                     <TableCell>
                       <div className="text-sm">
                         {ride.completedAt && ride.requestedAt ? (
                           <span>
-                            {formatDistanceToNow(
-                              new Date(ride.requestedAt), 
-                              { 
-                                addSuffix: false 
-                              }
-                            )}
+                            {formatDistanceToNow(new Date(ride.requestedAt), {
+                              addSuffix: false,
+                            })}
                           </span>
                         ) : (
                           <span className="text-muted-foreground">-</span>

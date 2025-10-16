@@ -12,12 +12,11 @@ export default function AboutPage() {
           desc="We're on a mission to make transportation accessible, reliable, and safe for everyone, everywhere."
         />
 
-
         {/* about page container  */}
         <div>
-            <OurStory />
-            <OurMissionAndVission />
-            <TeamMembers />
+          <OurStory />
+          <OurMissionAndVission />
+          <TeamMembers />
         </div>
       </div>
     </main>

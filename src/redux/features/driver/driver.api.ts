@@ -4,7 +4,7 @@ import type { IDriverProfile, IDriverStats } from "@/types/driver.type";
 export const driverApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     // Driver: Get driver analytics`
-      getDriverAnalytics: builder.query<IDriverStats, undefined>({
+    getDriverAnalytics: builder.query<IDriverStats, undefined>({
       query: () => ({
         url: "/analytics/driverStats",
         method: "GET",
@@ -13,7 +13,7 @@ export const driverApi = baseApi.injectEndpoints({
       transformResponse: (response: { data: IDriverStats }) => response.data,
     }),
     // Driver: Get driver profile
-     getDriverProfile: builder.query<IDriverProfile, undefined>({
+    getDriverProfile: builder.query<IDriverProfile, undefined>({
       query: () => ({
         url: "/drivers/me",
         method: "GET",
@@ -31,7 +31,7 @@ export const driverApi = baseApi.injectEndpoints({
       invalidatesTags: ["DRIVER"],
       transformResponse: (response: { data: any }) => response.data,
     }),
- //
+    //
     // Admin / Super Admin: List driver applications
     getDriverApplications: builder.query({
       query: () => ({
@@ -54,7 +54,7 @@ export const driverApi = baseApi.injectEndpoints({
       providesTags: ["DRIVER"],
       transformResponse: (response) => response.data,
     }),
-  
+
     // Admin / Super Admin: Update application status
     updateDriverStatus: builder.mutation({
       query: ({ id, driverStatus }) => ({
@@ -66,22 +66,18 @@ export const driverApi = baseApi.injectEndpoints({
     }),
 
     // Driver: Update availability
-updateAvailability: builder.mutation({
-  query: ({ driverId, availability }) => ({
-    url: `/drivers/${driverId}/availability`,
-    method: "PATCH",
-    data: { availability },  
-  }),
-  invalidatesTags: ["DRIVER"],
-}),
+    updateAvailability: builder.mutation({
+      query: ({ driverId, availability }) => ({
+        url: `/drivers/${driverId}/availability`,
+        method: "PATCH",
+        data: { availability },
+      }),
+      invalidatesTags: ["DRIVER"],
+    }),
 
-//<IResponse<IIncomingRideRequest[]>, IIncomingRequestParams>
-     getIncomingRideRequests: builder.query({
-      query: ({
-        page = 1,
-        limit = 1,
-        sort = "desc",
-      }) => {
+    //<IResponse<IIncomingRideRequest[]>, IIncomingRequestParams>
+    getIncomingRideRequests: builder.query({
+      query: ({ page = 1, limit = 1, sort = "desc" }) => {
         const params = new URLSearchParams();
 
         if (page) params.append("page", page.toString());
@@ -95,7 +91,6 @@ updateAvailability: builder.mutation({
       },
       providesTags: ["RIDE"],
     }),
-    
   }),
 });
 

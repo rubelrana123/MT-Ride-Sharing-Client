@@ -1,4 +1,3 @@
- 
 // import ChangePasswordModal from "@/components/modals/user/ChangePasswordModal";
 import Loading from "@/components/modules/shared/Loading";
 import ChangePasswordModal from "@/components/modules/user/ChangePasswordModal";
@@ -12,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { useGetDriverProfileQuery } from "@/redux/features/driver/driver.api";
 import { useGetUserProfileQuery } from "@/redux/features/user/user.api";
- 
+
 import { useState } from "react";
 import { Link } from "react-router";
 
@@ -42,7 +41,7 @@ export default function UserProfile() {
               <AvatarImage
                 src={
                   userProfile?.picture ||
-                  "https://image.winudf.com/p/aHR0cHM6Ly9wbGF5LWxoLmdvb2dsZXVzZXJjb250ZW50LmNvbS9FOVE3WEdaeDNZVVFzcGxwZDRsSnZLT2xDNWx4ejNnaUszajJpdUV4TlpTYnFWcldzUkQtbW0wTG9BYTJORWY5UFE9aDgwMA?k=66f508aaa629d46d3d843b54633e0c0468e25b12&.jpg"
+                  "https://i.ibb.co.com/3rCdWYF/WIN-20220822-12-01-28-Pro-2.jpg"
                 }
               />
               <AvatarFallback>{userProfile?.name}</AvatarFallback>
@@ -72,11 +71,7 @@ export default function UserProfile() {
                 </div>
                 <div className="flex flex-col items-start min-[400px]:flex-row justify-between mt-5 min-[400px]:items-center gap-4 min-[400px]:gap-20 border-b pb-3">
                   <p>Phone:</p>
-                  <span>
-                    {userProfile?.phone
-                      ? userProfile?.phone
-                      : "N/A"}
-                  </span>
+                  <span>{userProfile?.phone ? userProfile?.phone : "N/A"}</span>
                 </div>
                 <div className="flex flex-col items-start min-[400px]:flex-row justify-between mt-5 min-[400px]:items-center gap-4 min-[400px]:gap-20">
                   <p>Address:</p>

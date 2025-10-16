@@ -1,4 +1,3 @@
- 
 import { adminFeatures } from "@/constants";
 import SectionHeading from "../Home/SectionHeading";
 import FeatureCard from "./FeatureCard";

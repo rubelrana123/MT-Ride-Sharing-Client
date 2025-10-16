@@ -1,6 +1,6 @@
 import { baseApi } from "@/redux/baseApi";
 import type { IResponse } from "@/types";
- 
+
 import type { IRide } from "@/types/ride.type";
 
 export const rideApi = baseApi.injectEndpoints({
@@ -89,14 +89,14 @@ export const rideApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["RIDE"],
     }),
-getActiveRide: builder.query<IRide | null, void>({
-  query: () => ({
-    url: "/rides/active-ride",
-    method: "GET",
-  }),
-  transformResponse: (response: IResponse<IRide>) => response.data, // unwrap `data`
-  providesTags: ["RIDE", "DRIVER"],
-}),
+    getActiveRide: builder.query<IRide | null, void>({
+      query: () => ({
+        url: "/rides/active-ride",
+        method: "GET",
+      }),
+      transformResponse: (response: IResponse<IRide>) => response.data, // unwrap `data`
+      providesTags: ["RIDE", "DRIVER"],
+    }),
   }),
 });
 

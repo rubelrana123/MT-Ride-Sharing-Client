@@ -5,7 +5,6 @@ import {
   Menu,
   X,
   User,
-  
   LayoutDashboard,
   MenuSquare,
   Contact2,
@@ -16,10 +15,11 @@ import { ModeToggle } from "@/components/layout/mode.toggler";
 import { useAppDispatch } from "@/redux/hook";
 import { Logo } from "@/assets/icons/Logo";
 import ProfileAvatar from "./ProfileAvatar";
-import { userApi } from "@/redux/features/user/user.api";
+import { useGetUserProfileQuery, userApi } from "@/redux/features/user/user.api";
 import { toast } from "sonner";
-import { useLogoutMutation, useUserInfoQuery } from "@/redux/features/auth/auth.api";
- 
+import {
+  useLogoutMutation
+} from "@/redux/features/auth/auth.api";
 
 // Navigation links with roles
 const navigationLinks = [
@@ -30,33 +30,51 @@ const navigationLinks = [
 
   { href: "/contact", label: "Contact", icon: Contact2, role: "PUBLIC" },
 
- 
-  { href: "/riders/ride-book", label: "Book a Ride", icon: Car, role: "RIDER" },//rider
-  { href: "/riders/driver-application", label: "Become a Drive", icon: Car, role: "RIDER" },//driver
-  { href: "/riders", label: "Dashboard", icon: LayoutDashboard, role: "RIDER" },//admin
-  { href: "/drivers", label: "Dashboard", icon: LayoutDashboard, role: "DRIVER" },//admin
-  { href: "/admin", label: "Admin Panel", icon: LayoutDashboard, role: "ADMIN" },//admin
-  { href: "/super-admin", label: "Dashboard", icon: LayoutDashboard, role: "SUPER_ADMIN" },//SUPER_ADMIN
+  { href: "/riders/ride-book", label: "Book a Ride", icon: Car, role: "RIDER" }, //rider
+  {
+    href: "/riders/driver-application",
+    label: "Become a Drive",
+    icon: Car,
+    role: "RIDER",
+  }, //driver
+  { href: "/riders", label: "Dashboard", icon: LayoutDashboard, role: "RIDER" }, //admin
+  {
+    href: "/drivers",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    role: "DRIVER",
+  }, //admin
+  {
+    href: "/admin",
+    label: "Admin Panel",
+    icon: LayoutDashboard,
+    role: "ADMIN",
+  }, //admin
+  {
+    href: "/super-admin",
+    label: "Dashboard",
+    icon: LayoutDashboard,
+    role: "SUPER_ADMIN",
+  }, //SUPER_ADMIN
 ];
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const { data , isLoading } = useUserInfoQuery(undefined);
+  const { data : userInfo , isLoading } = useGetUserProfileQuery(undefined);
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
-  !isLoading && console.log("user data", data)
+  !isLoading && console.log("user data", userInfo);
   const handleLogout = async () => {
-     try {
+    try {
       await logout(undefined);
-      dispatch(userApi.util.resetApiState())
-      toast.success("Logout Successfully")
+      dispatch(userApi.util.resetApiState());
+      toast.success("Logout Successfully");
     } catch {
-      toast.error("Logout failed!")
+      toast.error("Logout failed!");
     }
   };
-
 
   return (
     <nav className="bg-background shadow-lg border-b border-border sticky top-0 z-50">
@@ -65,19 +83,14 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <Link to="/" className="flex items-center space-x-2">
- 
-              <Logo/>
-             
+              <Logo />
             </Link>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navigationLinks.map((link, index) => {
-              if (
-                link.role === "PUBLIC" ||
-                link.role === data?.data?.role
-              ) {
+              if (link.role === "PUBLIC" || link.role === userInfo?.role) {
                 const Icon = link.icon;
                 return (
                   <Link
@@ -98,17 +111,17 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             <ModeToggle />
 
-
-            {
-              
-            data?.data?.email ? (
-           
-            <ProfileAvatar name={data?.data?.name} userRole={data?.data?.role} logOutFn={handleLogout} />
-          ) : (
-            <Button asChild variant="default" size="sm" className="text-sm">
-              <Link to="/login">Log In</Link>
-            </Button>
-            )  }
+            {userInfo?.email ? (
+              <ProfileAvatar
+                name={userInfo?.name}
+                userRole={userInfo?.role}
+                logOutFn={handleLogout}
+              />
+            ) : (
+              <Button asChild variant="default" size="sm" className="text-sm">
+                <Link to="/login">Log In</Link>
+              </Button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -119,7 +132,11 @@ export default function Navbar() {
               onClick={toggleMenu}
               className="text-gray-700"
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </Button>
           </div>
         </div>
@@ -129,10 +146,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-background border-t border-border">
               {navigationLinks.map((link, index) => {
-                if (
-                  link.role === "PUBLIC" ||
-                  link.role === data?.data?.role
-                ) {
+                if (link.role === "PUBLIC" || link.role === userInfo?.role) {
                   const Icon = link.icon;
                   return (
                     <Link
@@ -151,7 +165,7 @@ export default function Navbar() {
 
               {/* Mobile User Actions */}
               <div className="pt-4 border-t border-border space-y-2">
-                {data?.data?.email ? (
+                {userInfo?.email ? (
                   <Button
                     onClick={() => {
                       handleLogout();
@@ -166,23 +180,27 @@ export default function Navbar() {
                   </Button>
                 ) : (
                   <>
-            {
-              
-            data?.data?.email ? (
-           
-            <ProfileAvatar name={data?.data?.name} userRole={data?.data?.role} logOutFn={handleLogout} />
-          ) : (
-            <Button asChild variant="default" size="sm" className="text-sm">
-              <Link to="/login">Log In</Link>
-            </Button>
-            )  }
+                    {userInfo?.email ? (
+                      <ProfileAvatar
+                        name={userInfo?.name}
+                        userRole={userInfo?.role}
+                        logOutFn={handleLogout}
+                      />
+                    ) : (
+                      <Button
+                        asChild
+                        variant="default"
+                        size="sm"
+                        className="text-sm"
+                      >
+                        <Link to="/login">Log In</Link>
+                      </Button>
+                    )}
                   </>
                 )}
                 <div className="flex justify-start ">
                   <ModeToggle />
                 </div>
-
-
               </div>
             </div>
           </div>

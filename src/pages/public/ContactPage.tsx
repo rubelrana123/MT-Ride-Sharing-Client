@@ -1,12 +1,9 @@
- 
 import ContactForm from "@/components/modules/public/Contact/ContactForm";
 import PageHeading from "@/components/modules/public/PageHeading";
 import { Card, CardContent } from "@/components/ui/card";
 import { contactInfo } from "@/constants";
 
-export default function ContactPage ()  {
- 
-
+export default function ContactPage() {
   return (
     <main className="py-24">
       <div className="container mx-auto px-4">
@@ -60,9 +57,7 @@ export default function ContactPage ()  {
             </div>
           </div>
         </div>
- 
       </div>
     </main>
   );
-};
-
+}

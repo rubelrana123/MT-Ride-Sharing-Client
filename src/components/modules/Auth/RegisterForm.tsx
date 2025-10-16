@@ -284,18 +284,10 @@ export default function RegisterForm() {
                           <option value="" disabled>
                             Select a vehicle type
                           </option>
-                          <option value="bike">
-                            Bike
-                          </option>
-                          <option value="nac-car">
-                            Non-AC Car
-                          </option>
-                          <option value="ac-car">
-                            AC Car
-                          </option>
-                          <option value="scooter">
-                            Scooter
-                          </option>
+                          <option value="bike">Bike</option>
+                          <option value="nac-car">Non-AC Car</option>
+                          <option value="ac-car">AC Car</option>
+                          <option value="scooter">Scooter</option>
                         </select>
                       </FormControl>
                       <FormMessage />

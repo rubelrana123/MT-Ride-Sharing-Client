@@ -11,37 +11,42 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
       case "pending":
         return {
           variant: "secondary" as const,
-          className: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400",
+          className:
+            "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400",
           icon: Clock,
-          label: "Pending"
+          label: "Pending",
         };
       case "approved":
         return {
           variant: "secondary" as const,
-          className: "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400",
+          className:
+            "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400",
           icon: CheckCircle,
-          label: "Approved"
+          label: "Approved",
         };
       case "rejected":
         return {
           variant: "secondary" as const,
-          className: "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400",
+          className:
+            "bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400",
           icon: XCircle,
-          label: "Rejected"
+          label: "Rejected",
         };
       case "suspend":
         return {
           variant: "secondary" as const,
-          className: "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400",
+          className:
+            "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400",
           icon: Ban,
-          label: "Suspended"
+          label: "Suspended",
         };
       default:
         return {
           variant: "secondary" as const,
-          className: "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400",
+          className:
+            "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400",
           icon: Clock,
-          label: status
+          label: status,
         };
     }
   };

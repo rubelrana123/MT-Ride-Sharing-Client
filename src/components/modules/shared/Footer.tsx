@@ -1,9 +1,9 @@
 import { Logo } from "@/assets/icons/Logo";
 import { useGetUserProfileQuery } from "@/redux/features/user/user.api";
-import { 
-  Facebook, 
-  Instagram, 
-  Linkedin, 
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
   Twitter,
   Mail,
   Phone,
@@ -17,7 +17,7 @@ const Footer = () => {
   const role = data?.role || "Guest";
 
   const getRoleBasedLinks = (userRole: string) => {
-    switch(userRole) {
+    switch (userRole) {
       case "DRIVER":
         return [
           { name: "Dashboard", href: "/drivers/dashboard" },
@@ -66,7 +66,6 @@ const Footer = () => {
       <div className="container mx-auto px-4 py-12">
         {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
           {/* Brand Section */}
           <div className="space-y-4">
             <Link to="/" className="inline-flex items-center space-x-2">

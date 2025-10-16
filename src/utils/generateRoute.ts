@@ -1,6 +1,5 @@
 import type { ISliderItem } from "@/types";
 
- 
 export default function generateRoute(sidebarItems: ISliderItem[]) {
   return sidebarItems.flatMap((section) =>
     section.items.map((item) => {

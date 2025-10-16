@@ -1,23 +1,32 @@
- 
 // components/ActionButtons.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Share, RotateCcw, AlertTriangle, CheckCircle, XCircle, Truck } from "lucide-react";
-import { useCancelRideMutation, useUpdateRideStatusMutation } from "@/redux/features/ride/ride.api";
+import {
+  Share,
+  RotateCcw,
+  AlertTriangle,
+  CheckCircle,
+  XCircle,
+  Truck,
+} from "lucide-react";
+import {
+  useCancelRideMutation,
+  useUpdateRideStatusMutation,
+} from "@/redux/features/ride/ride.api";
 import { toast } from "sonner";
- 
+
 export default function ActionButtons({ rideStatus, userRole, rideId }: any) {
   const [updateRideStatus] = useUpdateRideStatusMutation();
   const [cancelRide] = useCancelRideMutation();
-console.log(rideId, rideStatus, userRole ,"action params")
+  console.log(rideId, rideStatus, userRole, "action params");
   const handleUpdateStatus = async (status: string) => {
-try {
+    try {
       let res;
 
       // Rider cancel -> use /cancel endpoint
       if (userRole === "RIDER" && status === "cancelled") {
         res = await cancelRide(rideId);
-         toast.success(`Ride ${status} successfully`)
+        toast.success(`Ride ${status} successfully`);
       } else {
         // Default: driver actions use mutation
         res = await updateRideStatus({ rideId, status }).unwrap();
@@ -27,8 +36,8 @@ try {
       } else {
         toast.error(res.message || `Failed to update ride to ${status}`);
       }
-    } catch (error){
-        const errorMessage =
+    } catch (error) {
+      const errorMessage =
         typeof error === "object" &&
         error !== null &&
         "data" in error &&
@@ -46,7 +55,10 @@ try {
       case "requested":
         return (
           <div className="flex flex-col md:flex-row gap-2">
-            <Button onClick={() => handleUpdateStatus("accepted")} className="flex-1 flex items-center gap-2">
+            <Button
+              onClick={() => handleUpdateStatus("accepted")}
+              className="flex-1 flex items-center gap-2"
+            >
               <CheckCircle className="h-4 w-4" />
               Accept
             </Button>
@@ -62,14 +74,20 @@ try {
         );
       case "accepted":
         return (
-          <Button onClick={() => handleUpdateStatus("picked_up")} className="w-full flex items-center gap-2">
+          <Button
+            onClick={() => handleUpdateStatus("picked_up")}
+            className="w-full flex items-center gap-2"
+          >
             <Truck className="h-4 w-4" />
             Picked Up
           </Button>
         );
       case "picked_up":
         return (
-          <Button onClick={() => handleUpdateStatus("in_transit")} className="w-full flex items-center gap-2">
+          <Button
+            onClick={() => handleUpdateStatus("in_transit")}
+            className="w-full flex items-center gap-2"
+          >
             <Truck className="h-4 w-4" />
             In Transit
           </Button>
@@ -77,7 +95,10 @@ try {
       case "in_transit":
         return (
           <div className="flex flex-col md:flex-row gap-2">
-            <Button onClick={() => handleUpdateStatus("completed")} className="flex-1 flex items-center gap-2">
+            <Button
+              onClick={() => handleUpdateStatus("completed")}
+              className="flex-1 flex items-center gap-2"
+            >
               <CheckCircle className="h-4 w-4" />
               Complete
             </Button>
@@ -116,11 +137,17 @@ try {
         {/* Completed ride common actions */}
         {rideStatus === "completed" && (
           <div className="flex flex-col md:flex-row gap-2">
-            <Button variant="outline" className="flex-1 flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="flex-1 flex items-center gap-2"
+            >
               <RotateCcw className="h-4 w-4" />
               Book Again
             </Button>
-            <Button variant="outline" className="flex-1 flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="flex-1 flex items-center gap-2"
+            >
               <Share className="h-4 w-4" />
               Share Receipt
             </Button>
@@ -136,4 +163,3 @@ try {
     </Card>
   );
 }
- 

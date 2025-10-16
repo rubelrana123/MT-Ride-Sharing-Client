@@ -27,7 +27,7 @@ export default function LocationSelector({
   onDestChange,
   onPickupAddressChange,
   onDestAddressChange,
-  onSelectingPickupChange
+  onSelectingPickupChange,
 }: LocationSelectorProps) {
   const [pickupSearch, setPickupSearch] = useState("");
   // const [pickupResults, setPickupResults] = useState<Array<{ display_name: string; lat: string; lon: string }>>([]);
@@ -36,8 +36,8 @@ export default function LocationSelector({
   const pickupInputRef = useRef<HTMLInputElement | null>(null);
 
   const useCurrentLocation = () => {
-    if (!('geolocation' in navigator)) {
-      alert('Geolocation is not supported by your browser.');
+    if (!("geolocation" in navigator)) {
+      alert("Geolocation is not supported by your browser.");
       return;
     }
     navigator.geolocation.getCurrentPosition(
@@ -45,12 +45,14 @@ export default function LocationSelector({
         const { latitude, longitude } = pos.coords;
         const coords: [number, number] = [longitude, latitude];
         onPickupChange(coords);
-        onPickupAddressChange(`Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+        onPickupAddressChange(
+          `Location: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`
+        );
         onSelectingPickupChange(true);
       },
       (err) => {
         console.error(err);
-        alert('Unable to fetch your location. Please allow location access.');
+        alert("Unable to fetch your location. Please allow location access.");
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
@@ -89,7 +91,7 @@ export default function LocationSelector({
   //         signal: controller.signal,
   //         headers: { Accept: 'application/json' },
   //       });
-        
+
   //       if (!res.ok) throw new Error('Search failed');
   //       const data = (await res.json()) as Array<{ display_name: string; lat: string; lon: string }>;
   //       setPickupResults(data.slice(0, 8));
@@ -113,7 +115,7 @@ export default function LocationSelector({
         <MapPin className="h-5 w-5 mr-2" />
         Select Locations
       </h2>
-      
+
       <div className="space-y-4">
         {/* Pickup Location */}
         <div className="space-y-2">
@@ -188,7 +190,9 @@ export default function LocationSelector({
             <div className="flex items-center justify-between rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm dark:border-gray-700 dark:bg-gray-900/40">
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-gray-500" />
-                <span className="text-gray-700 dark:text-gray-300">{pickupAddress}</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  {pickupAddress}
+                </span>
               </div>
               <button
                 type="button"

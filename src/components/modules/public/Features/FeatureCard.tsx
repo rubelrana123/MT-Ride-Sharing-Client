@@ -2,15 +2,20 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import type { ElementType } from "react";
 
-
 export interface FeatureCardProps {
-  icon: ElementType
-  title: string
-  description: string
-  highlight: string
+  icon: ElementType;
+  title: string;
+  description: string;
+  highlight: string;
 }
 
-export default function FeatureCard( { feature, color }: { feature: FeatureCardProps, color: string } ) {
+export default function FeatureCard({
+  feature,
+  color,
+}: {
+  feature: FeatureCardProps;
+  color: string;
+}) {
   return (
     <Card className="shadow-card hover:shadow-lg transition-all duration-200 group">
       <CardHeader>

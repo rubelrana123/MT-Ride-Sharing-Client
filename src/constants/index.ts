@@ -33,8 +33,6 @@ export const rideTypes: RideType[] = [
   { id: "ac-car", name: "AC Car", icon: Car, price: 4, color: "bg-orange-500" },
 ];
 
- 
-
 export const pickupIcon = new L.Icon({
   iconUrl:
     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
@@ -213,7 +211,6 @@ export const teamMembers = [
   },
 ];
 
-
 export const sortOptions = [
   { value: "createdAt-desc", label: "Date: Newest to Oldest" },
   { value: "createdAt-asc", label: "Date: Oldest to Newest" },
@@ -330,22 +327,22 @@ export const driverFeatures = [
 ];
 
 export const testimonials = [
-{
-name: "Maria Rodriguez",
-rating: 5,
-text: "Mytrip has truly been a lifesaver! I prefer paying with cash, and this platform makes it simple. The rides are always comfortable, and the drivers are professional.",
-location: "Downtown Rider",
-},
-{
-name: "David Chen",
-rating: 5,
-text: "I’ve been driving with Mytrip for six months, and it’s been an amazing experience. The app is easy to use, and I enjoy providing safe, reliable rides to the community.",
-location: "Mytrip Driver",
-},
-{
-name: "Sarah Johnson",
-rating: 5,
-text: "Fantastic service! I rely on Mytrip for my daily commute, and it’s always on time and dependable. The cash payment option is so convenient, and the drivers are great.",
-location: "Regular Rider",
-},
+  {
+    name: "Maria Rodriguez",
+    rating: 5,
+    text: "Mytrip has truly been a lifesaver! I prefer paying with cash, and this platform makes it simple. The rides are always comfortable, and the drivers are professional.",
+    location: "Downtown Rider",
+  },
+  {
+    name: "David Chen",
+    rating: 5,
+    text: "I’ve been driving with Mytrip for six months, and it’s been an amazing experience. The app is easy to use, and I enjoy providing safe, reliable rides to the community.",
+    location: "Mytrip Driver",
+  },
+  {
+    name: "Sarah Johnson",
+    rating: 5,
+    text: "Fantastic service! I rely on Mytrip for my daily commute, and it’s always on time and dependable. The cash payment option is so convenient, and the drivers are great.",
+    location: "Regular Rider",
+  },
 ];

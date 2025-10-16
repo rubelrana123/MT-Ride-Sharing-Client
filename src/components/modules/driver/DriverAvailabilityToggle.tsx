@@ -1,10 +1,9 @@
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import {
- 
   useGetDriverProfileQuery,
   useUpdateAvailabilityMutation,
-} from "@/redux/features/driver/driver.api"; 
+} from "@/redux/features/driver/driver.api";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -18,7 +17,7 @@ export default function UserAvailabilityToggle({
   //   undefined,
   //   { skip: userRole == "DRIVER" }
   // );
-    const { data: driverProfile, isLoading } = useGetDriverProfileQuery(
+  const { data: driverProfile, isLoading } = useGetDriverProfileQuery(
     undefined,
     { skip: userRole !== "DRIVER" }
   );

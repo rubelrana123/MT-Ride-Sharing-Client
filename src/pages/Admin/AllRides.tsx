@@ -12,7 +12,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { ChevronDown, ChevronUp, Eye, Pencil } from "lucide-react";
 
@@ -23,7 +30,10 @@ export default function ViewAllRides() {
   const [limit] = useState(10);
 
   // Sort state
-  const [sortConfig, setSortConfig] = useState({ sortBy: "createdAt", sortOrder: "desc" });
+  const [sortConfig, setSortConfig] = useState({
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,7 +48,10 @@ export default function ViewAllRides() {
   }, [inputValue]);
 
   // Prepare sort param
-  const sort = sortConfig.sortOrder === "asc" ? sortConfig.sortBy : `-${sortConfig.sortBy}`;
+  const sort =
+    sortConfig.sortOrder === "asc"
+      ? sortConfig.sortBy
+      : `-${sortConfig.sortBy}`;
 
   // Fetch rides
   const { data, isLoading } = useGetAllRidesQuery({
@@ -55,10 +68,13 @@ export default function ViewAllRides() {
   const allRides = data?.data || [];
   const pagination = data?.meta;
   const serialNumber = (page - 1) * limit;
-console.log(data, "All rides here")
+  console.log(data, "All rides here");
   // Sort handler
   const handleSort = (field: string) => {
-    const newSortOrder = sortConfig.sortBy === field && sortConfig.sortOrder === "asc" ? "desc" : "asc";
+    const newSortOrder =
+      sortConfig.sortBy === field && sortConfig.sortOrder === "asc"
+        ? "desc"
+        : "asc";
     setSortConfig({ sortBy: field, sortOrder: newSortOrder });
   };
 
@@ -110,18 +126,36 @@ console.log(data, "All rides here")
             <TableHead>Driver</TableHead>
             <TableHead>RideType</TableHead>
             <TableHead>Distance</TableHead>
-            <TableHead onClick={() => handleSort("fare")} className="cursor-pointer">
-              Fare {sortConfig.sortBy === "fare" && (sortConfig.sortOrder === "asc" ? <ChevronUp size={16} /> : <ChevronDown size={16} />)}
+            <TableHead
+              onClick={() => handleSort("fare")}
+              className="cursor-pointer"
+            >
+              Fare{" "}
+              {sortConfig.sortBy === "fare" &&
+                (sortConfig.sortOrder === "asc" ? (
+                  <ChevronUp size={16} />
+                ) : (
+                  <ChevronDown size={16} />
+                ))}
             </TableHead>
-            <TableHead onClick={() => handleSort("createdAt")} className="cursor-pointer">
-              Date {sortConfig.sortBy === "createdAt" && (sortConfig.sortOrder === "asc" ? <ChevronUp size={16} /> : <ChevronDown size={16} />)}
+            <TableHead
+              onClick={() => handleSort("createdAt")}
+              className="cursor-pointer"
+            >
+              Date{" "}
+              {sortConfig.sortBy === "createdAt" &&
+                (sortConfig.sortOrder === "asc" ? (
+                  <ChevronUp size={16} />
+                ) : (
+                  <ChevronDown size={16} />
+                ))}
             </TableHead>
             <TableHead>Status</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {allRides.map((ride : any, idx : number) => (
+          {allRides.map((ride: any, idx: number) => (
             <TableRow key={ride._id}>
               <TableCell>{serialNumber + idx + 1}</TableCell>
               <TableCell>{ride.rider?.name}</TableCell>
@@ -131,12 +165,18 @@ console.log(data, "All rides here")
               <TableCell>{ride.fare}</TableCell>
               <TableCell>{dateFormater(ride.createdAt)}</TableCell>
               <TableCell>
-                <Badge className="capitalize">{ride.rideStatus?.replace("_", " ")}</Badge>
+                <Badge className="capitalize">
+                  {ride.rideStatus?.replace("_", " ")}
+                </Badge>
               </TableCell>
               <TableCell className="text-right flex gap-2 justify-end">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button size="icon" onClick={() => handleModal(ride)} className="bg-blue-700 dark:bg-blue-500 dark:text-foreground">
+                    <Button
+                      size="icon"
+                      onClick={() => handleModal(ride)}
+                      className="bg-blue-700 dark:bg-blue-500 dark:text-foreground"
+                    >
                       <Pencil />
                     </Button>
                   </DialogTrigger>
@@ -155,13 +195,21 @@ console.log(data, "All rides here")
       {/* Pagination */}
       {pagination && pagination.totalPages > 1 && (
         <div className="mt-10">
-          <PaginationPage page={page} setPage={setPage} totalPages={pagination.totalPages} />
+          <PaginationPage
+            page={page}
+            setPage={setPage}
+            totalPages={pagination.totalPages}
+          />
         </div>
       )}
 
       {/* Status Modal */}
       {isOpen && selectedRide && (
-        <RideStatusUpdateModal ride={selectedRide} open={isOpen} onChange={setIsOpen} />
+        <RideStatusUpdateModal
+          ride={selectedRide}
+          open={isOpen}
+          onChange={setIsOpen}
+        />
       )}
     </div>
   );

@@ -1,4 +1,3 @@
- 
 import PageHeading from "@/components/modules/public/PageHeading";
 import {
   Accordion,
@@ -9,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { faqs } from "@/constants";
- 
+
 import { Search } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
@@ -82,26 +81,26 @@ export default function FaqPage() {
         <p className="text-primary-foreground mb-6">
           Our support team is here to help 24/7. Get in touch with us directly.
         </p>
-<div className="flex flex-col sm:flex-row gap-4 justify-center">
-  {/* Contact Support Button */}
-  <Button
-    asChild
-    size="lg"
-    className="bg-green-600 hover:bg-green-700 text-xl transition-colors text-white duration-700 px-8 py-6"
-  >
-    <Link to="/contact">Contact Support</Link>
-  </Button>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {/* Contact Support Button */}
+          <Button
+            asChild
+            size="lg"
+            className="bg-green-600 hover:bg-green-700 text-xl transition-colors text-white duration-700 px-8 py-6"
+          >
+            <Link to="/contact">Contact Support</Link>
+          </Button>
 
-  {/* Email Us Button */}
-  <Button
-    asChild
-    size="lg"
-    variant="outline"
-    className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/20 hover:text-foreground text-lg transition-colors duration-700 px-8 py-6"
-  >
-    <Link to="mailto:saidulislamr333@gmail.com">Email Us</Link>
-  </Button>
-</div>
+          {/* Email Us Button */}
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/20 hover:text-foreground text-lg transition-colors duration-700 px-8 py-6"
+          >
+            <Link to="mailto:saidulislamr333@gmail.com">Email Us</Link>
+          </Button>
+        </div>
       </div>
     </main>
   );

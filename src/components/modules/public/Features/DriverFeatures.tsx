@@ -2,8 +2,6 @@ import { driverFeatures } from "@/constants";
 import SectionHeading from "../Home/SectionHeading";
 import FeatureCard from "./FeatureCard";
 
- 
-
 export default function DriverFeatures() {
   return (
     <section className="mb-20">

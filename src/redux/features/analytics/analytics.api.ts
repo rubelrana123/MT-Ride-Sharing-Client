@@ -2,7 +2,6 @@ import { baseApi } from "@/redux/baseApi";
 
 export const analytics = baseApi.injectEndpoints({
   endpoints: (builder) => ({
- 
     // Admin: List all rides
     getAnalytics: builder.query({
       query: () => ({
@@ -12,11 +11,7 @@ export const analytics = baseApi.injectEndpoints({
       providesTags: ["RIDE", "USER", "DRIVER"],
       transformResponse: (response) => response.data,
     }),
-    
   }),
 });
 
-export const {
-    useGetAnalyticsQuery,
- 
-} = analytics;
+export const { useGetAnalyticsQuery } = analytics;

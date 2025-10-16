@@ -1,7 +1,5 @@
-// components/FareBreakDown.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard } from "lucide-react";
- 
 
 interface FareBreakDownProps {
   fare: string;
@@ -9,11 +7,11 @@ interface FareBreakDownProps {
 }
 
 export default function FareBreakDown({ fare, distance }: FareBreakDownProps) {
-const fareAmount = parseFloat(fare.replace(' BDT', '') || '0');
+  const fareAmount = parseFloat(fare.replace(" BDT", "") || "0");
   const basePrice = 50;
   const pricePerKm = 15;
   const distanceCost = distance * pricePerKm;
-  
+
   return (
     <Card>
       <CardHeader>
@@ -35,7 +33,9 @@ const fareAmount = parseFloat(fare.replace(' BDT', '') || '0');
         </div>
         <div className="flex justify-between">
           <span className="text-gray-600 dark:text-gray-400">Service Fee:</span>
-          <span className="font-medium">৳{Math.max(0, fareAmount - basePrice - distanceCost).toFixed(0)}</span>
+          <span className="font-medium">
+            ৳{Math.max(0, fareAmount - basePrice - distanceCost).toFixed(0)}
+          </span>
         </div>
         <hr className="border-gray-200 dark:border-gray-700" />
         <div className="flex justify-between text-lg font-bold">
@@ -46,5 +46,3 @@ const fareAmount = parseFloat(fare.replace(' BDT', '') || '0');
     </Card>
   );
 }
-
- 

@@ -8,11 +8,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useState } from "react";
 import { PencilIcon } from "lucide-react";
 import type { DriverStatus } from "@/types/driver.type";
- 
 
 interface StatusUpdateDialogProps {
   applicationId: string;
@@ -25,9 +30,11 @@ export default function StatusUpdateDialog({
   applicationId,
   currentStatus,
   driverName,
-  onStatusUpdate
+  onStatusUpdate,
 }: StatusUpdateDialogProps) {
-  const [selectedStatus, setSelectedStatus] = useState<DriverStatus>(currentStatus as DriverStatus);
+  const [selectedStatus, setSelectedStatus] = useState<DriverStatus>(
+    currentStatus as DriverStatus
+  );
   const [isOpen, setIsOpen] = useState(false);
 
   const handleUpdate = () => {
@@ -38,10 +45,26 @@ export default function StatusUpdateDialog({
   };
 
   const statusOptions = [
-    { value: "pending", label: "Pending", description: "Application under review" },
-    { value: "approved", label: "Approved", description: "Driver approved and active" },
-    { value: "rejected", label: "Rejected", description: "Application rejected" },
-    { value: "suspend", label: "Suspended", description: "Driver temporarily suspended" }
+    {
+      value: "pending",
+      label: "Pending",
+      description: "Application under review",
+    },
+    {
+      value: "approved",
+      label: "Approved",
+      description: "Driver approved and active",
+    },
+    {
+      value: "rejected",
+      label: "Rejected",
+      description: "Application rejected",
+    },
+    {
+      value: "suspend",
+      label: "Suspended",
+      description: "Driver temporarily suspended",
+    },
   ];
 
   return (
@@ -58,16 +81,23 @@ export default function StatusUpdateDialog({
             Change the status for {driverName}'s driver application.
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div>
             <label className="text-sm font-medium">Current Status</label>
-            <div className="text-sm text-gray-600 capitalize">{currentStatus}</div>
+            <div className="text-sm text-gray-600 capitalize">
+              {currentStatus}
+            </div>
           </div>
-          
+
           <div>
             <label className="text-sm font-medium">New Status</label>
-            <Select value={selectedStatus} onValueChange={(value) => setSelectedStatus(value as DriverStatus)}>
+            <Select
+              value={selectedStatus}
+              onValueChange={(value) =>
+                setSelectedStatus(value as DriverStatus)
+              }
+            >
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
@@ -76,7 +106,9 @@ export default function StatusUpdateDialog({
                   <SelectItem key={option.value} value={option.value}>
                     <div>
                       <div className="font-medium">{option.label}</div>
-                      <div className="text-xs text-gray-500">{option.description}</div>
+                      <div className="text-xs text-gray-500">
+                        {option.description}
+                      </div>
                     </div>
                   </SelectItem>
                 ))}
@@ -89,7 +121,7 @@ export default function StatusUpdateDialog({
           <Button variant="outline" onClick={() => setIsOpen(false)}>
             Cancel
           </Button>
-          <Button 
+          <Button
             onClick={handleUpdate}
             disabled={selectedStatus === currentStatus}
           >

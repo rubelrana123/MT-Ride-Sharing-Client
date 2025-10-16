@@ -35,8 +35,8 @@ import { useGetUserProfileQuery } from "@/redux/features/user/user.api";
 export default function RideHistory() {
   const { data, isLoading } = useGetRideHistoryQuery(undefined);
   const [cancelRideMutation] = useCancelRideMutation(); // ✅ add mutation hook
-const {data : userProfile} = useGetUserProfileQuery(undefined);
-console.log(userProfile, "user profile")
+  const { data: userProfile } = useGetUserProfileQuery(undefined);
+  console.log(userProfile, "user profile");
   if (isLoading && !data) return <Loading />;
 
   const rideHistory = data?.data || []; // ✅ use data.data (API structure)
@@ -112,32 +112,34 @@ console.log(userProfile, "user profile")
               <TableCell>{dateFormater(ride.createdAt)}</TableCell>
               <TableCell className="text-right flex items-center justify-end gap-2">
                 {/* cancel button here */}
-                {ride.rideStatus != "completed" && ride.rideStatus != "cancelled"  && userProfile?.role != "DRIVER" &&(
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button size="icon" variant="destructive">
-                        <X />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Cancel Ride</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Are you sure you want to cancel this ride? This action
-                          cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Close</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={() => handleCancelRide(ride?._id)} // ✅ call handler
-                        >
-                          Yes, Cancel
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                )}
+                {ride.rideStatus != "completed" &&
+                  ride.rideStatus != "cancelled" &&
+                  userProfile?.role != "DRIVER" && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button size="icon" variant="destructive">
+                          <X />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Cancel Ride</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to cancel this ride? This
+                            action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Close</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleCancelRide(ride?._id)} // ✅ call handler
+                          >
+                            Yes, Cancel
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
 
                 <Button size="icon" variant="outline" asChild>
                   <Link to={`/dashboard/rideDetails/${ride._id}`}>

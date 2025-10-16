@@ -3,7 +3,7 @@ import type { IDriver, IRider } from "./user.type";
 export interface IPickedupCoordinates {
   type: string;
   coordinates: number[];
-};
+}
 export interface IDestinationCoordinates {
   type: string;
   coordinates: number[];
@@ -29,7 +29,7 @@ export interface IRideLocation {
   coordinates: [number, number];
 }
 export interface IRideResponse<T> {
-  data : T
+  data: T;
 }
 
 // Ride
@@ -42,9 +42,9 @@ export interface IRide {
   rideStatus?: string;
 
   // Backend is sending these extra fields
-  distance?: string;   // "10.12 km"
-  fare?: string;       // "657 BDT"
-  createdAt?: string;  // "2025-09-27T20:20:57.195Z"
+  distance?: string; // "10.12 km"
+  fare?: string; // "657 BDT"
+  createdAt?: string; // "2025-09-27T20:20:57.195Z"
 
   // Optional timestamps
   requestedAt?: string;
@@ -55,7 +55,6 @@ export interface IRide {
   pickedupAt?: string;
   inTransitAt?: string;
 }
- 
 
 export interface RideType {
   id: string;
@@ -64,4 +63,3 @@ export interface RideType {
   price: number;
   color: string;
 }
-

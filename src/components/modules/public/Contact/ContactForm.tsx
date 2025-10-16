@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
- 
+
 import { ClipLoader } from "react-spinners";
 import { toast } from "sonner";
 import z from "zod";
@@ -43,7 +43,7 @@ export default function ContactForm() {
   });
 
   const onSubmit = async () => {
-    setLoading(true)
+    setLoading(true);
     // Simulate API call
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -52,10 +52,10 @@ export default function ContactForm() {
 
       // Reset form
       form.reset();
-      setLoading(false)
+      setLoading(false);
     } catch {
       toast("Failed to send message");
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -96,7 +96,9 @@ export default function ContactForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <Label className="text-xl font-ride-title mb-1">Email</Label>
+                    <Label className="text-xl font-ride-title mb-1">
+                      Email
+                    </Label>
                     <FormControl>
                       <Input
                         placeholder="jhondoe@gmaol.com"
@@ -113,7 +115,9 @@ export default function ContactForm() {
                 name="message"
                 render={({ field }) => (
                   <FormItem>
-                    <Label className="text-xl font-ride-title mb-1">Message</Label>
+                    <Label className="text-xl font-ride-title mb-1">
+                      Message
+                    </Label>
                     <FormControl>
                       <Textarea
                         placeholder="your message..."

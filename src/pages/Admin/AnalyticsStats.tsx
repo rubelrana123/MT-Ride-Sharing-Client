@@ -1,17 +1,6 @@
 import { useGetAnalyticsQuery } from "@/redux/features/analytics/analytics.api";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-} from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from "recharts";
 import Loading from "@/components/modules/shared/Loading";
 import ViewAllRides from "./AllRides";
 
@@ -21,7 +10,8 @@ export default function Analytics() {
   });
 
   if (isLoading) return <Loading />;
-  if (isError || !data) return <div className="p-6">Failed to load analytics</div>;
+  if (isError || !data)
+    return <div className="p-6">Failed to load analytics</div>;
 
   const stats = data;
 
@@ -104,7 +94,10 @@ export default function Analytics() {
                   label
                 >
                   {userPieData.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -131,7 +124,10 @@ export default function Analytics() {
                   label
                 >
                   {ridePieData.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip />
@@ -140,10 +136,10 @@ export default function Analytics() {
           </CardContent>
         </Card>
       </div>
-   
-     <div className="mt-10">
-     <ViewAllRides/>
-     </div>
+
+      <div className="mt-10">
+        <ViewAllRides />
+      </div>
     </div>
   );
 }

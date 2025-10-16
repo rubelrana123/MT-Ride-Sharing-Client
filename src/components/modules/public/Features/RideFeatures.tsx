@@ -1,9 +1,9 @@
 import { riderFeatures } from "@/constants";
- 
+
 import FeatureCard from "./FeatureCard";
 import SectionHeading from "../Home/SectionHeading";
 
-export default function RideFeatures () {
+export default function RideFeatures() {
   return (
     <section className="mb-20">
       <div>

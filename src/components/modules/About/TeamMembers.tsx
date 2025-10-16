@@ -2,7 +2,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { teamMembers } from "@/constants";
 import { Linkedin, Mail } from "lucide-react";
 import SectionHeading from "../public/Home/SectionHeading";
- 
 
 export default function TeamMembers() {
   return (
@@ -33,7 +32,9 @@ export default function TeamMembers() {
               <h3 className="text-xl font-bold text-foreground mb-2">
                 {member.name}
               </h3>
-              <p className="text-muted-foreground font-medium mb-3">{member.role}</p>
+              <p className="text-muted-foreground font-medium mb-3">
+                {member.role}
+              </p>
               <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
                 {member.bio}
               </p>

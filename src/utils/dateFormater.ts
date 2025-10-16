@@ -12,6 +12,6 @@ export const dateFormater = (newsDate: Date) => {
   return formattedDate;
 };
 
-  export const formatDateTime = (dateString: string) => {
-    return format(new Date(dateString), "MMM dd, yyyy 'at' hh:mm a");
-  };
+export const formatDateTime = (dateString: string) => {
+  return format(new Date(dateString), "MMM dd, yyyy 'at' hh:mm a");
+};

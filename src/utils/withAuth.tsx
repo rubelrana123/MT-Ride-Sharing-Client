@@ -2,15 +2,20 @@
 import { useGetUserProfileQuery } from "@/redux/features/user/user.api";
 import { type TRole } from "@/types";
 import type { ComponentType } from "react";
- 
+
 import { Navigate } from "react-router";
 
-export const withAuth = (Component: ComponentType, requiredRoles?: TRole | TRole[]) => {
+export const withAuth = (
+  Component: ComponentType,
+  requiredRoles?: TRole[]
+) => {
   return function AuthWrapper() {
-    const { data : info, isLoading } = useGetUserProfileQuery(undefined);
-
+    const { data: info, isLoading } = useGetUserProfileQuery(
+      undefined 
+    );
+    console.log(info, "info from with auth",isLoading);
     const userInfo = info;
-    console.log("auth indise",userInfo);
+    console.log("auth indise", userInfo);
     if (!isLoading && !userInfo?.email) {
       return <Navigate to="/login" />;
     }
@@ -18,7 +23,6 @@ export const withAuth = (Component: ComponentType, requiredRoles?: TRole | TRole
     if (requiredRoles && !isLoading) {
       const userRole = userInfo?.role;
       const isActive = userInfo?.isActive;
- 
 
       if (isActive === "blocked") {
         return (
@@ -29,7 +33,6 @@ export const withAuth = (Component: ComponentType, requiredRoles?: TRole | TRole
           />
         );
       }
-      
 
       if (Array.isArray(requiredRoles)) {
         if (!requiredRoles.includes(userRole as TRole)) {

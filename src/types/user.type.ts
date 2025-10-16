@@ -1,4 +1,3 @@
-
 export interface IUser {
   _id: string;
   name: string;
@@ -13,30 +12,30 @@ export interface IUser {
   isDeleted: boolean;
   status: string;
   createdAt: string;
-  updatedAt: string
+  updatedAt: string;
 }
 
 export interface IRider {
-  _id: string
-  name: string
-  email: string
-  role: string
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
   phone: string;
 }
 
 export interface IDriver {
-  _id: string
-  name: string
-  email: string
-  role: string
-  vehicleInfo: IVehicleInfo
-  licenseNumber: string
+  _id: string;
+  name: string;
+  email: string;
+  role: string;
+  vehicleInfo: IVehicleInfo;
+  licenseNumber: string;
 }
 
 export interface IVehicleInfo {
-  vehicleType?: string
-  model?: string
-  plate?: string
+  vehicleType?: string;
+  model?: string;
+  plate?: string;
 }
 
 export interface IUpdateProfile {
@@ -48,13 +47,13 @@ export interface IUserProfile {
   name?: string;
   phone?: string;
   address?: string;
-  vehicleInfo?: IVehicleInfo
-  licenseNumber?: string
+  vehicleInfo?: IVehicleInfo;
+  licenseNumber?: string;
 }
 
 export interface IRiderUpdateStatus {
   isActive: string;
-  userId: string
+  userId: string;
 }
 
 export interface IUpdateDriverStatus {

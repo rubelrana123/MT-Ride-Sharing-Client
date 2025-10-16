@@ -1,13 +1,14 @@
 import { dateFormater } from "@/utils/dateFormater";
 
- 
-
 interface RideHeaderProps {
   rideDetails: any;
   userProfile: any;
 }
 
-export default function RideHeader({ rideDetails, userProfile }: RideHeaderProps) {
+export default function RideHeader({
+  rideDetails,
+  userProfile,
+}: RideHeaderProps) {
   const getTitle = () => {
     switch (userProfile?.role) {
       case "RIDER":

@@ -1,6 +1,6 @@
 // Main AllDriverApplications Component
 import { useState } from "react";
- 
+
 import { Filter, Search, Download } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
- 
+
 import {
   Select,
   SelectContent,
@@ -22,34 +22,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useGetDriverApplicationsQuery, useUpdateDriverStatusMutation } from "@/redux/features/driver/driver.api";
+import {
+  useGetDriverApplicationsQuery,
+  useUpdateDriverStatusMutation,
+} from "@/redux/features/driver/driver.api";
 import type { DriverApplication, DriverStatus } from "@/types/driver.type";
 import ApplicationStats from "@/components/modules/driver/ApplicationStats";
 import { ApplicationRow } from "@/components/modules/driver/ApplicationRow";
 import Swal from "sweetalert2";
- 
- 
+
 export default function AllDriverApplications() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [vehicleTypeFilter, setVehicleTypeFilter] = useState<string>("all");
 
-  const { 
-    data: driverApplicationsResponse, 
-    isLoading, 
-    error 
+  const {
+    data: driverApplicationsResponse,
+    isLoading,
+    error,
   } = useGetDriverApplicationsQuery(undefined);
 
-const [updateApplicationStatus] = useUpdateDriverStatusMutation();
-  
-console.log(driverApplicationsResponse, "driver applications data")
+  const [updateApplicationStatus] = useUpdateDriverStatusMutation();
+
+  console.log(driverApplicationsResponse, "driver applications data");
 
   const applications: DriverApplication[] = driverApplicationsResponse || [];
   const meta = driverApplicationsResponse?.meta;
 
-  const handleStatusUpdate = async (applicationId: string, newStatus: DriverStatus) => {
+  const handleStatusUpdate = async (
+    applicationId: string,
+    newStatus: DriverStatus
+  ) => {
     try {
-      const res =  await updateApplicationStatus({ id: applicationId, driverStatus: newStatus }).unwrap();
+      const res = await updateApplicationStatus({
+        id: applicationId,
+        driverStatus: newStatus,
+      }).unwrap();
       console.log(res, "status update response");
       toast.success(`Application status updated to ${newStatus}`);
     } catch (error) {
@@ -61,13 +69,13 @@ console.log(driverApplicationsResponse, "driver applications data")
     try {
       // TODO: Implement API call - DELETE /driver-application/:id
       Swal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "This action cannot be undone.",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
           // Call the delete API here
@@ -79,20 +87,22 @@ console.log(driverApplicationsResponse, "driver applications data")
     } catch (error) {
       toast.error("Failed to delete application");
     }
-  }
+  };
 
   // Filter applications based on search and filters
   const filteredApplications = applications.filter((app) => {
-    const matchesSearch = 
+    const matchesSearch =
       app.driver.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.driver.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.licenseNumber.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus = statusFilter === "all" || app.driverStatus === statusFilter;
-    
-    const matchesVehicleType = 
-      vehicleTypeFilter === "all" || 
-      app.vehicleInfo.vehicleType.toLowerCase() === vehicleTypeFilter.toLowerCase();
+    const matchesStatus =
+      statusFilter === "all" || app.driverStatus === statusFilter;
+
+    const matchesVehicleType =
+      vehicleTypeFilter === "all" ||
+      app.vehicleInfo.vehicleType.toLowerCase() ===
+        vehicleTypeFilter.toLowerCase();
 
     return matchesSearch && matchesStatus && matchesVehicleType;
   });
@@ -131,7 +141,7 @@ console.log(driverApplicationsResponse, "driver applications data")
             Manage and review driver applications
           </p>
         </div>
-        
+
         <div className="flex items-center gap-2">
           <Button variant="outline" className="flex items-center gap-2">
             <Download className="h-4 w-4" />
@@ -173,7 +183,10 @@ console.log(driverApplicationsResponse, "driver applications data")
             </Select>
 
             {/* Vehicle Type Filter */}
-            <Select value={vehicleTypeFilter} onValueChange={setVehicleTypeFilter}>
+            <Select
+              value={vehicleTypeFilter}
+              onValueChange={setVehicleTypeFilter}
+            >
               <SelectTrigger className="w-full lg:w-48">
                 <SelectValue placeholder="Filter by vehicle" />
               </SelectTrigger>
@@ -187,9 +200,11 @@ console.log(driverApplicationsResponse, "driver applications data")
             </Select>
 
             {/* Clear Filters */}
-            {(searchTerm || statusFilter !== "all" || vehicleTypeFilter !== "all") && (
-              <Button 
-                variant="outline" 
+            {(searchTerm ||
+              statusFilter !== "all" ||
+              vehicleTypeFilter !== "all") && (
+              <Button
+                variant="outline"
                 onClick={() => {
                   setSearchTerm("");
                   setStatusFilter("all");
@@ -203,7 +218,8 @@ console.log(driverApplicationsResponse, "driver applications data")
 
           {/* Results Count */}
           <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-            Showing {filteredApplications.length} of {applications.length} applications
+            Showing {filteredApplications.length} of {applications.length}{" "}
+            applications
           </div>
         </CardContent>
       </Card>
@@ -234,14 +250,17 @@ console.log(driverApplicationsResponse, "driver applications data")
               <TableBody>
                 {filteredApplications.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-gray-500">
+                    <TableCell
+                      colSpan={8}
+                      className="text-center py-8 text-gray-500"
+                    >
                       No applications found matching your criteria
                     </TableCell>
                   </TableRow>
                 ) : (
                   filteredApplications.map((application) => (
-                    <ApplicationRow 
-                      key={application._id} 
+                    <ApplicationRow
+                      key={application._id}
                       application={application}
                       onStatusUpdate={handleStatusUpdate}
                       onDelete={handleDelete}
@@ -260,13 +279,18 @@ console.log(driverApplicationsResponse, "driver applications data")
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="text-sm text-gray-600 dark:text-gray-400">
-                Page {meta.page} of {meta.totalPages} ({meta.total} total applications)
+                Page {meta.page} of {meta.totalPages} ({meta.total} total
+                applications)
               </div>
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" disabled={meta.page === 1}>
                   Previous
                 </Button>
-                <Button variant="outline" size="sm" disabled={meta.page === meta.totalPages}>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={meta.page === meta.totalPages}
+                >
                   Next
                 </Button>
               </div>
@@ -277,5 +301,3 @@ console.log(driverApplicationsResponse, "driver applications data")
     </div>
   );
 }
- 
-  

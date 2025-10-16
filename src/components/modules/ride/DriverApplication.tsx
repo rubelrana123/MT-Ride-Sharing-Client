@@ -1,4 +1,3 @@
- 
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,7 +57,7 @@ export default function DriverApplications() {
     try {
       await applyForDriver(values);
       toast.success("Form submitted — check dashboard for status!");
-      navigate("/dashboard")
+      navigate("/dashboard");
     } catch (error) {
       toast.error("Failed to submit form. Please try again.");
     }

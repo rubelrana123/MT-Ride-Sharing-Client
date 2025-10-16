@@ -13,7 +13,6 @@ import { Eye, ChevronUp, ChevronDown } from "lucide-react";
 import { Link } from "react-router";
 import { toast } from "sonner";
 
- 
 interface Props {
   allIncomingRides: any[];
   serialNumber: number;
@@ -28,17 +27,24 @@ export default function IncomingRideDataTable({
   handleSort,
 }: Props) {
   const [updateRideStatus] = useUpdateRideStatusMutation();
- 
-  const updateStatus = async (rideId: string, status: "accepted" | "rejected") => {
+
+  const updateStatus = async (
+    rideId: string,
+    status: "accepted" | "rejected"
+  ) => {
     const toastId = toast.loading(`Updating Ride Status to ${status}...`);
     try {
       const res = await updateRideStatus({ rideId, status }).unwrap();
       if (res.success) {
-        toast.success(res.message || `Ride ${status} successfully`, { id: toastId });
+        toast.success(res.message || `Ride ${status} successfully`, {
+          id: toastId,
+        });
       } else {
-        toast.error(res.message || `Failed to ${status} the ride`, { id: toastId });
+        toast.error(res.message || `Failed to ${status} the ride`, {
+          id: toastId,
+        });
       }
-    //  navigate("/drivers/ride-history")
+      //  navigate("/drivers/ride-history")
     } catch (error: unknown) {
       const errorMessage =
         typeof error === "object" &&
@@ -55,7 +61,11 @@ export default function IncomingRideDataTable({
 
   const renderSortIcon = (field: string) => {
     if (sortConfig.sortBy !== field) return null;
-    return sortConfig.sortOrder === "asc" ? <ChevronUp size={16} /> : <ChevronDown size={16} />;
+    return sortConfig.sortOrder === "asc" ? (
+      <ChevronUp size={16} />
+    ) : (
+      <ChevronDown size={16} />
+    );
   };
 
   return (
@@ -101,8 +111,13 @@ export default function IncomingRideDataTable({
             <TableCell>{ride.fare}</TableCell>
             <TableCell>{dateFormater(ride.createdAt)}</TableCell>
             <TableCell className="flex gap-2">
-              <Button onClick={() => updateStatus(ride._id, "accepted")}>Accept</Button>
-              <Button variant="destructive" onClick={() => updateStatus(ride._id, "rejected")}>
+              <Button onClick={() => updateStatus(ride._id, "accepted")}>
+                Accept
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={() => updateStatus(ride._id, "rejected")}
+              >
                 Reject
               </Button>
               <Button variant="outline">

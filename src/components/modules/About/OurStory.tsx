@@ -2,7 +2,9 @@ export default function OurStory() {
   return (
     <div className="grid md:grid-cols-2 gap-12 mb-20">
       <div>
-        <h2 className="text-3xl font-bold text-foreground font-ride-title mb-6">Our Story</h2>
+        <h2 className="text-3xl font-bold text-foreground font-ride-title mb-6">
+          Our Story
+        </h2>
         <div className="space-y-4 text-muted-foreground">
           <p>
             Founded in 2020, MyTrip started with a simple vision: make
@@ -28,19 +30,27 @@ export default function OurStory() {
         <div className="grid grid-cols-2 gap-6">
           <div className="text-center">
             <div className="text-3xl font-bold font-ride-title">50K+</div>
-            <div className="text-primary-foreground/80 dark:text-primary">Happy Riders</div>
+            <div className="text-primary-foreground/80 dark:text-primary">
+              Happy Riders
+            </div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold font-ride-title">5K+</div>
-            <div className="text-primary-foreground/80 dark:text-primary">Active Drivers</div>
+            <div className="text-primary-foreground/80 dark:text-primary">
+              Active Drivers
+            </div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold font-ride-title">1M+</div>
-            <div className="text-primary-foreground/80 dark:text-primary">Rides Completed</div>
+            <div className="text-primary-foreground/80 dark:text-primary">
+              Rides Completed
+            </div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold font-ride-title">15</div>
-            <div className="text-primary-foreground/80 dark:text-primary">Cities Served</div>
+            <div className="text-primary-foreground/80 dark:text-primary">
+              Cities Served
+            </div>
           </div>
         </div>
       </div>

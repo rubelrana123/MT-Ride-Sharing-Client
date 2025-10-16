@@ -8,11 +8,9 @@ import { Button } from "@/components/ui/button";
 import { useRequestRideMutation } from "@/redux/features/ride/ride.api";
 import { extractCoordinates } from "@/utils/extractCoordinates";
 import { Search } from "lucide-react";
-import { useState } from "react"; 
- 
+import { useState } from "react";
 
- 
-export default function RideBook() { 
+export default function RideBook() {
   const [pickupLoc, setPickupLoc] = useState<[number, number] | null>(null);
   const [destLoc, setDestLoc] = useState<[number, number] | null>(null);
   const [pickupAddress, setPickupAddress] = useState("");
@@ -20,30 +18,34 @@ export default function RideBook() {
   const [selectingPickup, setSelectingPickup] = useState(true);
   const [rideType, setRideType] = useState<string>("alto");
   const [paymentMethod, setPaymentMethod] = useState<string>("cash");
-  
-  const [requestRide] = useRequestRideMutation()
-  console.log(pickupLoc,destAddress)
-  const handleBooking = async() => {
+
+  const [requestRide] = useRequestRideMutation();
+  console.log(pickupLoc, destAddress);
+  const handleBooking = async () => {
     const toastId = toast.loading("Ride booking.....");
 
-   const riderData = {
-  pickupLoc: {
-    type: "Point",
-    coordinates: pickupLoc ? [pickupLoc[0], pickupLoc[1]] : extractCoordinates(pickupAddress)
-  },
-  destLoc: {
-    type: "Point",
-    coordinates: destLoc ? [destLoc[0], destLoc[1]] : extractCoordinates(destAddress)
-  },
-  rideType,
-  paymentMethod
-};
+    const riderData = {
+      pickupLoc: {
+        type: "Point",
+        coordinates: pickupLoc
+          ? [pickupLoc[0], pickupLoc[1]]
+          : extractCoordinates(pickupAddress),
+      },
+      destLoc: {
+        type: "Point",
+        coordinates: destLoc
+          ? [destLoc[0], destLoc[1]]
+          : extractCoordinates(destAddress),
+      },
+      rideType,
+      paymentMethod,
+    };
 
     console.log("rideData", riderData);
     try {
       const res = await requestRide(riderData).unwrap();
-      if(res.success){
-        toast.success("Ride requested successfully!", {id : toastId  })
+      if (res.success) {
+        toast.success("Ride requested successfully!", { id: toastId });
         //reset form
         setPickupLoc(null);
         setDestLoc(null);
@@ -53,10 +55,9 @@ export default function RideBook() {
         setRideType("bike");
         setPaymentMethod("cash");
       }
-
-    } catch (error) { 
+    } catch (error) {
       console.log("error in ride request", error);
-           const errorMessage =
+      const errorMessage =
         typeof error === "object" &&
         error !== null &&
         "data" in error &&
@@ -67,9 +68,6 @@ export default function RideBook() {
           : "An error occurred";
       toast.error(errorMessage, { id: toastId });
     }
-  
-    
-
   };
 
   return (
@@ -119,7 +117,7 @@ export default function RideBook() {
               />
             )}
 
-            <Button 
+            <Button
               onClick={handleBooking}
               className="w-full py-3 text-lg font-semibold"
               disabled={!pickupLoc || !destLoc}
@@ -138,10 +136,14 @@ export default function RideBook() {
               onLocationSelect={(coords) => {
                 if (selectingPickup) {
                   setPickupLoc(coords);
-                  setPickupAddress(`Location: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`);
+                  setPickupAddress(
+                    `Location: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`
+                  );
                 } else {
                   setDestLoc(coords);
-                  setDestAddress(`Location: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`);
+                  setDestAddress(
+                    `Location: ${coords[1].toFixed(4)}, ${coords[0].toFixed(4)}`
+                  );
                 }
               }}
             />
@@ -151,4 +153,3 @@ export default function RideBook() {
     </div>
   );
 }
- 

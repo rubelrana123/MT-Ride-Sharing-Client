@@ -16,7 +16,7 @@ import { Logo } from "@/assets/icons/Logo";
  
  
  
-export const Register = () => {
+ const Register = () => {
 //  
 
   return (
@@ -57,3 +57,4 @@ export const Register = () => {
 };
 
  
+export default Register;

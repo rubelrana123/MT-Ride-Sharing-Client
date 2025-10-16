@@ -3,7 +3,6 @@ import { CreditCard } from "lucide-react";
 import { calculateDistance } from "../../../utils/calculateDistance";
 import { calculateFare } from "@/utils/fareCalculator";
 import { rideTypes } from "@/constants";
- 
 
 interface PriceSummaryProps {
   pickupLoc: [number, number];
@@ -11,10 +10,14 @@ interface PriceSummaryProps {
   rideType: string;
 }
 
-export default function PriceSummary({ pickupLoc, destLoc, rideType }: PriceSummaryProps) {
+export default function PriceSummary({
+  pickupLoc,
+  destLoc,
+  rideType,
+}: PriceSummaryProps) {
   const distance = calculateDistance(pickupLoc, destLoc);
   const { basePrice, distanceCost, total } = calculateFare(distance, rideType);
-  const selectedRideType = rideTypes.find(t => t.id === rideType);
+  const selectedRideType = rideTypes.find((t) => t.id === rideType);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
@@ -22,7 +25,7 @@ export default function PriceSummary({ pickupLoc, destLoc, rideType }: PriceSumm
         <CreditCard className="h-5 w-5 mr-2" />
         Price Estimate
       </h2>
-      
+
       <div className="space-y-3">
         <div className="flex justify-between">
           <span className="text-gray-600 dark:text-gray-400">Distance:</span>
@@ -33,7 +36,9 @@ export default function PriceSummary({ pickupLoc, destLoc, rideType }: PriceSumm
           <span className="font-medium">৳{basePrice}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-600 dark:text-gray-400">Distance Cost:</span>
+          <span className="text-gray-600 dark:text-gray-400">
+            Distance Cost:
+          </span>
           <span className="font-medium">৳{distanceCost}</span>
         </div>
         <div className="flex justify-between">

@@ -1,21 +1,23 @@
 // components/RideOptions.tsx
 import { rideTypes } from "@/constants";
-import { Car} from "lucide-react";
- 
+import { Car } from "lucide-react";
 
 interface RideOptionsProps {
   selectedRideType: string;
   onRideTypeChange: (rideType: string) => void;
 }
 
-export default function RideOptions({ selectedRideType, onRideTypeChange }: RideOptionsProps) {
+export default function RideOptions({
+  selectedRideType,
+  onRideTypeChange,
+}: RideOptionsProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
         <Car className="h-5 w-5 mr-2" />
         Choose Ride Type
       </h2>
-      
+
       <div className="grid grid-cols-4 gap-3">
         {rideTypes?.map((type) => {
           const Icon = type.icon;
@@ -29,10 +31,14 @@ export default function RideOptions({ selectedRideType, onRideTypeChange }: Ride
               }`}
               onClick={() => onRideTypeChange(type.id)}
             >
-              <div className={`absolute -top-1 -left-1 w-3 h-3 rounded-full ${
-                selectedRideType === type.id ? "bg-yellow-400" : "bg-yellow-400"
-              }`} />
-              
+              <div
+                className={`absolute -top-1 -left-1 w-3 h-3 rounded-full ${
+                  selectedRideType === type.id
+                    ? "bg-yellow-400"
+                    : "bg-yellow-400"
+                }`}
+              />
+
               <div className="flex flex-col items-center space-y-2">
                 <div className={`p-2 rounded-lg ${type.color}`}>
                   <Icon className="h-6 w-6 text-white" />
